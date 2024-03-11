@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link th:href="@{'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'}" rel='stylesheet'>
+    
+    
+    <title>Qanaa</title>
+</head>
+<body>
+<nav>
+    <div class="navcontainer">
+        <div class="fristnav">
+            <div class="inner_navI">
+                <div class="phonecont">
+                    <i class='bx bx-phone'></i>
+                    <p>01115405419</p>
+                </div>
+            </div>
+            <div class="inner_navII">
+                <div th:if="${user eq ''}" class="Account">
+                    <a th:href="@{/auth/signup}" class="header_icon"><i class='bx bx-user'></i></a>
+                    <a th:href="@{/auth/signup}" class="header_item_link">Account</a>
+                </div>
+                <div th:if="${user ne ''}">
+                    <!-- <div th:if="${user.user_isAdmin}" class="dashboard-button"> -->
+                        <a th:href="@{/admin}" class="header_icon"><i class='bx bxs-dashboard'></i></a>
+                        <a th:href="@{/admin}" class="header_item_link">Admin</a>
+                    </div>
+                    <div class="wishlist">
+                        <a th:href="@{/product/wishlist}" class="header_icon"><i class='bx bx-heart'></i></a>
+                        <a th:href="@{/product/wishlist}" class="header_item_link">Wishlist</a>
+                    </div>
+                    <div class="cart">
+                        <a th:href="@{/product/cart}" class="header_icon"><i class='bx bx-cart-alt'></i></a>
+                        <a th:href="@{/product/cart}" class="header_item_link">Cart</a>
+                    </div>
+                    <div class="notifs">
+                        <a class="header_icon"><i class='bx bxs-notification'></i></a>
+                        <a class="header_item_link">Notifications</a>
+                    </div>
+                    <div class="Account">
+                        <a th:href="@{/account}" class="header_icon"><i class='bx bxs-user'></i></a>
+                        <!-- <a th:href="@{/account}" class="header_item_link" th:text="${user.user_fname}"></a> -->
+                    </div>
+                    <div class="logout">
+                        <a th:href="@{/logout}" class="header_icon"><i class='bx bx-exit'></i></a>
+                        <a href="" class="header_item_link">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr id="nav-separator">
+    <div class="heeader">
+        <i class='bx bx-menu navOpenBtn'></i>
+        <a th:href="@{/}"><img id="logo" th:src="@{/images/pure-logo.png}" alt="logo" width="20%"></a>
+        <div class="ccon">
+            <div class="searchcon">
+                <div class="icon">
+                    <i class='bx bx-search search'></i>
+                </div>
+                <div class="Input">
+                    <input type="text" placeholder="Search" id="search">
+                    <i class='clear bx bx-x'></i>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <i class='bx bx-x navCloseBtn'></i>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/product/list}">Products</a></li>
+                <li><a th:href="@{/about}">About Us</a></li>
+                <li><a th:href="@{/contact}">Contact Us</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Categories</a>
+                    <div class="dropdown-content">
+                        <!-- <th:block th:if="${categories and #lists.size(categories) > 0}">
+                            <th:each th:each="category : ${categories}">
+                                <a th:href="@{/product/list(category=${category.category_name})}" th:text="${category.category_name}"></a>
+                            </th:each>
+                        </th:if>
+                        <th:block th:if="${not categories or #lists.size(categories) == 0}">
+                            <p>No categories available</p>
+                        </th:if> -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="notifs-overlay">
+        <th:block th:if="${notifications}">
+            <th:block th:if="${#lists.size(notifications) > 0}">
+                <th:block th:each="notification : ${notifications}">
+                    <p th:text="${#temporals.format(notification.notification_date, 'EEE, dd MMM yyyy HH:mm:ss')}"></p>
+                    <br>
+                    <strong th:text="${notification.notification_text}"></strong>
+                    <p></p>
+                    <hr>
+                </th:each>
+            </th:if>
+            <th:block th:unless="${#lists.size(notifications) > 0}">
+                <p>No notifications</p>
+            </th:unless>
+        </th:if>
+        <th:block th:unless="${notifications}">
+            <p>No notifications</p>
+        </th:block>
+    </div>
+</nav>
+<script th:src="@{/js/header.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const notifDiv = document.querySelector(".notifs");
+        const overlay = document.querySelector(".notifs-overlay");
+
+        notifDiv.addEventListener("click", function () {
+            overlay.style.display = "flex";
+        });
+
+        const anchorElements = document.querySelectorAll(".notifs a");
+        anchorElements.forEach(function (anchor) {
+            anchor.addEventListener("click", function (event) {
+                event.stopPropagation();
+                overlay.style.display = "flex";
+            });
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!overlay.contains(event.target) && event.target !== notifDiv) {
+                overlay.style.display = "none";
+            }
+        });
+    });
+</script>
+</body>
+</html>
