@@ -2,7 +2,10 @@ package com.example.demo.models;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -11,8 +14,11 @@ import jakarta.persistence.Table;
 public class Category {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Long category_id;
 
+    @Column(name = "category_name", nullable = false)
     private String category_name;
 
 
