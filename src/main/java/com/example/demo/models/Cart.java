@@ -1,7 +1,5 @@
 package com.example.demo.models;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
