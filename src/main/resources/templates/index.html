@@ -20,7 +20,7 @@
 </div>
 
 <div class="container">
-    <!-- <div th:if="${categories and #lists.size(categories) > 0}">
+    <div th:if="${categories != null and #lists.size(categories) > 0}">
         <a th:each="category : ${categories}" th:href="@{/product/list(category=${category.category_name})}">
             <div class="category-card">
                 <div class="category-image">
@@ -33,9 +33,9 @@
             </div>
         </a>
     </div>
-    <div th:if="${not categories or #lists.size(categories) == 0}">
-        <p>No categories available</p>
-    </div> -->
+    <th:block th:if="${categories == null or #lists.size(categories) == 0}">
+    <p>No categories available</p>
+</th:block>
 </div>
 
 <div class="featured-products-container">
