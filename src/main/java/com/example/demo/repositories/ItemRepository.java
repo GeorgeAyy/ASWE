@@ -8,4 +8,5 @@ import com.example.demo.models.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
         List<Item> findByItemCategory(String item_cat);
+        Item  findByItemId(Long itemId);
 }
