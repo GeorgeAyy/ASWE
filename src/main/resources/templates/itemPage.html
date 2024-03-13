@@ -36,13 +36,17 @@
             <div class="product_list">
                 <div class="product_list_wrapper">
                     <!-- Remaining HTML content -->
+                    
+                    <div class="product_item_price">
+                        <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <th:block th:insert="~{fragments/footer.html}"/>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="/js/cart.js"></script>
-    <script src="/js/itempage.js"></script>
+    <script th:src="@{/js/cart.js}"></script>
+    <script src="@{/js/itempage.js}"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@
                         <div class="product_item_info">
                             <div class="product_item_info_inner">
                            
-                                <a th:href="@{'/product/itempage?id=' + ${item.itemId}}" class="product_title" th:text="${item.itemTitle}"></a>
+                                <a th:href="@{'/itempage?id=' + ${item.itemId}}" class="product_title" th:text="${item.itemTitle}"></a>
                          
                                 <div class="product_item_price">
                                     <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
