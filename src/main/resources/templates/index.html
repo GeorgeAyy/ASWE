@@ -6,7 +6,8 @@
     <title>Homepage</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" th:href="@{/css/homepage.css}"/>
-
+    <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
+    <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
     <!-- Add your other head elements (scripts, links, etc.) here -->
 
 </head>
@@ -15,9 +16,19 @@
 <th:block th:insert="~{fragments/header.html}"/>
 <div class="container">
     <div class="slider-container">
-        <!-- Add your slider content here -->
+        <div class="slider">
+            <div class="slide">
+                <img th:src="@{/images/591dff7e-205e-40fe-b24f-e6533282254e.avif}" alt="Image 2"/>
+            </div>
+            <div class="slide">
+                <img th:src="@{/images/f925e78e-43c4-44a2-91b3-b26e9d5f89ca.avif}" alt="Image3"/>
+            </div>
+            <!-- Add more slides as needed -->
+        </div>
+        <div class="slider-btns"></div>
     </div>
 </div>
+
 
 <div class="container">
     <div th:if="${categories != null and #lists.size(categories) > 0}">
