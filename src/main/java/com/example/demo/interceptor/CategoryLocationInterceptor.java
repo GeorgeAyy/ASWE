@@ -6,10 +6,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.models.Category;
-import com.example.demo.models.Item;
+
 import com.example.demo.models.Location;
 import com.example.demo.repositories.CategoryRepository;
-import com.example.demo.repositories.ItemRepository;
+
 import com.example.demo.repositories.LocationRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,14 +23,13 @@ public class CategoryLocationInterceptor implements HandlerInterceptor {
     private final CategoryRepository categoryRepository;
     @Autowired
     private final LocationRepository locationRepository;
-    @Autowired
-    private final ItemRepository ItemRepository;
+   
 
     
-    public CategoryLocationInterceptor(CategoryRepository categoryRepository, LocationRepository locationRepository, ItemRepository ItemRepository) {
+    public CategoryLocationInterceptor(CategoryRepository categoryRepository, LocationRepository locationRepository) {
         this.categoryRepository = categoryRepository;
         this.locationRepository = locationRepository;
-        this.ItemRepository = ItemRepository;
+        
     }
 
     @Override
@@ -48,13 +47,7 @@ public class CategoryLocationInterceptor implements HandlerInterceptor {
             System.out.println("Categories: " + categories);
             System.out.println("Locations: " + locations);
 
-            String categoryName = request.getParameter("category");
-            System.out.println("Category: " + categoryName);
-            if (categoryName != null && !categoryName.isEmpty()) {
-                List<Item> itemsByCategory = ItemRepository.findByItemCategory(categoryName);
-                System.out.println("Items by category: " + itemsByCategory);
-                modelAndView.addObject("itemsByCategory", itemsByCategory);
-            }    
+            
         }
     }
 }
