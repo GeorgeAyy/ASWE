@@ -31,8 +31,9 @@
 
 
 <div class="container">
-    <div class="Card" th:if="${categories != null and #lists.size(categories) > 0}">
-        <a th:each="category : ${categories}" th:href="@{/product/list(category=${category.category_name})}">
+    <div th:if="${categories != null and #lists.size(categories) > 0}">
+        <a th:each="category : ${categories}" th:href="@{/productlist(category=${category.category_name})}">
+
             <div class="category-card">
                 <div class="category-image">
                     <img th:src="@{/images/{categoryName}.webp(categoryName=${category.category_name})}" alt="" />
