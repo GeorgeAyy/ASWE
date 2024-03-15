@@ -1,0 +1,292 @@
+<th:block th:insert="~{fragments/admin_fragments/header.html}"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.6/min/dropzone.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.6/min/dropzone.min.css"
+/>
+
+<div class="container">
+  <div class="row">
+      <h1>Products</h1>
+  </div>
+  <div class="table-responsive" style="max-height: 75vh; max-width: 75vw">
+      <table class="table table-bordered">
+          <thead class="sticky-top">
+          <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Brand</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="product : ${products}">
+              <td th:text="${product.item_id}"></td>
+              <td th:text="${product.item_title}"></td>
+              <td th:text="${product.item_brand}"></td>
+              <td th:text="${product.item_cat}"></td>
+              <td th:text="${product.item_quantity}"></td>
+              <td th:text="${#numbers.formatDecimal(product.item_price, 2)}"></td>
+              <td>
+                  <a href="#" class="btn btn-outline-primary btn-sm edit-product-btn" data-bs-toggle="modal"
+                     data-bs-target="#editProduct" th:data-product-id="${product.item_id}">Edit</a>
+                  <a href="#" class="btn btn-outline-danger btn-sm delete-product-btn" data-bs-toggle="modal"
+                     data-bs-target="#deleteProductConfirmation" th:data-product-id="${product.item_id}">Delete</a>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+  </div>
+  <div class="subtable">
+      <a href="#" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterProducts">Filter products</a>
+      <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProduct">Add new product</a>
+  </div>
+</div>
+
+<!-- Create Product Modal -->
+<div th:fragment="createProductModal">
+    <div class="modal fade" id="createProduct" tabindex="-1" aria-labelledby="createProductLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProductLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createProductForm" th:action="@{/admin/createProduct}" method="post">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName" name="productName" required>
+                            <div id="name-error" style="color: red"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="brand" class="form-label">Brand</label>
+                            <input type="text" class="form-control" id="brand" name="brand" required>
+                            <div id="brand-error" style="color: red"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Health and Wellness">Health and Wellness</option>
+                                <option value="Personal Care">Personal Care</option>
+                                <option value="Baby and Child Care">Baby and Child Care</option>
+                                <option value="Home Health Care">Home Health Care</option>
+                                <option value="Beauty and Cosmetics">Beauty and Cosmetics</option>
+                                <option value="Diet and Nutrition">Diet and Nutrition</option>
+                                <option value="Travel Health">Travel Health</option>
+                                <option value="Specialty Health">Specialty Health</option>
+                                <option value="Medical Devices">Medical Devices</option>
+                                <option value="Pet Health">Pet Health</option>
+                                <!-- Add other categories as needed -->
+                            </select>
+                            <div id="category-error" style="color: red"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+                            <div id="quantity-error" style="color: red"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="price" name="price" required>
+                            <div id="price-error" style="color: red"></div>
+                        </div>
+                        <!-- Error area for Offers -->
+                        <div class="mb-3">
+                            <label for="offers" class="form-label">Offers</label>
+                            <input type="number" class="form-control" id="offers" placeholder="Enter offers" name="offers" value="0" min="0" max="100">
+                            <div id="offers-error" style="color: red"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" rows="3" placeholder="Enter description" name="description"></textarea>
+                            <div id="description-error" style="color: red"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div id="images-error" style="color: red"></div>
+
+                            <div id="my-dropzone" class="dropzone"></div>
+                            <div id="preview"></div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Filter Products Modal -->
+<div class="modal fade" id="filterProducts" tabindex="-1" aria-labelledby="filterProductsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="filterProductsLabel">Filter Products</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="filterProductsForm" th:action="@{/admin/filterProducts}" method="get">
+                  <div class="mb-3">
+                      <label for="brand" class="form-label">Brand</label>
+                      <input type="text" class="form-control" id="brand" name="brand" placeholder="Enter brand name">
+                  </div>
+                  <div class="mb-3">
+                      <label for="title" class="form-label">Title</label>
+                      <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                  </div>
+                  <div class="mb-3">
+                      <label for="priceMin" class="form-label">Min. Price</label>
+                      <input type="number" class="form-control" id="priceMin" name="priceMin" placeholder="Enter minimum price">
+                  </div>
+                  <div class="mb-3">
+                      <label for="priceMax" class="form-label">Max. Price</label>
+                      <input type="number" class="form-control" id="priceMax" name="priceMax" placeholder="Enter maximum price">
+                  </div>
+                  <!-- Add other filtering options as needed -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Apply Filters</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<div th:fragment="editProductModal">
+  <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="editProductLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="editProductLabel">Edit Product</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="edit-product-form" action="/admin/editItem" method="post" class="product-form"
+                        enctype="multipart/form-data">
+                      <!-- Error area for Product Name -->
+                      <div class="mb-3">
+                          <label for="edit-product-name" class="form-label">Product Name</label>
+                          <input type="text" class="form-control" id="edit-product-name" placeholder="Enter product name"
+                                 name="productName" required>
+                          <div id="edit-name-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Brand -->
+                      <div class="mb-3">
+                          <label for="edit-brand" class="form-label">Brand</label>
+                          <input type="text" class="form-control" id="edit-brand" placeholder="Enter brand name"
+                                 name="brand" required>
+                          <div id="edit-brand-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Category -->
+                      <!-- Dropdown for Category -->
+                      <div class="mb-3">
+                          <label for="edit-category" class="form-label">Category</label>
+                          <select class="form-select" id="edit-category" name="category" required>
+                              <option value="" disabled selected>Select a category</option>
+                              <option value="Health and Wellness">Health and Wellness</option>
+                              <option value="Personal Care">Personal Care</option>
+                              <option value="Baby and Child Care">Baby and Child Care</option>
+                              <option value="Home Health Care">Home Health Care</option>
+                              <option value="Beauty and Cosmetics">Beauty and Cosmetics</option>
+                              <option value="Diet and Nutrition">Diet and Nutrition</option>
+                              <option value="Travel Health">Travel Health</option>
+                              <option value="Specialty Health">Specialty Health</option>
+                              <option value="Medical Devices">Medical Devices</option>
+                              <option value="Pet Health">Pet Health</option>
+                              <!-- Add other categories as needed -->
+                          </select>
+                          <div id="edit-category-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Quantity -->
+                      <div class="mb-3">
+                          <label for="edit-quantity" class="form-label">Quantity</label>
+                          <input type="number" class="form-control" id="edit-quantity" placeholder="Enter quantity"
+                                 name="quantity" required>
+                          <div id="edit-quantity-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Price -->
+                      <div class="mb-3">
+                          <label for="edit-price" class="form-label">Price</label>
+                          <input type="number" class="form-control" id="edit-price" placeholder="Enter price"
+                                 name="price" required>
+                          <div id="edit-price-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Offers -->
+                      <div class="mb-3">
+                          <label for="edit-offers" class="form-label">Offers</label>
+                          <input type="number" class="form-control" id="edit-offers" placeholder="Enter offers"
+                                 name="offers" value="0" min="0" max="100" required>
+                          <div id="edit-offers-error" style="color: red"></div>
+                      </div>
+
+                      <!-- Error area for Description -->
+                      <div class="mb-3">
+                          <label for="edit-description" class="form-label">Description</label>
+                          <textarea class="form-control" id="edit-description" rows="3"
+                                    placeholder="Enter description" name="description" required></textarea>
+                          <div id="edit-description-error" style="color: red"></div>
+                      </div>
+
+                      <div class="mb-3">
+                          <div id="images-error" style="color: red"></div>
+                          <div id="my-dropzoneedit" class="dropzone"></div>
+                          <div id="edit-preview">
+                              <ul id="edit-previous-images"></ul>
+                          </div>
+                      </div>
+
+                      <!-- Additional input fields or hidden inputs based on your requirements -->
+                      <input type="hidden" id="edit-product-id" name="productId" value="" />
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div th:fragment="deleteProductConfirmationModal">
+  <div class="modal fade" id="deleteProductConfirmation" tabindex="-1" aria-labelledby="deleteProductConfirmationLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="deleteProductConfirmationLabel">Confirm Deletion</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <p>Are you sure you want to delete this product?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger" id="confirmDeleteProductBtn">Delete</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<th:block th:insert="~{fragments/admin_fragments/footer.html}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/js/dropzone.js"></script>

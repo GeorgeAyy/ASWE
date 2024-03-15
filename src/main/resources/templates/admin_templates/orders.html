@@ -1,0 +1,48 @@
+<th:block th:insert="~{fragments/admin_fragments/header.html}"/>
+<div class="container">
+  <div class="row">
+      <h1>Orders</h1>
+  </div>
+  <div class="table-responsive" style="max-height: 75vh; max-width: 75vw">
+      <table class="table table-bordered">
+          <thead class="sticky-top">
+          <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Item(s)</th>
+              <th>Sum</th>
+              <th>Status</th>
+              <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="order : ${orders}">
+              <td th:text="${order.order_id}"></td>
+              <td th:text="${#dates.format(order.order_date, 'EEE MMM dd yyyy')}"></td>
+              <td>
+                  <span th:each="item : ${order.order_items}" class="badge bg-secondary"
+                        th:text="${item.item_quantity + 'x ' + item.item.item_title}"></span>
+              </td>
+              <td>
+                  <span th:with="sum=0">
+                      <span th:each="item : ${order.order_items}"
+                            th:with="sum=${sum + (item.item_quantity * item.item.item_price)}"></span>
+                  </span>
+                  <span th:text="'$' + ${#numbers.formatDecimal(sum, 2)}"></span>
+              </td>
+              <td>
+                  <span th:class="${order.order_status == 0} ? 'badge bg-warning' : 'badge bg-success'"
+                        th:text="${order.order_status == 0} ? 'Pending' : 'Completed'"></span>
+              </td>
+              <td>
+                  <a th:href="@{/admin/orders/change_status/{order_id}(order_id=${order.order_id})}"
+                     class="btn btn-outline-secondary btn-sm">Change Status</a>
+                  <a th:href="@{/admin/orders/delete/{order_id}(order_id=${order.order_id})}"
+                     class="btn btn-outline-danger btn-sm">Delete</a>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+<th:block th:insert="~{fragments/admin_fragments/footer.html}"/>
