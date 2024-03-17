@@ -32,7 +32,7 @@ public class User {
     @Column(name = "user_address", nullable = false, columnDefinition = "TEXT")
     private String user_address;
 
-    @Column(name = "user_user_isAdmin", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(name = "user_user_isAdmin", nullable = false)
     private boolean user_isAdmin;
 
 
@@ -173,5 +173,8 @@ public class User {
             "}";
     }
 
+    public boolean isUserAdmin() {
+        return this.user_isAdmin;
+    }
     
 }

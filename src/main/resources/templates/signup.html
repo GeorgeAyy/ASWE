@@ -8,41 +8,15 @@
     <link rel="stylesheet" th:href="@{/css/loginAndSignup.css}"/>
     <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
     <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
+    <!-- Add your other head elements (scripts, links, etc.) here -->
 
 </head>
 <body>
 
 <th:block th:insert="~{fragments/header.html}"/>
 <div class="signupcontainer">
-    <form th:action="@{/auth/signup}" th:object="${signupRequest}" method="POST" class="form-main" id="form-main">
-        <header class="form_header">
-            <h1 class="form_title1">Create my account</h1>
-            <p class="form_title2">Please fill in the information below:</p>
-        </header>
-        <div class="form-input">
-            <input type="text" th:field="*{user_fname}" class="input-field" id="firstname" placeholder="First Name">
-            <span class="error-message" id="firstname-error" th:if="${#fields.hasErrors('user_fname')}" th:errors="*{user_fname}" ></span>
-        </div>
-        <div class="form-input">
-            <input type="text" th:field="*{user_Lname}" class="input-field" id="lastname" placeholder="Last Name">
-            <span class="error-message" id="lastname-error"></span>
-        </div>
-        <div class="form-input">
-            <input type="text" th:field="*{email}" class="input-field" id="email" placeholder="Email">
-            <span class="error-message" id="email-error" ></span>
-        </div>
-        <div class="form-input">
-            <input type="password" th:field="*{userPassword}"  class="input-field" id="password" placeholder="Password">
-            <span class="error-message" id="password-error" ></span>
-        </div>
-        <!-- <div class="form-input">
-            <input type="password" field="user_confirmPassword" class="input-field" id="confirmPassword" placeholder="Confirm Password">
-            <span class="error-message" id="confirmpassword-error" ></span>
-        </div> -->
-        <div class="form-input">
-            <input type="text" th:field="*{user_address}" class="input-field" id="address" placeholder="Address">
-            <span class="error-message" id="address-error"></span>
-        </div>
+    <form th:action="@{/auth/signup}" th:object="${signupRequest}" method="post" class="form-main" id="form-main">
+        
         <button type="submit" class="submit-button">Create My Account</button>
 
         <div class="form_second">
@@ -55,7 +29,7 @@
 
 
 <th:block th:insert="~{fragments/footer.html}"/>
-
+<!-- Add your scripts here -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:src="@{/js/homepage.js}"></script>
 <script th:src="@{/js/cart.js}"></script>

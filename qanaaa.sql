@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2024 at 09:32 PM
+-- Generation Time: Mar 16, 2024 at 03:29 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `qanaa`
+-- Database: `qanaaa`
 --
 
 -- --------------------------------------------------------
@@ -163,6 +163,7 @@ CREATE TABLE `user` (
   `user_fname` varchar(20) NOT NULL,
   `user_address` text NOT NULL,
   `user_isAdmin` tinyint(1) NOT NULL DEFAULT 0,
+  `user_is_admin` bit(1) NOT NULL,
   `user_user_is_admin` bit(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -170,8 +171,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_Lname`, `email`, `user_password`, `user_id`, `user_fname`, `user_address`, `user_isAdmin`, `user_user_is_admin`) VALUES
-('Aziz', 'georgeayman2003@gmail.com', '$2a$10$vUdrqBMjDcPkURNLJ8oIJeAMPZ3D9OJq9bTwbUjXJMR2M6N1BXDpe', 87, 'George', 'tawnyat', 1, b'0');
+INSERT INTO `user` (`user_Lname`, `email`, `user_password`, `user_id`, `user_fname`, `user_address`, `user_isAdmin`, `user_is_admin`, `user_user_is_admin`) VALUES
+('Aziz', 'georgeayman2003@gmail.com', '$2a$10$vUdrqBMjDcPkURNLJ8oIJeAMPZ3D9OJq9bTwbUjXJMR2M6N1BXDpe', 87, 'George', 'tawnyat', 1, b'0', b'0');
 
 -- --------------------------------------------------------
 
