@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/")
 public class IndexController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView("index.html");
         return mav;
