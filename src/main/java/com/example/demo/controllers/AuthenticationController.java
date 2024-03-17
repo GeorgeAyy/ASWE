@@ -4,16 +4,19 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.repositories.UserRepository;
 
@@ -31,21 +34,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    @Autowired
+    private UserRepository UserRepository;
+
     @GetMapping("/login")
     public ModelAndView login() {
         ModelAndView mav = new ModelAndView("login.html");
         return mav;
     }
-
     @GetMapping("/signup")
     public ModelAndView signup() {
         ModelAndView mav = new ModelAndView("signup.html");
-        mav.addObject("signupRequest", new SignupRequest());
+        User user = new User();
+        mav.addObject("signupRequest", user);
         return mav;
     }
-
-    @Autowired
-    private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
@@ -60,7 +63,7 @@ public class AuthenticationController {
         }
 
         // Check if the user exists in the database
-        User user = userRepository.findByEmail(email);
+        User user = UserRepository.findByEmail(email);
         if (user == null) {
             return ResponseEntity.badRequest().body("Invalid email or password");
         }
@@ -87,7 +90,7 @@ public class AuthenticationController {
 
         // Update the user details in the database
         try {
-            userRepository.save(userDetails);
+            UserRepository.save(userDetails);
             return ResponseEntity.ok("User details updated successfully");
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,21 +98,21 @@ public class AuthenticationController {
         }
     }
 
+
+
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
+    public RedirectView signup(@ModelAttribute User signupRequest) {
+        
         System.out.println("Signup request received");
 
-        String firstname = signupRequest.getFirstname();
-        String lastname = signupRequest.getLastname();
+        String firstname = signupRequest.getUser_fname();
+        String lastname = signupRequest.getUser_Lname();
         String email = signupRequest.getEmail();
-        String password = signupRequest.getPassword();
-        String confirmpassword = signupRequest.getConfirmpassword();
-        String address = signupRequest.getAddress();
+        String password = signupRequest.getUserPassword();
+        String address = signupRequest.getUser_address();
 
-        // Create an array to store error messages with field names
         List<String> errors = new ArrayList<>();
 
-        // Perform data validation
         if (firstname == null || firstname.isEmpty()) {
             errors.add("First name is required");
         }
@@ -126,28 +129,21 @@ public class AuthenticationController {
             errors.add("Password must be at least 8 characters long");
         }
 
-        if (!password.equals(confirmpassword)) {
-            errors.add("Passwords do not match");
-        }
+        // if (!password.equals(confirmPassword)) {
+        //     errors.add("Passwords do not match");
+        // }
 
         if (address == null || address.isEmpty()) {
             errors.add("Address is required");
         }
 
-        // If there are errors, return the errors
         if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().body(errors);
+            
+            return new RedirectView("/auth/signup");
         }
 
-        // Hash the password
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
+        this.UserRepository.save(signupRequest);
 
-        // Save the user to the database
-        User newUser = new User(null, lastname, email, hashedPassword, firstname, address, false);
-        userRepository.save(newUser);
-
-        // Redirect to login page
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new RedirectView("/auth/login");
     }
 }
