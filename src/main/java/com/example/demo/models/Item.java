@@ -33,10 +33,10 @@ public class Item {
     private int itemQuantity;
 
     @Column(name = "item_price", nullable = false)
-    private int itemPrice;
+    private double itemPrice;
 
     @Column(name = "item_offers", nullable = false)
-    private int itemOffers;
+    private double itemOffers;
 
     // Add getters and setters
 
@@ -52,6 +52,17 @@ public class Item {
         this.itemQuantity = itemQuantity;
         this.itemPrice = itemPrice;
         this.itemOffers = itemOffers;
+    }
+    
+    public Item(String productName, String category, String brand, double price, String description, int quantity,
+            double offers) {
+        this.itemTitle = productName;
+        this.itemCategory = category;
+        this.itemBrand = brand;
+        this.itemPrice = price;
+        this.itemDetails = description;
+        this.itemQuantity = quantity;
+        this.itemOffers = offers;
     }
 
     public Long getItemId() {
@@ -102,19 +113,19 @@ public class Item {
         this.itemQuantity = itemQuantity;
     }
 
-    public int getItemPrice() {
+    public double getItemPrice() {
         return this.itemPrice;
     }
 
-    public void setItemPrice(int itemPrice) {
+    public void setItemPrice(double itemPrice) {
         this.itemPrice = itemPrice;
     }
 
-    public int getItemOffers() {
+    public double getItemOffers() {
         return this.itemOffers;
     }
 
-    public void setItemOffers(int itemOffers) {
+    public void setItemOffers(double itemOffers) {
         this.itemOffers = itemOffers;
     }
 

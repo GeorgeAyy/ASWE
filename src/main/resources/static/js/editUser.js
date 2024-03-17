@@ -23,14 +23,14 @@ $(document).ready(function () {
       method: "POST",
       data: { userId: userId },
       success: function (response) {
-        console.log("User details retrieved successfully:", response.userId);
+        console.log("User details retrieved successfully:", response.user_id);
         // Update the edit form fields with the retrieved data
-        $("#edit-user-id").val(response.userId);
-        $("#edit-user-fname").val(response.userFname);
-        $("#edit-user-lname").val(response.userLname);
+        $("#edit-user-id").val(response.user_id);
+        $("#edit-user-fname").val(response.user_fname);
+        $("#edit-user-lname").val(response.user_Lname);
         $("#edit-user-email").val(response.email);
-        $("#edit-user-address").val(response.userAddress);
-        $("#edit-user-admin").prop("checked", response.userIsAdmin);
+        $("#edit-user-address").val(response.user_address);
+        $("#edit-user-admin").prop("checked", response.user_isAdmin);
 
         // You can customize the code below based on your requirements
         // Example: Display a message
