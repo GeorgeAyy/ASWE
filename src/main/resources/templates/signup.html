@@ -16,7 +16,34 @@
 <th:block th:insert="~{fragments/header.html}"/>
 <div class="signupcontainer">
     <form th:action="@{/auth/signup}" th:object="${signupRequest}" method="post" class="form-main" id="form-main">
-        
+        <header class="form_header">
+            <h1 class="form_title1">Create my account</h1>
+            <p class="form_title2">Please fill in the information below:</p>
+        </header>
+        <div class="form-input">
+            <input type="text" name="firstname" class="input-field" id="firstname" placeholder="First Name" th:value="${firstname}">
+            <span class="error-message" id="firstname-error" th:text="${#fields.errors('firstname')}"></span>
+        </div>
+        <div class="form-input">
+            <input type="text" name="lastname" class="input-field" id="lastname" placeholder="Last Name" th:value="${lastname}">
+            <span class="error-message" id="lastname-error" th:text="${#fields.errors('lastname')}"></span>
+        </div>
+        <div class="form-input">
+            <input type="text" name="email" class="input-field" id="email" placeholder="Email" th:value="${email}">
+            <span class="error-message" id="email-error" th:text="${#fields.errors('email')}"></span>
+        </div>
+        <div class="form-input">
+            <input type="password" name="password" class="input-field" id="password" placeholder="Password">
+            <span class="error-message" id="password-error" th:text="${#fields.errors('password')}"></span>
+        </div>
+        <div class="form-input">
+            <input type="password" name="confirmpassword" class="input-field" id="confirmPassword" placeholder="Confirm Password">
+            <span class="error-message" id="confirmpassword-error" th:text="${#fields.errors('confirmpassword')}"></span>
+        </div>
+        <div class="form-input">
+            <input type="text" name="address" class="input-field" id="address" placeholder="Address" th:value="${address}">
+            <span class="error-message" id="address-error" th:text="${#fields.errors('address')}"></span>
+        </div>
         <button type="submit" class="submit-button">Create My Account</button>
 
         <div class="form_second">
