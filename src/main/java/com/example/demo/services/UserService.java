@@ -19,7 +19,7 @@ public class UserService {
                                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Toggle admin status
-        user.setUser_isAdmin(!user.isUser_isAdmin());
+        user.setUser_isAdmin(!user.isUserAdmin());
 
         // Save the updated user
         userRepository.save(user);
