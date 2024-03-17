@@ -37,12 +37,7 @@ public class AuthenticationController {
         return mav;
     }
 
-    @GetMapping("/signup")
-    public ModelAndView signup() {
-        ModelAndView mav = new ModelAndView("signup.html");
-        mav.addObject("signupRequest", new SignupRequest());
-        return mav;
-    }
+
 
     @Autowired
     private UserRepository userRepository;
@@ -95,59 +90,5 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
-        System.out.println("Signup request received");
-
-        String firstname = signupRequest.getFirstname();
-        String lastname = signupRequest.getLastname();
-        String email = signupRequest.getEmail();
-        String password = signupRequest.getPassword();
-        String confirmpassword = signupRequest.getConfirmpassword();
-        String address = signupRequest.getAddress();
-
-        // Create an array to store error messages with field names
-        List<String> errors = new ArrayList<>();
-
-        // Perform data validation
-        if (firstname == null || firstname.isEmpty()) {
-            errors.add("First name is required");
-        }
-
-        if (lastname == null || lastname.isEmpty()) {
-            errors.add("Last name is required");
-        }
-
-        if (email == null || email.isEmpty() || !email.contains("@") || !email.contains(".")) {
-            errors.add("Invalid email");
-        }
-
-        if (password == null || password.length() < 8) {
-            errors.add("Password must be at least 8 characters long");
-        }
-
-        if (!password.equals(confirmpassword)) {
-            errors.add("Passwords do not match");
-        }
-
-        if (address == null || address.isEmpty()) {
-            errors.add("Address is required");
-        }
-
-        // If there are errors, return the errors
-        if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        // Hash the password
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-
-        // Save the user to the database
-        User newUser = new User(null, lastname, email, hashedPassword, firstname, address, false);
-        userRepository.save(newUser);
-
-        // Redirect to login page
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+   
 }
