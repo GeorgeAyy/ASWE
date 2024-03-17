@@ -173,8 +173,5 @@ public class User {
             "}";
     }
 
-    public boolean isUserAdmin() {
-        return this.user_isAdmin;
-    }
     
 }
