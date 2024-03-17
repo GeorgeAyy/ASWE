@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/loginAndSignup.css}"/>
+    <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
+    <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
+	<link rel="stylesheet" href="/css/loginAndSignup.css">
+    <!-- Add your other head elements (scripts, links, etc.) here -->
+
+</head>
+<body>
+
+<th:block th:insert="~{fragments/header.html}"/>
+<div class="containerI">
+	<div class="form-header">
+		<h1>Login to my account</h1>
+		<p class="sub-header-login">Enter your email and password:</p>
+	</div>
+	<form id="login-form" action="/login" method="post" novalidate>
+		<div class="form-group">
+			<input type="text" id="email" name="email" placeholder="Email" class="input-field" required="required">
+			<!-- <span class="error-message" th:id="email-error" th:text="${#fields.hasErrors('email')} ? ${#fields.errors('email').get(0).getDefaultMessage()} : ''"></span> -->
+		</div>
+		
+		<div class="form-group">
+			<input type="password" id="password" name="password" placeholder="Password" class="input-field" required="required">
+			<!-- <span class="error-message" th:id="password-error" th:text="${#fields.hasErrors('password')} ? ${#fields.errors('password').get(0).getDefaultMessage()} : ''"></span> -->
+		</div>
+		
+		
+		<input type="submit" value="Submit" id="submit-button" class="submit-button">
+
+		<a href="/auth/signup" class="create">New customer? Create your account</a>
+		<a href="/auth/forgetpassword" class="forgetpas">Forget your password?</a>
+	  
+	</form>
+	 </div>
+
+<!-- Add your Thymeleaf modal content here -->
+
+<!-- Include Thymeleaf footer -->
+
+<th:block th:insert="~{fragments/footer.html}"/>
+<!-- Add your scripts here -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:src="@{/js/homepage.js}"></script>
+<script th:src="@{/js/cart.js}"></script>
+<script th:src="@{/js/wishlist.js}"></script>
+</body>
+</html>
