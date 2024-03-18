@@ -23,11 +23,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.repositories.UserRepository;
 
-import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.models.User;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 
@@ -69,7 +67,11 @@ public class AuthenticationController {
     }
 
 
-
+    @GetMapping("/changeAccount")
+    public ModelAndView changeAccount() {
+        ModelAndView mav = new ModelAndView("account.html");
+        return mav;
+    }
    
 
     @PostMapping("/changeAccount")
