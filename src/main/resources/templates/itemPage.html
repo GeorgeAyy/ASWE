@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,40 +13,385 @@
 </head>
 <body>
     <th:block th:insert="~{fragments/header.html}"/>
+<div class="mainContainer">
+    <div class="page_header">
+        <nav>
+            <ol class="page-list">
+                <li class="page-tag">
+                    <a href="/" class="tag">Home</a>
+                    <i class='bx bx-chevron-right'></i>
+                <li class="page-tag">
+                    <a href="" class="tag">All products</a>
+                    <i class='bx bx-chevron-right'></i>
+                </li>
+                <li class="page-tag">
+                  <span class="tag">Panadol Advance - 24 Tablets</span>
+                </li>
+
+            </ol>
+        </nav>
+    </div>
 
     <div class="mainContainer">
-        <div class="page_header">
-            <nav>
-                <ol class="page-list">
-                    <li class="page-tag">
-                        <a href="/" class="tag">Home</a>
-                        <i class='bx bx-chevron-right'></i>
-                    <li class="page-tag">
-                        <a href="" class="tag">All products</a>
-                        <i class='bx bx-chevron-right'></i>
-                    </li>
-                    <li class="page-tag">
-                      <span class="tag">Panadol Advance - 24 Tablets</span>
-                    </li>
-                </ol>
-            </nav>
-        </div>
+        <div class="product_list">
+            <div class="product_list_wrapper">
+                <div class="mobile_only">
+                    <div class="cardsection">
+                        <h1 class="title_prod">
+                           Vichy Liftactiv B3 Serum Dark Spots &amp; Wrinkles Serum - 30ml
+                        </h1>
+                        <div class="product_ref">
+                            <a href="" class="producttitle">Vichy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product_list_item">
+                    <div class="card">
+                        <div class="cardsection">
+                            <div class="product_gallery">
+                                <div class="product_gallery_wrapper">
+                                    <div class="tag">
+                                        <span></span>
+                                    </div>
+                                    <div class="product_gallery_img">
+                                        <div class="prod_item" id="dynamicDiv">
+                                            <div class="imgslider">
+                                                <div class="img_1">
+                                                    <div class="product_size">
+                                                        <div class="ratio">
+                                                            <img th:each="image : ${itemImages[0]}" th:src="@{'/images/' + ${image.imagePath}}" alt=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="img_2">
+                                                    <div class="sec_product_size">
+                                                        <div class="ratio">
+                                                            <% if (images.length > 1) { %>
+                                                                <img src="/images/<%= images[1] %>" alt="<%= images[1] %>">
+                                                              <% } else { %>
+                                                                <img src="/images/default_image.png" alt="Default Image">
+                                                              <% } %>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="productitems">
+                                    <div class="desktop_only">
+                                    <div class="scroller">
+                                        <div class="inner_scroller">
+                                            <div class="items_img">
+                                                <!-- <% const image = product.image_path ? product.image_path.split(',') : []; %>
+                                                <% for (let i = 0; i < image.length; i++) { %>
+                                                  <a href="#" class="item" onclick="changeImage('<%=i%>')">
+                                                    <img src="/images/<%= image[i] %>" alt="<%= image[i] %>">
+                                                  </a>
+                                                <% } %> -->
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product_item_info">
+                    <div class="cardinfo">
+                        <div class="card_section">
+                           
+                                <div class="product_catageory">
+                                    <div class="inner_catageory">
+                                        <div class="desktop_only">
+                                            <a href="" class="producttitle" th:text="${item.itemTitle}"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="desktop_only">
+                                    <div class="product-title">
+                                        <h1 th:text="${item.itemTitle}"></h1>
+                                    </div>
+                                </div>
+                                <div class="product_extra_info">
+                                    <div class="item_stock">
+                                        <span class="stock">In stock</span>
+                                    </div>
+                                </div>
+                                <hr class="card__separator">
+                                <div class="product_info">
+                                    <div class="product_price">
+                                        <span class="prod-info">Price:</span>
+                                        <div class="costprod">
+                                            <div class="price">
+                                                <span th:text="${item.itemPrice}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="prodcut-quantity">
+                                        <label class="quantity">Quantity</label>
+                                        <div class="quantity_no">
+                                            <div class="quantity_sector">
+                                                <button type="button"  onclick="decrement()" class="quantity_button">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </button>
+                                                <input type="text" class="quantity_value" id="quantity_value" value="1">
+                                                <button type="button"  onclick="increment()" class="quantity_button">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product_payment">
+                                    <!-- <% if (user === "") { %>
+                                    <button class="btn_addtocart">ADD TO BAG</button>
+                                    <button class="buy">Buy Now</button>
+                                    <% } else { %>
 
-        <div class="mainContainer">
-            <div class="product_list">
-                <div class="product_list_wrapper">
-                    <!-- Remaining HTML content -->
-                    
-                    <div class="product_item_price">
-                        <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
+                                        <form
+                                        onsubmit="addToBag(event)"
+                                        data-product-id="<%= product.item_id %>"
+                                        data-user-id="<%= user.user_id %>"
+                                        style="    display: contents;"
+                                      >
+                                        <button type="submit" class="btn_addtocart">
+                                          Add to Bag
+                                        </button>
+                                      </form>
+                                    <button type="button" class="buy">Buy Now</button>
+                                    <% } %> -->
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="product_descrption">
+                    <div class="card">
+                        <button class="card_button">
+                            <span class="card_title">PRODUCT INFORMATION</span>
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <div class=""></div>
+                    </div>
+                </div>
+                <div class="delivery">
+                    <div class="card">
+                        <button class="card_button">
+                            <span class="card_title">Delivery & Returns</span>
+                        </button>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="product_review">
+                    <div class="card">
+                        <div class="card__section">
+                            <div class="reviewcontainer">
+                                <div class="review_header">
+                                    <h2 class="headerr_title">Customer Reviews</h2>
+                                    <div class="reviewsummary">
+                                        <span class="rev_caption">No reviews yet</span>
+                                        <span class="rev_btn">
+                                            <a href="" class="write_rev_btn">Write a review</a>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <th:block th:insert="~{fragments/footer.html}"/>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script th:src="@{/js/cart.js}"></script>
-    <script src="@{/js/itempage.js}"></script>
+    <div class="mainContainer">
+        <div class="header_section">
+            <h2 class="header_title h2">YOU MAY ALSO LIKE</h2>
+        </div>
+        <div class="product-recommendations">
+            <div class="scroller">
+                <div class="inner_scroller">
+                    <div class="products_list">
+                        <div class="inner_list" id="inner_List">
+                            <div class="product_slider" id="productSlider">
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/beurer-bm28-upper-arm-blood-pressure-monitor-229954.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div>
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-193628.webp" alt="" class="pic-1">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="" class="pic-2">
+
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div>
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div>
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div>
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div> <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div> <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div> <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div>
+                                 <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button class="product_btn">Add to Bag</button>
+                                    </div>
+                                </div> 
+                                <div class="product_Item">
+                                    <a href="" class="product_item_img">
+                                        <div class="ratio">
+                                            <img src="/images/eucerin-hyaluron-filler-moisture-booster-serum-30ml-578653_1024x.webp" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="product_items_info">
+                                        <div class="product_items_info_inner">
+                                            <a href="#" class="product_item_title">Beurer Bm28 Upper Arm Blood Pressure ...</a>
+                                            <div class="product_item_price">
+                                                <span class="price_item">EGP 1,999.00</span>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="product_btn">add to bag</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button_prev" type="button"onclick="prevSlide()" id="prevButton" disabled><span class="material-symbols-outlined">
+                            chevron_left
+                            </span></button>
+                            <button class="button_next" type="button" onclick="nextSlide()" id="nextButton"><span class="material-symbols-outlined">
+                                chevron_right
+                                </span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:src="@{/js/cart.js}"></script>
+<script th:src="@{/js/itempage.js}"></script>
+</script>
 </body>
 </html>
