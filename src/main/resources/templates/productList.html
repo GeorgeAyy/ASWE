@@ -20,11 +20,11 @@
                 <div th:each="item : ${itemsByCategory}" class="featured_product">
                     <div class="featured_product_inner">
                     
-                        <!-- <a th:href="@{'/product/itempage?id=' + ${item.itemId}}" class="product_item_image">
+                        <a th:href="@{'/itempage?id=' + ${item.itemId}}" class="product_item_image">
                             <div class="ratio">
-                                <img th:src="@{/images/{imagePath}(imagePath=${item.imagePath})}" alt=""/>
+                                <img th:each="image : ${itemImages[0]}" th:src="@{'/images/' + ${image.imagePath}}" alt=""/>
                             </div>
-                        </a> -->
+                        </a>
                         <div class="product_item_info">
                             <div class="product_item_info_inner">
                            
