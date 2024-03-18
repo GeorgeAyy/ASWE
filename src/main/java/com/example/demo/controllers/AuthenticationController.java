@@ -40,7 +40,23 @@ public class AuthenticationController {
     @GetMapping("/login")
     public ModelAndView login() {
         ModelAndView mav = new ModelAndView("login.html");
+        User newUser = new User();
+        mav.addObject("user", newUser);
         return mav;
+    }
+
+    @PostMapping("/login")
+    public RedirectView getuser(@RequestParam("email") String email,
+    @RequestParam("userPassword") String userPassword) {
+        
+        User dbUser= this.UserRepository.findByEmail(email);
+        Boolean isPassword = BCrypt.checkpw(userPassword, dbUser.getUserPassword());
+        if (isPassword) {
+       
+        return new RedirectView("/");}
+        else{
+            return new RedirectView("/auth/login");
+        }
     }
 
     @GetMapping("/signup")
@@ -51,37 +67,9 @@ public class AuthenticationController {
         return mav;
     }
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
-        System.out.println("Login request received");
 
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-
-        // Perform data validation
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
-            return ResponseEntity.badRequest().body("Email and password are required");
-        }
-
-        // Check if the user exists in the database
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Invalid email or password");
-        }
-
-        // Check if the password is valid
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(password, user.getUserPassword())) {
-            return ResponseEntity.badRequest().body("Invalid email or password");
-        }
-
-        // Create a session
-        session.setAttribute("user", user);
-        return ResponseEntity.ok().build();
-    }
+   
 
     @PostMapping("/changeAccount")
     public ResponseEntity<String> changeAccount(@RequestBody User userDetails) {
@@ -94,7 +82,7 @@ public class AuthenticationController {
 
         // Update the user details in the database
         try {
-            userRepository.save(userDetails);
+            UserRepository.save(userDetails);
             return ResponseEntity.ok("User details updated successfully");
         } catch (Exception e) {
             e.printStackTrace();

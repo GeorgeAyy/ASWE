@@ -20,14 +20,14 @@
 		<h1>Login to my account</h1>
 		<p class="sub-header-login">Enter your email and password:</p>
 	</div>
-	<form id="login-form" action="/login" method="post" novalidate>
+	<form id="login-form" th:action="@{/auth/login}"  th:object="${user}" method="post">
 		<div class="form-group">
-			<input type="text" id="email" name="email" placeholder="Email" class="input-field" required="required">
+			<input type="text" id="email" th:field="*{email}" placeholder="Email" class="input-field" required="required">
 			<!-- <span class="error-message" th:id="email-error" th:text="${#fields.hasErrors('email')} ? ${#fields.errors('email').get(0).getDefaultMessage()} : ''"></span> -->
 		</div>
 		
 		<div class="form-group">
-			<input type="password" id="password" name="password" placeholder="Password" class="input-field" required="required">
+			<input type="password" id="password" th:field="*{userPassword}" placeholder="Password" class="input-field" required="required">
 			<!-- <span class="error-message" th:id="password-error" th:text="${#fields.hasErrors('password')} ? ${#fields.errors('password').get(0).getDefaultMessage()} : ''"></span> -->
 		</div>
 		
