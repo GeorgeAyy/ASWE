@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/cart.css}" />
+    <title>Document</title>
+</head>
+<body>
+    <th:block th:insert="~{fragments/header.html}"/>
+
+    <div class="container">
+        <header class="cartheader">
+            <h1>My Bag</h1>
+        </header>
+    </div>
+    <div class="cart-wrapper">
+        <div class="cart-wrapper__inner">
+            <div class="insidewrapper">
+                <div class="container c_cart">
+                    <!-- <div class="card">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead class="hidden-phone">
+                                    <tr>
+                                        <th>ITEM</th>
+                                        <th class="table_center">QTY</th>
+                                        <th class="table_right">SUBTOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <td class="td_upper">
+                                            <div class="prodductinfo">
+                                                <div class="item_image">
+                                                    <div class="imgcont">
+                                                        <img th:src="@{/images/__${product.image_paths.split(',')[0]}__ ? '__${product.image_paths.split(',')[0]}__' : '/images/default_image.png'}" alt="Product Image" />
+                                                    </div>
+                                                </div>
+                                                <div class="item_title">
+                                                    <a href="" class="inner_title" th:text="${product.item_title}"></a>
+                                                    <div class="item_price">
+                                                        <span class="prices" th:text="${product.item_price}"></span>
+                                                    </div>
+                                                    <div class="line-item hidden-table">
+                                                        <div class="quantity_range">
+                                                            <button type="button" onclick="decrement()" class="quan_button"><i class="fa-solid fa-minus"></i></button>
+                                                            <input type="text" class="quantityvalue" th:value="${product.quantity}" data-product-id="${product.item_id}" />
+                                                            <button type="button" onclick="increment()" class="quan_button"><i class="fa-solid fa-plus"></i></button>
+                                                        </div>
+                                                        <button type="button" onclick="deleteProduct()" class="button-remove"><i class="bx bx-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="td_center hidden-phone">
+                                            <div class="Qty_div">
+                                                <div class="quantity_range">
+                                                    <button type="button" onclick="decrement()" class="quan_button"><i class="fa-solid fa-minus"></i></button>
+                                                    <input type="text" class="quantityvalue" th:value="${product.quantity}" />
+                                                    <button type="button" onclick="increment()" class="quan_button"><i class="fa-solid fa-plus"></i></button>
+                                                </div>
+                                                <button type="button" onclick="deleteProduct()" class="button-remove"><i class="bx bx-trash"></i></button>
+                                            </div>
+                                        </td>
+                                        <td class="td_right hidden-phone">
+                                            <span th:text="'EGP ' + ${#numbers.formatDecimal(product.item_price * product.quantity, 2, 'COMMA', 'POINT')}"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> -->
+                    <form th:action="@{/checkout}" class="cart-recap" method="POST">
+                        <div class="cart_scroller">
+                            <div class="card">
+                                <div class="card__Section">
+                                    <div class="upperpart">
+                                        <div class="innerpart">
+                                            <div class="coupon">
+                                                <input type="text" placeholder="Coupon Code" />
+                                                <div class="buttoninput">
+                                                    <div class="inputbtn">Apply</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="innerpart">
+                                            <div class="subtotal">
+                                                <span class="toleft">Subtotal</span>
+                                                <span class="toright" th:text="'EGP ' + ${subtotal}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="notices">
+                                        <p>Taxes and shipping calculated at checkout</p>
+                                    </div>
+                                    <input type="hidden" name="prod_Info_checkout"  />
+                                    <input type="hidden" name="prod_Quantity_checkout" />
+                                    <button type="submit" class="butn">SECURE CHECKOUT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:insert="~{fragments/footer.html}"/>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/cart.js"></script> -->
+    <script>
+
+    </script>
+</body>
+</html>

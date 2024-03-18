@@ -43,7 +43,7 @@
                         <a class="header_item_link">Notifications</a>
                     </div>
                     <div class="Account">
-                        <a th:href="@{/account}" class="header_icon"><i class='bx bxs-user'></i></a>
+                        <a th:href="@{/auth/changeAccount}" class="header_icon"><i class='bx bxs-user'></i></a>
                         <!-- <a th:href="@{/account}" class="header_item_link" th:text="${user.user_fname}"></a> -->
                     </div>
                     <div class="logout">
@@ -71,15 +71,15 @@
             <ul class="nav-links">
                 <i class='bx bx-x navCloseBtn'></i>
                 <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/product/list}">Products</a></li>
-                <li><a th:href="@{/about}">About Us</a></li>
-                <li><a th:href="@{/contact}">Contact Us</a></li>
+                <li><a th:href="@{/productlist}">Products</a></li>
+                <!-- <li><a th:href="@{/about}">About Us</a></li>
+                <li><a th:href="@{/contact}">Contact Us</a></li> -->
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Categories</a>
                     <div class="dropdown-content">
                         <th:block th:if="${categories != null and #lists.size(categories) > 0}">
                             <th:each th:each="category : ${categories}">
-                                <a th:href="@{/product/list(category=${category.category_name})}" th:text="${category.category_name}"></a>
+                                <a th:href="@{/productlist(category=${category.category_name})}" th:text="${category.category_name}"></a>
                             </th:each>
                         </th:if>
                         <th:block th:if="${categories == null or #lists.size(categories) == 0}">
