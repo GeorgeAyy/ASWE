@@ -35,7 +35,7 @@ public class User {
     @Column(name = "user_user_isAdmin", nullable = false)
     private boolean user_isAdmin;
 
-
+    
     public User() {
     }
 

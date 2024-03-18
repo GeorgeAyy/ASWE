@@ -22,19 +22,19 @@
         </header>
         <div class="form-input">
             <input type="text" th:field="*{user_fname}" class="input-field" id="firstname" placeholder="First Name">
-            <span class="error-message" id="firstname-error" th:if="${#fields.hasErrors('user_fname')}" th:errors="*{user_fname}" ></span>
+            <span class="error-message" th:text="${errors}"></span>
         </div>
         <div class="form-input">
             <input type="text" th:field="*{user_Lname}" class="input-field" id="lastname" placeholder="Last Name">
-            <span class="error-message" id="lastname-error"></span>
+            <span class="error-message" id="lastname-error"  th:text="${errors}"></span>
         </div>
         <div class="form-input">
             <input type="text" th:field="*{email}" class="input-field" id="email" placeholder="Email">
-            <span class="error-message" id="email-error" ></span>
+            <span class="error-message"  th:text="${errors}" th:errors="*{email}"></span>
         </div>
         <div class="form-input">
             <input type="password" th:field="*{userPassword}"  class="input-field" id="password" placeholder="Password">
-            <span class="error-message" id="password-error" ></span>
+            <span class="error-message" id="password-error"  th:text="${errors}"></span>
         </div>
         <!-- <div class="form-input">
             <input type="password" field="user_confirmPassword" class="input-field" id="confirmPassword" placeholder="Confirm Password">
@@ -42,7 +42,7 @@
         </div> -->
         <div class="form-input">
             <input type="text" th:field="*{user_address}" class="input-field" id="address" placeholder="Address">
-            <span class="error-message" id="address-error"></span>
+            <span class="error-message" id="address-error"  th:text="${errors}"></span>
         </div>
         <button type="submit" class="submit-button">Create My Account</button>
 
