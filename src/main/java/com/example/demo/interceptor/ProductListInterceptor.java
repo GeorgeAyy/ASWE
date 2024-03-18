@@ -1,5 +1,6 @@
 package com.example.demo.interceptor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.models.Item;
+import com.example.demo.models.ItemImages;
+import com.example.demo.repositories.ItemImagesRepository;
 import com.example.demo.repositories.ItemRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +20,8 @@ public class ProductListInterceptor implements HandlerInterceptor {
     @Autowired
     private  ItemRepository ItemRepository;
 
+    @Autowired
+    private ItemImagesRepository imagesRepository;
   
 
     @Override
@@ -29,6 +34,17 @@ public class ProductListInterceptor implements HandlerInterceptor {
                 List<Item> itemsByCategory = this.ItemRepository.findByItemCategory(categoryName);
                 System.out.println("Items by category: " + itemsByCategory);
                 modelAndView.addObject("itemsByCategory", itemsByCategory);
+
+                 List<List<ItemImages>> allItemImages = new ArrayList<>();
+                for(Item item:itemsByCategory){
+                    List<ItemImages> itemImages = this.imagesRepository.findByItemItemId(item.getItemId());
+                    System.out.println("images: " + itemImages);
+                    allItemImages.add(itemImages);
+                }
+               
+                modelAndView.addObject("itemImages", allItemImages);
+                System.out.println("allllimages: " + allItemImages);
+
             }
         }
     }
