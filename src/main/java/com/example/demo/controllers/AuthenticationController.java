@@ -4,25 +4,26 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.repositories.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.models.User;
 
@@ -89,9 +90,8 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user details");
         }
     }
-
     @PostMapping("/signup")
-    public RedirectView signup(@ModelAttribute User signupRequest) {
+    public RedirectView signup(@Valid @ModelAttribute User signupRequest, BindingResult result) {
         
         System.out.println("Signup request received");
 
@@ -107,31 +107,27 @@ public class AuthenticationController {
 
         if (firstname == null || firstname.isEmpty()) {
             errors.add("First name is required");
+            return new RedirectView("/auth/signup?error=firstNameError");
         }
 
         if (lastname == null || lastname.isEmpty()) {
             errors.add("Last name is required");
+            return new RedirectView("/auth/signup?error=lastNameError");
         }
 
         if (email == null || email.isEmpty() || !email.contains("@") || !email.contains(".")) {
             errors.add("Invalid email");
+            return new RedirectView("/auth/signup?error=emailError");
         }
 
         if (password == null || password.length() < 8) {
             errors.add("Password must be at least 8 characters long");
+            return new RedirectView("/auth/signup?error=passwordError");
         }
-
-        // if (!password.equals(confirmPassword)) {
-        //     errors.add("Passwords do not match");
-        // }
 
         if (address == null || address.isEmpty()) {
             errors.add("Address is required");
-        }
-
-        if (!errors.isEmpty()) {
-            
-            return new RedirectView("/auth/signup");
+            return new RedirectView("/auth/signup?error=addressError");
         }
      
         String encodedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
@@ -141,5 +137,4 @@ public class AuthenticationController {
         
         return new RedirectView("/auth/login");
     }
-
 }
