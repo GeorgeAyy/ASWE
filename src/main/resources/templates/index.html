@@ -8,12 +8,18 @@
     <link rel="stylesheet" th:href="@{/css/homepage.css}"/>
     <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
     <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
-    <!-- Add your other head elements (scripts, links, etc.) here -->
+
 
 </head>
 <body>
 
 <th:block th:insert="~{fragments/header.html}"/>
+<h1 class="sessions">
+    <div th:if="${username != ''}">
+    <span th:text="${username}">
+        </h1>
+    </div>
+   
 <div class="container">
     <div class="slider-container">
         <div class="slider">
@@ -23,7 +29,7 @@
             <div class="slide">
                 <img th:src="@{/images/f925e78e-43c4-44a2-91b3-b26e9d5f89ca.avif}" alt="Image3"/>
             </div>
-            <!-- Add more slides as needed -->
+
         </div>
         <div class="slider-btns"></div>
     </div>
@@ -55,20 +61,15 @@
         <h1>FEATURED PRODUCTS</h1>
     </div>
     <div class="product-recommendations">
-        <!-- Add your product recommendations content here -->
+
         <div th:each="product : ${products}" class="product_Item">
-            <!-- Add your product item content here -->
+
         </div>
-        <!-- Add your buttons for prev/next and modal here -->
+
     </div>
 </div>
 
-<!-- Add your Thymeleaf modal content here -->
-
-<!-- Include Thymeleaf footer -->
-
 <th:block th:insert="~{fragments/footer.html}"/>
-<!-- Add your scripts here -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:src="@{/js/homepage.js}"></script>
 <script th:src="@{/js/cart.js}"></script>
