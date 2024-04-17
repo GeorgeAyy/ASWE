@@ -13,17 +13,17 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 </head>
 <body>
-    <th:block th:insert="~{fragments/header.html}"/>
     <div class="container">
       
         <div th:if="${itemsByCategory != null and #lists.size(itemsByCategory) > 0}">
             <div class="collection_product_list">
-                <div th:each="item : ${itemsByCategory}" class="featured_product">
+                <div th:each="item,itemIndex: ${itemsByCategory}" class="featured_product">
                     <div class="featured_product_inner">
                     
                         <a th:href="@{'/itempage?id=' + ${item.itemId}}" class="product_item_image">
                             <div class="ratio">
-                                <img th:each="image : ${itemImages[0]}" th:src="@{'/images/' + ${image.imagePath}}" alt=""/>
+                                <img th:src="@{'/images/' + ${itemImages[itemIndex.index][0].imagePath}}" alt=""/>
+                    
                             </div>
                         </a>
                         <div class="product_item_info">
@@ -33,9 +33,14 @@
                          
                                 <div class="product_item_price">
                                     <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
+                                <form id="cart-form" th:action="@{/product/cart}"  th:object="${cart}" method="post">
+                                    <input type="hidden" th:value="${item.itemId}">
+                                    <button class="add_to_bag_btn">Add to Bag</button>
+                                </form>
+
                                 </div>
                             </div>
-                            
+                          
                             <div th:if="${user == ''}">
                                 <button class="add_to_bag_btn">Add to Bag</button>
                             </div>
@@ -48,6 +53,6 @@
             <p>No items available in this category</p>
         </th:block>
     </div>
-    <th:block th:insert="~{fragments/footer.html}"/>
+    
 </body>
 </html>
