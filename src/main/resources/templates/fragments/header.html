@@ -27,8 +27,8 @@
                 </div>
                 <div th:if="${user ne ''}">
                     <!-- <div th:if="${user.user_isAdmin}" class="dashboard-button"> -->
-                        <a th:href="@{/admin}" class="header_icon"><i class='bx bxs-dashboard'></i></a>
-                        <a th:href="@{/admin}" class="header_item_link">Admin</a>
+                        <a th:href="@{/admin/dashboard}" class="header_icon"><i class='bx bxs-dashboard'></i></a>
+                        <a th:href="@{/admin/dashboard}" class="header_item_link">Admin</a>
                     </div>
                     <div class="wishlist">
                         <a th:href="@{/product/wishlist}" class="header_icon"><i class='bx bx-heart'></i></a>
@@ -47,8 +47,14 @@
                         <!-- <a th:href="@{/account}" class="header_item_link" th:text="${user.user_fname}"></a> -->
                     </div>
                     <div class="logout">
-                        <a th:href="@{/logout}" class="header_icon"><i class='bx bx-exit'></i></a>
+                        <div th:if="${username == null}">
+                            <a th:href="@{/auth/login}" class="header_icon"><i class='bx bx-exit'></i></a>
+                        <a href="" class="header_item_link">Login</a>
+                        </div>
+                        <div th:unless ="${username == null}">
+                            <a th:href="@{/logout}" class="header_icon"><i class='bx bx-exit'></i></a>
                         <a href="" class="header_item_link">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,8 +78,6 @@
                 <i class='bx bx-x navCloseBtn'></i>
                 <li><a th:href="@{/}">Home</a></li>
                 <li><a th:href="@{/productlist}">Products</a></li>
-                <!-- <li><a th:href="@{/about}">About Us</a></li>
-                <li><a th:href="@{/contact}">Contact Us</a></li> -->
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Categories</a>
                     <div class="dropdown-content">
