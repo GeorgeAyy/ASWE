@@ -13,6 +13,7 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 </head>
 <body>
+    <th:block th:insert="~{fragments/header.html}"/>
     <div class="container">
       
         <div th:if="${itemsByCategory != null and #lists.size(itemsByCategory) > 0}">
@@ -34,7 +35,7 @@
                                     <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
                                 </div>
                             </div>
-                          
+                            
                             <div th:if="${user == ''}">
                                 <button class="add_to_bag_btn">Add to Bag</button>
                             </div>
@@ -47,6 +48,6 @@
             <p>No items available in this category</p>
         </th:block>
     </div>
-    
+    <th:block th:insert="~{fragments/footer.html}"/>
 </body>
 </html>
