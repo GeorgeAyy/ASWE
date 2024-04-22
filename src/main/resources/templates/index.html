@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>El Medico</title>
-</head>
+
+<th:block th:insert="~{fragments/head.html}"/>
 
 <body class="font-poppins text-lg">
-	<div class="container">
-        <th:block th:insert="~{fragments/header.html}"/>
 
+	<th:block th:insert="~{fragments/header.html}"/>
+	
+	<div class="container">
+
+		<!-- Banner -->
 		<div class="bg-gradient-to-b from-white to-gray-200 h-96 mb-36 w-screen">
 			<div class="flex justify-center">
 				<div class="welcome w-1/2 flex flex-col text-center">
@@ -21,10 +21,12 @@
 			</div>
 		</div>
 
+		<!-- Search Bar -->
 		<div class="flex justify-center w-screen mb-36">
 			<input type="search" placeholder="What are you looking for?" class="border-solid border-gray-300 border-2 px-6 py-1 rounded-full w-1/2 h-14 text-xl hover:border-gray-400 transition-all">
 		</div>
 
+		<!-- Categories -->
 		<div class="categories flex flex-wrap">
 			<a href=""><div class="flex flex-col justify-center items-center border-2 border-gray-100 min-w-64 h-72 hover:bg-gray-100 hover:shadow-2xl hover:cursor-pointer transition-all">
 				<!-- <svg width="120px" height="120px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dfdfdf"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99057 13.6019C1.33648 10.9478 1.33648 6.64466 3.99057 3.99057C6.64466 1.33648 10.9478 1.33648 13.6019 3.99057L20.0094 10.3981C22.6635 13.0522 22.6635 17.3553 20.0094 20.0094C17.3553 22.6635 13.0522 22.6635 10.3981 20.0094L3.99057 13.6019Z" stroke="#dfdfdf" stroke-width="1.5"></path> <path d="M16.8057 7.19434C16.8057 7.19434 16.2649 9.99999 13.1322 13.1327C9.99952 16.2653 7.19434 16.8057 7.19434 16.8057" stroke="#dfdfdf" stroke-width="1.5"></path> </g></svg> -->
@@ -77,23 +79,8 @@
 				<p class="text-gray-400 text-center">Pet Health</p>
 			</div></a>
 		</div>
-        <th:block th:insert="~{fragments/footer.html}"/>
-	</div>
-
-	<div id="menu-overlay" class="bg-white fixed z-10 top-0 left-0 w-1/4 h-screen p-12 flex flex-col -translate-x-full transition-all">
-		<svg id="menu-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute right-5 top-6 opacity-50 hover:cursor-pointer">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-		  </svg>					  
-
-		<h1 class="font-bold uppercase opacity-65 text-5xl mb-20">El Medico</h1>
 		
-		<div>
-			<p class="mb-10 text-2xl hover:underline underline-offset-8"><a href="index.html">Products</a></p>
-			<p class="mb-10 text-2xl hover:underline underline-offset-8 opacity-50"><a href="cart.html">Cart</a></p>
-			<p class="mb-10 text-2xl hover:underline underline-offset-8 opacity-50"><a href="wishlist.html">Wishlist</a></p>
-			<p class="mb-10 text-2xl hover:underline underline-offset-8 opacity-50"><a href="">Account</a></p>
-			<p class="mb-10 text-2xl hover:underline underline-offset-8 opacity-50"><a href="">Admin</a></p>
-		</div>
+        <th:block th:insert="~{fragments/footer.html}"/>
 	</div>
 	
 	<script>
