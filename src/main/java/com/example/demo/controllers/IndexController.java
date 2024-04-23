@@ -50,4 +50,9 @@ public class IndexController {
         ModelAndView mav = new ModelAndView("wishlist.html");
         return mav;
     }
+    @GetMapping("wishlist")
+    public ModelAndView getwishlist() {
+        ModelAndView mav = new ModelAndView("wishlist.html");
+        return mav;
+    }
 }
