@@ -1,54 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" th:href="@{/css/loginAndSignup.css}"/>
-    <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
-    <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
-	<link rel="stylesheet" href="/css/loginAndSignup.css">
-    <!-- Add your other head elements (scripts, links, etc.) here -->
+<html lang="en">
 
-</head>
-<body>
+<th:block th:insert="~{fragments/head.html}"/>
 
-<th:block th:insert="~{fragments/header.html}"/>
-<div class="containerI">
-	<div class="form-header">
-		<h1>Login to my account</h1>
-		<p class="sub-header-login">Enter your email and password:</p>
+<body class="font-poppins text-lg">
+
+    <th:block th:insert="~{fragments/header.html}"/>
+
+	<div class="container">
+		<div class="flex flex-col items-center mt-32 h-96">
+			<form action="post" class="flex flex-col w-1/3 h-full justify-between border-2 p-8 rounded shadow-2xl">
+				<h1 class="text-center text-2xl opacity-65">Login</h1>
+				<input type="email" name="email" id="email" placeholder="Email" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="password" name="password" id="password" placeholder="Password" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="submit" value="Login" class="bg-gray-900 text-white w-1/2 h-1/5 self-center hover:cursor-pointer hover:bg-gray-800 transition-all">
+			</form>
+		</div>
+
+		<th:block th:insert="~{fragments/footer.html}"/>
 	</div>
-	<form id="login-form" th:action="@{/auth/login}"  th:object="${user}" method="post">
-		<div class="form-group">
-			<input type="text" id="email" th:field="*{email}" placeholder="Email" class="input-field" required="required">
-			<!-- <span class="error-message" th:id="email-error" th:text="${#fields.hasErrors('email')} ? ${#fields.errors('email').get(0).getDefaultMessage()} : ''"></span> -->
-		</div>
-		
-		<div class="form-group">
-			<input type="password" id="password" th:field="*{userPassword}" placeholder="Password" class="input-field" required="required">
-			<!-- <span class="error-message" th:id="password-error" th:text="${#fields.hasErrors('password')} ? ${#fields.errors('password').get(0).getDefaultMessage()} : ''"></span> -->
-		</div>
-		
-		
-		<input type="submit" value="Submit" id="submit-button" class="submit-button">
-
-		<a href="/auth/signup" class="create">New customer? Create your account</a>
-		<a href="/auth/forgetpassword" class="forgetpas">Forget your password?</a>
-	  
-	</form>
-	 </div>
-
-<!-- Add your Thymeleaf modal content here -->
-
-<!-- Include Thymeleaf footer -->
-
-<th:block th:insert="~{fragments/footer.html}"/>
-<!-- Add your scripts here -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:src="@{/js/homepage.js}"></script>
-<script th:src="@{/js/cart.js}"></script>
-<script th:src="@{/js/wishlist.js}"></script>
 </body>
 </html>
