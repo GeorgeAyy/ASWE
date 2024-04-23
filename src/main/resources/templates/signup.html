@@ -1,65 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Homepage</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" th:href="@{/css/loginAndSignup.css}"/>
-    <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
-    <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
-    <!-- Add your other head elements (scripts, links, etc.) here -->
+<html lang="en">
 
-</head>
-<body>
+<th:block th:insert="~{fragments/head.html}"/>
 
-<th:block th:insert="~{fragments/header.html}"/>
-<div class="signupcontainer">
-    <form th:action="@{/auth/signup}" th:object="${signupRequest}" method="POST" class="form-main" id="form-main">
-        <header class="form_header">
-            <h1 class="form_title1">Create my account</h1>
-            <p class="form_title2">Please fill in the information below:</p>
-        </header>
-        <div class="form-input">
-            <input type="text" th:field="*{user_fname}" class="input-field" id="firstname" placeholder="First Name">
-            <span class="error-message" th:text="${errors}"></span>
-        </div>
-        <div class="form-input">
-            <input type="text" th:field="*{user_Lname}" class="input-field" id="lastname" placeholder="Last Name">
-            <span class="error-message" id="lastname-error"  th:text="${errors}"></span>
-        </div>
-        <div class="form-input">
-            <input type="text" th:field="*{email}" class="input-field" id="email" placeholder="Email">
-            <span class="error-message"  th:text="${errors}" th:errors="*{email}"></span>
-        </div>
-        <div class="form-input">
-            <input type="password" th:field="*{userPassword}"  class="input-field" id="password" placeholder="Password">
-            <span class="error-message" id="password-error"  th:text="${errors}"></span>
-        </div>
-        <!-- <div class="form-input">
-            <input type="password" field="user_confirmPassword" class="input-field" id="confirmPassword" placeholder="Confirm Password">
-            <span class="error-message" id="confirmpassword-error" ></span>
-        </div> -->
-        <div class="form-input">
-            <input type="text" th:field="*{user_address}" class="input-field" id="address" placeholder="Address">
-            <span class="error-message" id="address-error"  th:text="${errors}"></span>
-        </div>
-        <button type="submit" class="submit-button">Create My Account</button>
+<body class="font-poppins text-lg">
 
-        <div class="form_second">
-            <p>Already have an account?
-                <a href="/auth/login" class="link">Login here</a>
-            </p>
-        </div>
-    </form>
-</div>
+    <th:block th:insert="~{fragments/header.html}"/>
 
+	<div class="container">
+		<div class="flex flex-col items-center mt-32 h-screen">
+			<form action="post" class="flex flex-col w-1/3 h-full justify-between border-2 p-8 rounded shadow-2xl">
+				<h1 class="text-center text-2xl opacity-65">Sign Up</h1>
+				<input type="text" name="firstname" id="firstname" placeholder="Firstname" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="text" name="lastname" id="lastname" placeholder="Lastname" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="email" name="email" id="email" placeholder="Email" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="password" name="password" id="password" placeholder="Password" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="text" name="address" id="address" placeholder="Address" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="submit" value="Sign Up" class="bg-gray-900 text-white w-1/2 h-16 self-center hover:cursor-pointer hover:bg-gray-800 transition-all">
+			</form>
+		</div>
 
-<th:block th:insert="~{fragments/footer.html}"/>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:src="@{/js/homepage.js}"></script>
-<script th:src="@{/js/cart.js}"></script>
-<script th:src="@{/js/wishlist.js}"></script>
+		<th:block th:insert="~{fragments/footer.html}"/>
+	</div>
 </body>
 </html>
