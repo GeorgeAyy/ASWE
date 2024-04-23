@@ -12,6 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+import jakarta.servlet.http.HttpSession;
+
 import com.example.demo.repositories.UserRepository;
 
 
@@ -22,8 +25,9 @@ import com.example.demo.models.User;
 public class IndexController {
 
     @GetMapping("")
-    public ModelAndView index() {
+    public ModelAndView index(HttpSession session) {
         ModelAndView mav = new ModelAndView("index.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
 
@@ -61,9 +65,9 @@ public class IndexController {
     }
 
     @GetMapping("productlist")
-    public ModelAndView getproductlist() {
+    public ModelAndView getproductlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
     @GetMapping("itempage")
@@ -75,6 +79,7 @@ public class IndexController {
     @GetMapping("cart")
     public ModelAndView getcart() {
         ModelAndView mav = new ModelAndView("cart.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
     

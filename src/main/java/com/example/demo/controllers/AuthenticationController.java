@@ -23,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.repositories.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.models.User;
 
@@ -46,12 +47,12 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public RedirectView getuser(@RequestParam("email") String email,
-    @RequestParam("userPassword") String userPassword) {
+    @RequestParam("userPassword") String userPassword, HttpSession session) {
         
         User dbUser= this.UserRepository.findByEmail(email);
         Boolean isPassword = BCrypt.checkpw(userPassword, dbUser.getUserPassword());
         if (isPassword) {
-       
+        session.setAttribute("username", dbUser.getUser_fname());
         return new RedirectView("/");}
         else{
             return new RedirectView("/auth/login");
