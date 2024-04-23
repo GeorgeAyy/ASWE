@@ -34,7 +34,7 @@ public class IndexController {
         return mav;
     }
     
-    @GetMapping("checkout")
+    @GetMapping("cart")
     public ModelAndView getcart() {
         ModelAndView mav = new ModelAndView("cart.html");
         return mav;
