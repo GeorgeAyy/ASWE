@@ -60,13 +60,6 @@
         </div>
     </div>
     <th:block th:insert="~{fragments/footer.html}"/>
-    
-If you're receiving a "Uncaught ReferenceError: $ is not defined" error, it means that the jQuery library hasn't been loaded before your script. Ensure that you've included jQuery before your custom JavaScript code.
-
-Here's how you can include jQuery:
-
-html
-Copy code
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/js/cart.js}"></script>
 </body>

@@ -55,9 +55,11 @@ public class IndexController {
     }
 
     @GetMapping("logout")
-    public ModelAndView logout () {
+    public ModelAndView logout (HttpSession session) {
+        session.invalidate(); 
         ModelAndView mav = new ModelAndView("logout.html");
         return mav;
     }
+    
     
 }
