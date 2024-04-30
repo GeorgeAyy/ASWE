@@ -33,16 +33,17 @@
                          
                                 <div class="product_item_price">
                                     <span class="price" th:text="'EGP ' + ${item.itemPrice}"></span>
-                                <form id="cart-form" th:action="@{/product/cart}"  th:object="${cart}" method="post">
-                                    <input type="hidden" th:value="${item.itemId}">
-                                    <button class="add_to_bag_btn">Add to Bag</button>
-                                </form>
+                                    
+                                    <form th:action="@{/cart/add}"   method="POST" id="cart-form" >
+                                        <input type="hidden" name="itemId" th:value="${item.itemId}" >
+                                        <button class="add_to_bag_btn">Add to Bag</button>
+                                    </form>
 
                                 </div>
                             </div>
-                            <div th:if="${username != null}">
+                            <!-- <div th:if="${username != null}">
                                 <button class="add_to_bag_btn">Add to Bag</button>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -51,7 +52,22 @@
         <th:block th:if="${itemsByCategory == null or #lists.size(itemsByCategory) == 0}">
             <p>No items available in this category</p>
         </th:block>
+
+        <div class="popup" style="display: none;">
+            <button class="close-popup"><i class='bx bx-x'></i></button>
+            <p>Product added to cart!</p>
+           
+        </div>
     </div>
     <th:block th:insert="~{fragments/footer.html}"/>
+    
+If you're receiving a "Uncaught ReferenceError: $ is not defined" error, it means that the jQuery library hasn't been loaded before your script. Ensure that you've included jQuery before your custom JavaScript code.
+
+Here's how you can include jQuery:
+
+html
+Copy code
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/cart.js}"></script>
 </body>
 </html>

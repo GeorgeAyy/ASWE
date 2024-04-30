@@ -29,7 +29,7 @@ public class ItemInterceptor implements HandlerInterceptor {
             ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
             String itemIdStr = request.getParameter("id");
-            System.out.println("item id yarb: " + itemIdStr);
+            System.out.println("item id : " + itemIdStr);
             if (itemIdStr != null && !itemIdStr.isEmpty()) {
                 Long itemId = Long.parseLong(itemIdStr);
                 Item item = this.ItemRepository.findByItemId(itemId);

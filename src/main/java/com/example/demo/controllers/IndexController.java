@@ -23,39 +23,34 @@ public class IndexController {
     @GetMapping("")
     public ModelAndView index(HttpSession session) {
         ModelAndView mav = new ModelAndView("index.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     @GetMapping("productlist")
     public ModelAndView getproductlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     @GetMapping("itempage")
     public ModelAndView getitempage(HttpSession session) {
         ModelAndView mav = new ModelAndView("itemPage.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     
     @GetMapping("checkout")
     public ModelAndView getcart(HttpSession session) {
         ModelAndView mav = new ModelAndView("cart.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     
-    @GetMapping("product/cart")
-    public ModelAndView getproductcart(HttpSession session) {
-        ModelAndView mav = new ModelAndView("cart.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
-        return mav;
-    }
+   
     @GetMapping("product/wishlist")
     public ModelAndView getproductwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
 
