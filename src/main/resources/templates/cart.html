@@ -21,7 +21,7 @@
         <div class="cart-wrapper__inner">
             <div class="insidewrapper">
                 <div class="container c_cart">
-                    <!-- <div class="card">
+                    <div class="card">
                         <div class="table-wrapper">
                             <table>
                                 <thead class="hidden-phone">
@@ -32,48 +32,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="product : ${products}">
+                                    <tr th:each="product : ${items}">
                                         <td class="td_upper">
                                             <div class="prodductinfo">
                                                 <div class="item_image">
                                                     <div class="imgcont">
-                                                        <img th:src="@{/images/__${product.image_paths.split(',')[0]}__ ? '__${product.image_paths.split(',')[0]}__' : '/images/default_image.png'}" alt="Product Image" />
+                                                        <!-- <img th:src="@{/images/__${product.image_paths.split(',')[0]}__ ? '__${product.image_paths.split(',')[0]}__' : '/images/default_image.png'}" alt="Product Image" /> -->
                                                     </div>
                                                 </div>
                                                 <div class="item_title">
-                                                    <a href="" class="inner_title" th:text="${product.item_title}"></a>
+                                                    <a href="" class="inner_title" th:text="${product.item.itemTitle}"></a>
                                                     <div class="item_price">
-                                                        <span class="prices" th:text="${product.item_price}"></span>
+                                                        <span class="prices" th:text="${product.item.itemPrice}"></span>
                                                     </div>
                                                     <div class="line-item hidden-table">
-                                                        <div class="quantity_range">
-                                                            <button type="button" onclick="decrement()" class="quan_button"><i class="fa-solid fa-minus"></i></button>
-                                                            <input type="text" class="quantityvalue" th:value="${product.quantity}" data-product-id="${product.item_id}" />
-                                                            <button type="button" onclick="increment()" class="quan_button"><i class="fa-solid fa-plus"></i></button>
+                                                            <div class="quantity_range">
+                                                                <button type="button" class="quan_button decrement"><i class="fa-solid fa-minus"></i></button>
+                                                                <input type="text" class="quantityvalue"  th:value="${product.quantity}" th:data-itemid="${product.item.itemId}"  />
+                                                                <button type="button"  class="quan_button increment"><i class="fa-solid fa-plus"></i></button>
+                                                            </div>
+                                                            <button type="button"  class="button-remove"><i class="bx bx-trash"></i></button>
                                                         </div>
-                                                        <button type="button" onclick="deleteProduct()" class="button-remove"><i class="bx bx-trash"></i></button>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="td_center hidden-phone">
                                             <div class="Qty_div">
                                                 <div class="quantity_range">
-                                                    <button type="button" onclick="decrement()" class="quan_button"><i class="fa-solid fa-minus"></i></button>
-                                                    <input type="text" class="quantityvalue" th:value="${product.quantity}" />
-                                                    <button type="button" onclick="increment()" class="quan_button"><i class="fa-solid fa-plus"></i></button>
+                                                    <button type="button"class="quan_button decrement"><i class="fa-solid fa-minus"></i></button>
+                                                    <input type="text" class="quantityvalue" th:value="${product.quantity}" th:data-itemid="${product.item.itemId}"  />
+                                                    <button type="button"  class="quan_button increment"><i class="fa-solid fa-plus"></i></button>
                                                 </div>
-                                                <button type="button" onclick="deleteProduct()" class="button-remove"><i class="bx bx-trash"></i></button>
+                                                <button type="button" class="button-remove"><i class="bx bx-trash"></i></button>
                                             </div>
                                         </td>
-                                        <td class="td_right hidden-phone">
-                                            <span th:text="'EGP ' + ${#numbers.formatDecimal(product.item_price * product.quantity, 2, 'COMMA', 'POINT')}"></span>
-                                        </td>
+                                        <!-- <td class="td_right hidden-phone">
+                                            <span th:text="'EGP ' + ${#numbers.formatDecimal(product.item_price * product.quantity, 2, 'COMMA', 'POINT')}">data-product-id="${product.item_id}"</span>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div> -->
+                    </div>
                     <form th:action="@{/checkout}" class="cart-recap" method="POST">
                         <div class="cart_scroller">
                             <div class="card">
@@ -109,10 +109,7 @@
         </div>
     </div>
     <th:block th:insert="~{fragments/footer.html}"/>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="/js/cart.js"></script> -->
-    <script>
-
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/cart.js}"></script>
 </body>
 </html>
