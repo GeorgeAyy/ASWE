@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -32,8 +34,9 @@ public class IndexController {
         return mav;
     }
     @GetMapping("itempage")
-    public ModelAndView getitempage() {
+    public ModelAndView getitempage(HttpSession session) {
         ModelAndView mav = new ModelAndView("itemPage.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
     
@@ -45,13 +48,22 @@ public class IndexController {
     }
     
     @GetMapping("product/cart")
-    public ModelAndView getproductcart() {
+    public ModelAndView getproductcart(HttpSession session) {
         ModelAndView mav = new ModelAndView("cart.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
     @GetMapping("product/wishlist")
-    public ModelAndView getproductwishlist() {
+    public ModelAndView getproductwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");
+        mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
     }
+
+    @GetMapping("logout")
+    public ModelAndView logout () {
+        ModelAndView mav = new ModelAndView("logout.html");
+        return mav;
+    }
+    
 }
