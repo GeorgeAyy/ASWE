@@ -51,6 +51,8 @@ $(document).ready(function async() {
         console.log("Server response: " + response);
 
         uploadedImagePaths.push(file.name);
+        // Set the value of the hidden input field for uploadedImagePaths
+        $("#uploadedImagePaths").val(JSON.stringify(uploadedImagePaths));
         console.log(uploadedImagePaths[0]);
         // Update the preview element based on the server's response
       });
@@ -138,19 +140,18 @@ $(document).ready(function async() {
           console.log("Form is valid");
         }
 
+
+        // Set the value of the hidden input field for uploadedImagePaths
+        $("#uploadedImagePaths").val(JSON.stringify(uploadedImagePaths));
+
         let form = $(this);
 
         let formData = new FormData(form[0]);
-        // Append the uploadedImagePaths to the form data
-        formData.append(
-          "uploadedImagePaths",
-          JSON.stringify(uploadedImagePaths)
-        );
-
+        
         console.log("formData", formData);
         $.ajax({
           type: "POST",
-          url: "/admin/createItem",
+          url: "/admin/createProduct",
           data: formData,
           processData: false,
           contentType: false,
@@ -161,8 +162,7 @@ $(document).ready(function async() {
             // Replace the current page's content with the response
             document.documentElement.innerHTML = response;
 
-            // Optionally, you can update the browser's history so the user can use the back button
-            location.reload();
+            window.location.href = "/admin/createProduct";
           },
           error: function (xhr, status, error) {
             console.log("Error submitting form");
@@ -383,16 +383,16 @@ $(document).ready(function () {
       method: "POST",
       data: { productId: productId },
       success: function (response) {
-        console.log("Product details retrieved successfully:", response.productId)
+        console.log("Product details retrieved successfully:", response.product)
         // Update the edit form fields with the retrieved data
-        $("#edit-product-id").val(response.productId);
-        $("#edit-product-name").val(response.productName);
-        $("#edit-brand").val(response.brand);
-        $("#edit-category").val(response.category);
-        $("#edit-quantity").val(response.quantity);
-        $("#edit-price").val(response.price);
-        $("#edit-description").val(response.description);
-        $("#edit-offers").val(response.offers);
+        $("#edit-product-id").val(productId);
+        $("#edit-product-name").val(response.product.productName);
+        $("#edit-brand").val(response.product.brand);
+        $("#edit-category").val(response.product.category);
+        $("#edit-quantity").val(response.product.quantity);
+        $("#edit-price").val(response.product.price);
+        $("#edit-description").val(response.product.description);
+        $("#edit-offers").val(response.product.offers);
         console.log("response.images", response.images);
         
         $("#previous-images").empty();

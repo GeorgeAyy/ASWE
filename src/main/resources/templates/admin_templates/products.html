@@ -24,17 +24,17 @@
           </thead>
           <tbody>
           <tr th:each="product : ${products}">
-              <td th:text="${product.item_id}"></td>
-              <td th:text="${product.item_title}"></td>
-              <td th:text="${product.item_brand}"></td>
-              <td th:text="${product.item_cat}"></td>
-              <td th:text="${product.item_quantity}"></td>
-              <td th:text="${#numbers.formatDecimal(product.item_price, 2)}"></td>
+              <td th:text="${product.itemId}"></td>
+              <td th:text="${product.itemTitle}"></td>
+              <td th:text="${product.itemBrand}"></td>
+              <td th:text="${product.itemCategory}"></td>
+              <td th:text="${product.itemQuantity}"></td>
+              <td th:text="${#numbers.formatDecimal(product.itemPrice, 0, 2)}"></td>
               <td>
                   <a href="#" class="btn btn-outline-primary btn-sm edit-product-btn" data-bs-toggle="modal"
-                     data-bs-target="#editProduct" th:data-product-id="${product.item_id}">Edit</a>
+                     data-bs-target="#editProduct" th:data-product-id="${product.itemId}">Edit</a>
                   <a href="#" class="btn btn-outline-danger btn-sm delete-product-btn" data-bs-toggle="modal"
-                     data-bs-target="#deleteProductConfirmation" th:data-product-id="${product.item_id}">Delete</a>
+                     data-bs-target="#deleteProductConfirmation" th:data-product-id="${product.itemId}">Delete</a>
               </td>
           </tr>
           </tbody>
@@ -56,7 +56,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="createProductForm" th:action="@{/admin/createProduct}" method="post">
+                    <form id="product-form" th:object="${Item}" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="productName" class="form-label">Product Name</label>
                             <input type="text" class="form-control" id="productName" name="productName" required>
@@ -113,7 +113,7 @@
                             <div id="my-dropzone" class="dropzone"></div>
                             <div id="preview"></div>
                         </div>
-
+                        <input type="hidden" id="uploadedImagePaths" name="uploadedImagePaths">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.ItemDTO;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.models.Item;
+import com.example.demo.models.ItemImages;
 import com.example.demo.models.User;
+import com.example.demo.repositories.ItemImagesRepository;
+import com.example.demo.repositories.ItemRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.UserService;
@@ -24,7 +29,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.nio.file.Path;
 
 @Controller
@@ -40,6 +50,12 @@ public class AdminController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private ItemImagesRepository itemImageRepository;
 
     @GetMapping("/")
     public ModelAndView index() {
@@ -63,11 +79,22 @@ public class AdminController {
     }
 
     @GetMapping("/products")
-    public ModelAndView getProducts() {
-        ModelAndView mav = new ModelAndView("admin_templates/products.html");
-        mav.addObject("title", "Products");
-        return mav;
-    }
+public ModelAndView getProducts() {
+    // Assuming you have a service or repository to fetch the products
+    List<Item> products = itemRepository.findAll(); // Fetch products from your data source
+
+    // Create a new ModelAndView object and set the view name
+    ModelAndView mav = new ModelAndView("admin_templates/products");
+
+    // Add the products list as an attribute to the ModelAndView
+    mav.addObject("products", products);
+
+    // You can also add other attributes if needed
+    mav.addObject("title", "Products");
+
+    // Return the ModelAndView object
+    return mav;
+}
 
     @GetMapping("/users")
     public ModelAndView getUsers() {
@@ -142,6 +169,7 @@ public void createItem(@RequestParam("uploadedImagePaths") List<String> uploaded
         @ModelAttribute ItemDTO itemDTO) {
     try {
         itemService.createItem(itemDTO, uploadedImagePaths);
+        getProducts();
         // return "redirect:/admin/products";
     } catch (Exception e) {
         // Handle error
@@ -150,5 +178,52 @@ public void createItem(@RequestParam("uploadedImagePaths") List<String> uploaded
         // return "redirect:/admin/products";
     }
 }
+@PostMapping("/getProductDetails")
+@ResponseBody
+public Map<String, Object> getProductDetails(@RequestParam Long productId) {
+    try {
+        // Fetch product details by ID
+        Optional<Item> optionalItem = itemRepository.findById(productId);
+        if (optionalItem.isPresent()) {
+            Item item = optionalItem.get();
+            // Create a map to hold product details and image paths
+            Map<String, Object> response = new HashMap<>();
+            // Set product details
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setProductName(item.getItemTitle());
+            itemDTO.setCategory(item.getItemCategory());
+            itemDTO.setBrand(item.getItemBrand());
+            itemDTO.setPrice(item.getItemPrice());
+            itemDTO.setDescription(item.getItemDetails());
+            itemDTO.setQuantity(item.getItemQuantity());
+            itemDTO.setOffers(item.getItemOffers());
+            response.put("product", itemDTO);
+            // Fetch all images from the repository
+            List<ItemImages> allImages = itemImageRepository.findAll();
+            // Filter images for the given item
+            List<String> imagePaths = new ArrayList<>();
+            for (ItemImages img : allImages) {
+                if (img.getItem().equals(item)) {
+                    // Extract filename from JSON array
+                    String imagePath = img.getImagePath();
+                    JSONArray jsonArray = new JSONArray(imagePath);
+                    if (jsonArray.length() > 0) {
+                        imagePaths.add(jsonArray.getString(0));
+                    }
+                }
+            }
+            response.put("images", imagePaths);
+            return response;
+        } else {
+            // Product not found
+            return Collections.singletonMap("error", "Product not found");
+        }
+    } catch (Exception e) {
+        System.err.println("Error fetching product details: " + e.getMessage());
+        // Handle error
+        return Collections.singletonMap("error", "Failed to fetch product details");
+    }
+}
+
 
 }
