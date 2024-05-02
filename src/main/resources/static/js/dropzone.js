@@ -2,17 +2,17 @@ Dropzone.autoDiscover = false;
 let uploadedImagePaths = [];
 $(document).ready(function async() {
   // Initialize Dropzone
-  $('.delete-product-btn').click(function () {
-    var productId = $(this).data('product-id');
+  $(".delete-product-btn").click(function () {
+    var productId = $(this).data("product-id");
     // Set the product ID for deletion in the confirmation modal
-    $('#confirmDeleteProductBtn').data('product-id', productId);
+    $("#confirmDeleteProductBtn").data("product-id", productId);
   });
 
   // Handle confirmation modal delete button click
-  $('#confirmDeleteProductBtn').click(function () {
-    var productId = $(this).data('product-id');
+  $("#confirmDeleteProductBtn").click(function () {
+    var productId = $(this).data("product-id");
     // Redirect or trigger the server-side deletion logic here
-    window.location.href = '/admin/deleteProduct/' + productId;
+    window.location.href = "/admin/deleteProduct/" + productId;
   });
   let myDropzone = new Dropzone("#my-dropzone", {
     // Configuration options for Dropzone
@@ -140,14 +140,13 @@ $(document).ready(function async() {
           console.log("Form is valid");
         }
 
-
         // Set the value of the hidden input field for uploadedImagePaths
         $("#uploadedImagePaths").val(JSON.stringify(uploadedImagePaths));
 
         let form = $(this);
 
         let formData = new FormData(form[0]);
-        
+
         console.log("formData", formData);
         $.ajax({
           type: "POST",
@@ -162,7 +161,7 @@ $(document).ready(function async() {
             // Replace the current page's content with the response
             document.documentElement.innerHTML = response;
 
-            window.location.href = "/admin/createProduct";
+            window.location.href = "/admin/products";
           },
           error: function (xhr, status, error) {
             console.log("Error submitting form");
@@ -287,9 +286,7 @@ $(document).ready(function () {
             listItem.remove(); // Remove the image from the list
 
             // Remove the image path from the uploadedImagePaths array
-            let index = uploadedImagePaths.indexOf(
-              imageName
-            );
+            let index = uploadedImagePaths.indexOf(imageName);
             if (index !== -1) {
               console.log(
                 "Removing image path: " +
@@ -333,14 +330,14 @@ $(document).ready(function () {
           console.log("Form is invalid");
           return false;
         }
-
+        $("#editUploadedImagePaths").val(JSON.stringify(uploadedImagePaths));
         // Create FormData object
         let editForm = $(this);
         let editFormData = new FormData(editForm[0]);
 
         // Append the uploadedImagePaths to the form data
         editFormData.append(
-          "uploadedImagePaths",
+          "editUploadedImagePaths",
           JSON.stringify(uploadedImagePaths)
         );
 
@@ -349,7 +346,7 @@ $(document).ready(function () {
         // AJAX request for form submission
         $.ajax({
           type: "POST",
-          url: "/admin/editItem",
+          url: "/admin/editProduct",
           data: editFormData,
           processData: false,
           contentType: false,
@@ -361,7 +358,7 @@ $(document).ready(function () {
             document.documentElement.innerHTML = response;
 
             // Optionally, you can update the browser's history
-            location.reload();
+            window.location.href = "/admin/products";
           },
           error: function (xhr, status, error) {
             console.log("Error submitting edit form");
@@ -383,7 +380,10 @@ $(document).ready(function () {
       method: "POST",
       data: { productId: productId },
       success: function (response) {
-        console.log("Product details retrieved successfully:", response.product)
+        console.log(
+          "Product details retrieved successfully:",
+          response.product
+        );
         // Update the edit form fields with the retrieved data
         $("#edit-product-id").val(productId);
         $("#edit-product-name").val(response.product.productName);
@@ -394,21 +394,23 @@ $(document).ready(function () {
         $("#edit-description").val(response.product.description);
         $("#edit-offers").val(response.product.offers);
         console.log("response.images", response.images);
-        
-        $("#previous-images").empty();
+
+        $("#edit-preview").empty();
         let previewElement = document.getElementById("edit-preview");
         response.images.forEach(function (image) {
+          // Remove double quotations from the file name
+          let cleanedImage = image.replace(/"/g, "");
           let thumbnail = document.createElement("div");
           thumbnail.classList.add("thumbnail");
-          thumbnail.setAttribute("data-dz-name", image); // Add a custom attribute with the file name
-          thumbnail.setAttribute("data-file-id", image.uuid); // Add a custom attribute with the file ID
+          thumbnail.setAttribute("data-dz-name", cleanedImage); // Add a custom attribute with the file name
+          thumbnail.setAttribute("data-file-id", cleanedImage.uuid); // Add a custom attribute with the file ID
           thumbnail.innerHTML =
             '<img src="/images/' +
-            image +
+            cleanedImage +
             '" style="max-width: 100px;" />' +
             '<button type = "button" class="btn btn-danger remove-button">Remove</button>';
           previewElement.appendChild(thumbnail);
-          uploadedImagePaths.push(image);
+          uploadedImagePaths.push(cleanedImage);
         });
       },
       error: function (error) {

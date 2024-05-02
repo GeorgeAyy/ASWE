@@ -175,7 +175,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form id="edit-product-form" action="/admin/editItem" method="post" class="product-form"
+                  <form id="edit-product-form" tn:object="${Item}" method="post" class="product-form"
                         enctype="multipart/form-data">
                       <!-- Error area for Product Name -->
                       <div class="mb-3">
@@ -253,7 +253,7 @@
                               <ul id="edit-previous-images"></ul>
                           </div>
                       </div>
-
+                      <input type="hidden" id="editUploadedImagePaths" name="uploadedImagePaths">
                       <!-- Additional input fields or hidden inputs based on your requirements -->
                       <input type="hidden" id="edit-product-id" name="productId" value="" />
                       <div class="modal-footer">
