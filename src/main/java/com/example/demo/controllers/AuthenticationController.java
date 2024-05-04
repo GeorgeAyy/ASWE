@@ -52,7 +52,7 @@ public class AuthenticationController {
         User dbUser= this.UserRepository.findByEmail(email);
         Boolean isPassword = BCrypt.checkpw(userPassword, dbUser.getUserPassword());
         if (isPassword) {
-        session.setAttribute("username", dbUser.getUser_fname());
+        session.setAttribute("username", dbUser.getUser_id());
         return new RedirectView("/");}
         else{
             return new RedirectView("/auth/login");

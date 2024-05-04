@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.demo.repositories.UserRepository;
 
 import com.example.demo.repositories.UserRepository;
 
@@ -27,7 +30,7 @@ public class IndexController {
     @GetMapping("")
     public ModelAndView index(HttpSession session) {
         ModelAndView mav = new ModelAndView("index.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
 
@@ -67,32 +70,39 @@ public class IndexController {
     @GetMapping("productlist")
     public ModelAndView getproductlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     @GetMapping("itempage")
-    public ModelAndView getitempage() {
+    public ModelAndView getitempage(HttpSession session) {
         ModelAndView mav = new ModelAndView("itemPage.html");
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     
     @GetMapping("cart")
     public ModelAndView getcart(HttpSession session) {
         ModelAndView mav = new ModelAndView("cart.html");
-        mav.addObject("username", (String) session.getAttribute("username"));
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
     
-    @GetMapping("product/cart")
-    public ModelAndView getproductcart() {
-        ModelAndView mav = new ModelAndView("cart.html");
-        return mav;
-    }
+   
     @GetMapping("product/wishlist")
-    public ModelAndView getproductwishlist() {
+    public ModelAndView getproductwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");
+        mav.addObject("username", (Long) session.getAttribute("username"));
         return mav;
     }
+
+    @GetMapping("logout")
+    public ModelAndView logout (HttpSession session) {
+        session.invalidate(); 
+        ModelAndView mav = new ModelAndView("logout.html");
+        return mav;
+    }
+    
+    
     @GetMapping("wishlist")
     public ModelAndView getwishlist() {
         ModelAndView mav = new ModelAndView("wishlist.html");
