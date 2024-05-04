@@ -77,7 +77,7 @@ public class IndexController {
     }
     
     @GetMapping("cart")
-    public ModelAndView getcart() {
+    public ModelAndView getcart(HttpSession session) {
         ModelAndView mav = new ModelAndView("cart.html");
         mav.addObject("username", (String) session.getAttribute("username"));
         return mav;
