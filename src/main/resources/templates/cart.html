@@ -1,115 +1,181 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" th:href="@{/css/cart.css}" />
-    <title>Document</title>
-</head>
-<body>
+<html lang="en">
+
+<th:block th:insert="~{fragments/head.html}"/>
+
+<body class="font-poppins text-lg">
+
     <th:block th:insert="~{fragments/header.html}"/>
 
-    <div class="container">
-        <header class="cartheader">
-            <h1>My Bag</h1>
-        </header>
-    </div>
-    <div class="cart-wrapper">
-        <div class="cart-wrapper__inner">
-            <div class="insidewrapper">
-                <div class="container c_cart">
-                    <div class="card">
-                        <div class="table-wrapper">
-                            <table>
-                                <thead class="hidden-phone">
-                                    <tr>
-                                        <th>ITEM</th>
-                                        <th class="table_center">QTY</th>
-                                        <th class="table_right">SUBTOTAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="product : ${items}">
-                                        <td class="td_upper">
-                                            <div class="prodductinfo">
-                                                <div class="item_image">
-                                                    <div class="imgcont">
-                                                        <!-- <img th:src="@{/images/__${product.image_paths.split(',')[0]}__ ? '__${product.image_paths.split(',')[0]}__' : '/images/default_image.png'}" alt="Product Image" /> -->
-                                                    </div>
-                                                </div>
-                                                <div class="item_title">
-                                                    <a href="" class="inner_title" th:text="${product.item.itemTitle}"></a>
-                                                    <div class="item_price">
-                                                        <span class="prices" th:text="${product.item.itemPrice}"></span>
-                                                    </div>
-                                                    <div class="line-item hidden-table">
-                                                            <div class="quantity_range">
-                                                                <button type="button" class="quan_button decrement"><i class="fa-solid fa-minus"></i></button>
-                                                                <input type="text" class="quantityvalue"  th:value="${product.quantity}" th:data-itemid="${product.item.itemId}"  />
-                                                                <button type="button"  class="quan_button increment"><i class="fa-solid fa-plus"></i></button>
-                                                            </div>
-                                                            <button type="button"  class="button-remove"><i class="bx bx-trash"></i></button>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="td_center hidden-phone">
-                                            <div class="Qty_div">
-                                                <div class="quantity_range">
-                                                    <button type="button"class="quan_button decrement"><i class="fa-solid fa-minus"></i></button>
-                                                    <input type="text" class="quantityvalue" th:value="${product.quantity}" th:data-itemid="${product.item.itemId}"  />
-                                                    <button type="button"  class="quan_button increment"><i class="fa-solid fa-plus"></i></button>
-                                                </div>
-                                                <button type="button" class="button-remove"><i class="bx bx-trash"></i></button>
-                                            </div>
-                                        </td>
-                                        <!-- <td class="td_right hidden-phone">
-                                            <span th:text="'EGP ' + ${#numbers.formatDecimal(product.item_price * product.quantity, 2, 'COMMA', 'POINT')}">data-product-id="${product.item_id}"</span>
-                                        </td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <form th:action="@{/checkout}" class="cart-recap" method="POST">
-                        <div class="cart_scroller">
-                            <div class="card">
-                                <div class="card__Section">
-                                    <div class="upperpart">
-                                        <div class="innerpart">
-                                            <div class="coupon">
-                                                <input type="text" placeholder="Coupon Code" />
-                                                <div class="buttoninput">
-                                                    <div class="inputbtn">Apply</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="innerpart">
-                                            <div class="subtotal">
-                                                <span class="toleft">Subtotal</span>
-                                                <span class="toright" th:text="'EGP ' + ${subtotal}"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="notices">
-                                        <p>Taxes and shipping calculated at checkout</p>
-                                    </div>
-                                    <input type="hidden" name="prod_Info_checkout"  />
-                                    <input type="hidden" name="prod_Quantity_checkout" />
-                                    <button type="submit" class="butn">SECURE CHECKOUT</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <th:block th:insert="~{fragments/footer.html}"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script th:src="@{/js/cart.js}"></script>
+	<div class="container">
+		<div class="flex flex-col">
+			<h1 class="text-4xl opacity-65 mt-10 mb-6 ml-40">Cart</h1>
+			<div class="my-12 mx-40 flex justify-between">
+				<!-- Table to display the cart items -->
+				<table class="w-2/3 shadow-2xl">
+					<tr class="border-2 opacity-65 text-left">
+						<th></th>
+						<th class="py-2">Product</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Subtotal</th>
+						<th></th>
+					</tr>
+					
+					<tr class="border-2">
+						<td class="w-36 py-2">
+							<div class="mr-10 ml-5">
+								<img src="images/kirito.jpg" alt="">
+							</div>
+						</td>
+						<td><a href="/itempage">Kirito</a></td>
+						<td>$999.99</td>
+						<td>
+							<div class="flex border-2 w-fit">
+								<p class="minus-button opacity-65 text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all">-</p>
+								<input class="quantity w-7 text-center" value="1" readonly>
+								<p class="plus-button opacity-65 text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all">+</p>							  
+							</div>
+						</td>
+						<td>$999.99</td>
+						<td>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="remove-button w-6 h-6 opacity-65 hover:cursor-pointer hover:text-red-500 transition-all">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+							  </svg>
+						</td>
+					</tr>
+				</table>
+	
+				<!-- Total and Checkout Button -->
+				<div class="flex flex-col border-2 h-fit w-1/3 ml-5">
+					<div class="flex justify-between mx-5 my-5">
+						<p class="opacity-65 text-2xl">Total</p>
+						<p id="total" class="text-2xl"></p>
+					</div>
+					<button class="bg-gray-900 text-white py-2 px-4 hover:bg-gray-800 transition-all">Checkout</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+
+			// -------------------------------------------- Quantity and Total Price Control -------------------------------------------- //
+
+			// Function to calculate and update the total
+			function updateTotal() {
+				// Get all the rows in the table (excluding the header row)
+				const rows = document.querySelectorAll('table tr:not(:first-child)');
+				
+				// Initialize total to zero
+				let total = 0;
+				
+				// Iterate over each row
+				rows.forEach(row => {
+					// Find the subtotal cell within the row
+					const subtotalCell = row.querySelector('td:nth-child(5)');
+					
+					// Get the subtotal from the subtotal cell and convert it to a number
+					const subtotal = parseFloat(subtotalCell.textContent.replace('$', ''));
+					
+					// Add the subtotal to the total
+					total += subtotal;
+				});
+				
+				// Format the total as currency
+				const formattedTotal = `$${total.toFixed(2)}`;
+				
+				// Find the total display element and update its text content
+				const totalDisplay = document.getElementById("total");
+				totalDisplay.textContent = formattedTotal;
+			}
+
+			// Call the updateTotal function initially to set the total on page load
+			updateTotal();
+
+			// Modify the existing handleMinusClick and handlePlusClick functions to call updateTotal
+			function handleMinusClick(event) {
+				const minusButton = event.target;
+				const row = minusButton.closest('tr');
+				const quantityInput = row.querySelector('.quantity');
+				let quantity = parseInt(quantityInput.value);
+				
+				if (quantity > 1) {
+					quantity--;
+					quantityInput.value = quantity;
+					updateSubtotal(row, quantity);
+				}
+				
+				// Update the total after modifying the quantity
+				updateTotal();
+			}
+
+			function handlePlusClick(event) {
+				const plusButton = event.target;
+				const row = plusButton.closest('tr');
+				const quantityInput = row.querySelector('.quantity');
+				let quantity = parseInt(quantityInput.value);
+				
+				if (quantity < 9) {
+					quantity++;
+					quantityInput.value = quantity;
+					updateSubtotal(row, quantity);
+				}
+				
+				// Update the total after modifying the quantity
+				updateTotal();
+			}
+
+			// Function to update the subtotal for a row
+			function updateSubtotal(row, quantity) {
+				// Find the price cell within the row
+				const priceCell = row.querySelector('td:nth-child(3)');
+				// Find the subtotal cell within the row
+				const subtotalCell = row.querySelector('td:nth-child(5)');
+				
+				// Get the price from the price cell and convert it to a number
+				const price = parseFloat(priceCell.textContent.replace('$', ''));
+				
+				// Calculate the new subtotal
+				const subtotal = price * quantity;
+				
+				// Update the subtotal cell with the new subtotal, formatted as currency
+				subtotalCell.textContent = `$${subtotal.toFixed(2)}`;
+			}
+
+			// Select all minus and plus buttons
+			const minusButtons = document.querySelectorAll('.minus-button');
+			const plusButtons = document.querySelectorAll('.plus-button');
+
+			// Add event listeners to each minus button
+			minusButtons.forEach(button => {
+				button.addEventListener('click', handleMinusClick);
+			});
+
+			// Add event listeners to each plus button
+			plusButtons.forEach(button => {
+				button.addEventListener('click', handlePlusClick);
+			});
+
+			// -------------------------------------------- Remove Item -------------------------------------------- //
+			// Select all the "X" SVG elements in the table by class name
+			const removeButtons = document.getElementsByClassName('remove-button');
+
+			// Convert the HTMLCollection to an array to use forEach
+			Array.from(removeButtons).forEach(button => {
+				// Add click event listener to each button
+				button.addEventListener('click', function() {
+					// Find the closest parent row of the clicked SVG element
+					const rowToRemove = button.closest('tr');
+					
+					// Remove the row from the table
+					if (rowToRemove) {
+						rowToRemove.remove();
+					}
+				});
+			});
+		});
+	</script>
 </body>
 </html>

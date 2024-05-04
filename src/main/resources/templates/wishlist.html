@@ -1,40 +1,89 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn" crossorigin="anonymous" />
-  <link rel="stylesheet" th:href="@{/css/wishlist.css}">
-  <title>Wishlist</title>
-</head>
-<body>
-    <th:block th:insert="~{fragments/header.html}"/>
-    <div class="wishlist-container">
-      <h1>My Wishlist</h1>
+<html lang="en">
 
-      <div class="headers">
-        <p>ITEM</p>
-        <p>PRICE</p>
-      </div>
+<th:block th:insert="~{fragments/head.html}"/>
 
-      <!-- <div th:each="product : ${products}" class="wishlist-item">
-          <img th:src="@{/images/panadol-advance-24-tablets-285579_1024x.webp}" alt="Item 1" class="wishlist-image">
-          <div class="wishlist-details">
-            <div class="item-name" th:text="${product.item_title}"></div>
-            <div class="item-price">EGY <span th:text="${product.item_price}"></span></div>
-            <div class="item-description" th:text="${product.item_details}"></div>
-          </div>
-          <div>
-              <button class="remove-button" th:data-product-id="${product.item_id}"><i class="fas fa-trash"></i> Remove</button>
-              <a th:href="@{/product/itempage(id=${product.item_id})}"><button class="quick-view-button"><i class="fas fa-search"></i>View</button></a>
-          </div>
-      </div> -->
-    </div>
-      
+<body class="font-poppins text-lg">
+
+  <th:block th:insert="~{fragments/header.html}"/>
+
+	<div class="container">
+		<div class="flex flex-col">
+			<h1 class="text-4xl opacity-65 mt-10 mb-6 ml-40">Wishlist</h1>
+			<div class="my-12 mx-40 flex justify-between">
+				<!-- Table to display the wishlist items -->
+				<table class="w-full shadow-2xl">
+					<tr class="border-2 opacity-65 text-left">
+						<th></th>
+						<th class="py-2">Product</th>
+						<th>Price</th>
+						<th></th>
+						<th></th>
+					</tr>
+					
+					<tr class="border-2">
+						<td class="w-36 py-2">
+							<div class="mr-10 ml-5">
+								<img src="images/kirito.jpg" alt="">
+							</div>
+						</td>
+						<td><a href="/itempage">Kirito</a></td>
+						<td>$999.99</td>
+						<td>						  
+							  <button class="bg-gray-900 p-3 hover:bg-gray-800 text-white hover:cursor-pointer transition-all">Add to Cart</button>
+						</td>
+						<td>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="remove-button w-6 h-6 opacity-65 hover:cursor-pointer hover:text-red-500 transition-all">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+							  </svg>
+						</td>
+					</tr>
+
+					<tr class="border-2">
+						<td class="w-36 py-2">
+							<div class="mr-10 ml-5">
+								<img src="images/zenitsu.jpg" alt="">
+							</div>
+						</td>
+						<td><a href="/itempage">Zenitsu</a></td>
+						<td>$649.99</td>
+						<td>						  
+							  <button class="bg-gray-900 p-3 hover:bg-gray-800 text-white hover:cursor-pointer transition-all">Add to Cart</button>
+						</td>
+						<td>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="remove-button w-6 h-6 opacity-65 hover:cursor-pointer hover:text-red-500 transition-all">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+							  </svg>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 
     <th:block th:insert="~{fragments/footer.html}"/>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script th:src="@{/js/wishlist.js}"></script>
+	</div>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
 
+			// -------------------------------------------- Remove Item -------------------------------------------- //
+			// Select all the "X" SVG elements in the table by class name
+			const removeButtons = document.getElementsByClassName('remove-button');
+
+			// Convert the HTMLCollection to an array to use forEach
+			Array.from(removeButtons).forEach(button => {
+				// Add click event listener to each button
+				button.addEventListener('click', function() {
+					// Find the closest parent row of the clicked SVG element
+					const rowToRemove = button.closest('tr');
+					
+					// Remove the row from the table
+					if (rowToRemove) {
+						rowToRemove.remove();
+					}
+				});
+			});
+		});
+	</script>
 </body>
 </html>
