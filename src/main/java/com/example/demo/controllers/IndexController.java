@@ -46,13 +46,6 @@ public class IndexController {
         return mav;
     }
     
-    @GetMapping("cart")
-    public ModelAndView getcart(HttpSession session) {
-        ModelAndView mav = new ModelAndView("cart.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
-        return mav;
-    }
-    
    
     @GetMapping("product/wishlist")
     public ModelAndView getproductwishlist(HttpSession session) {
