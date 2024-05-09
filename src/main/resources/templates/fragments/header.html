@@ -8,11 +8,18 @@
         </div>
     </div>
 
-    <div class="flex flex-col justify-center items-center w-1/3">
-        <h1 id="title" class="font-bold uppercase opacity-65 hover:cursor-pointer text-center">El Medico</h1>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" id="search-icon" class="w-6 h-6 opacity-40 hover:cursor-pointer">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>       
+    <div class="w-1/3 flex flex-col">
+        <div class="flex flex-col justify-center items-center w-full">
+            <h1 id="title" class="font-bold uppercase opacity-65 hover:cursor-pointer text-center">El Medico</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" id="search-icon" class="w-6 h-6 opacity-40 hover:cursor-pointer">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>       
+        </div>
+    
+        <!-- Search Bar -->
+        <div id="search-div" class="absolute top-20 left-96 w-screen hidden">
+            <input type="search" placeholder="What are you looking for?" class="border-solid border-gray-300 border-2 px-6 py-1 rounded-full w-1/2 h-14 text-xl hover:border-gray-400 transition-all">
+        </div>
     </div>
 
     <div class="flex justify-end w-1/3">
@@ -36,10 +43,8 @@
         <p class="mb-10 text-2xl hover:underline underline-offset-8 opacity-50"><a href="/admin/">Admin</a></p>
     </div>
 </div>
+<div id="gap" class="mb-32 hidden">
 
-<!-- Search Bar -->
-<div id="search-div" class="flex justify-center w-screen mb-36 hidden">
-    <input type="search" placeholder="What are you looking for?" class="border-solid border-gray-300 border-2 px-6 py-1 rounded-full w-1/2 h-14 text-xl hover:border-gray-400 transition-all">
 </div>
 
 <script>
@@ -94,9 +99,11 @@
         //show search div when search icon is clicked
         var searchIcon = document.getElementById('search-icon');
         var searchDiv = document.getElementById('search-div');
+        var gap = document.getElementById('gap');
 
         searchIcon.addEventListener('click', function() {
             searchDiv.classList.toggle('hidden');
+            gap.classList.toggle('hidden');
         });
     });
 </script>
