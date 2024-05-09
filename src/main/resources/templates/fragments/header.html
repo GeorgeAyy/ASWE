@@ -71,12 +71,16 @@
         function openMenu() {
             menuOverlay.classList.remove('-translate-x-full');
             container.style.filter = 'blur(5px)';
+            container.style.transition = 'filter 0.5s';
+            container.style.pointerEvents = 'none';
         }
 
         // Function to close the menu
         function closeMenu() {
             menuOverlay.classList.add('-translate-x-full');
             container.style.filter = 'none';
+            container.style.transition = 'filter 0.5s';
+            container.style.pointerEvents = 'auto';
         }
 
         // Event listener to open the menu
