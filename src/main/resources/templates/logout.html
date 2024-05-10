@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" th:href="@{/css/loginAndSignup.css}"/>
-    <script th:src="'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js'"></script>
-    <link th:href="'@{/css/splide.min.css}'" rel="stylesheet"/>
-	<link rel="stylesheet" href="/css/loginAndSignup.css">
+<html lang="en">
 
-</head>
-<body>
+<th:block th:insert="~{fragments/head.html}"/>
 
-<th:block th:insert="~{fragments/header.html}"/>
-<div class="containerI">
-	<div class="form-header">
-		<h1 style="padding-bottom: 80px;">You've successfuly logged out. Log back in ?</h1><br>
+<body class="font-poppins text-lg w-screen">
+	
+	<div class="container">
+		<div class="flex flex-col items-center justify-center h-screen">
+            <h1 class="text-4xl text-primary mb-10">You have been logged out</h1>
+            <a href="/auth/login" class="text-primary hover:text-primary-dark">Click here to log back in</a>
+            <span class="countdown">
+                <span>5</span>
+            </span>
+        </div>
+	</div>
 
-		<a href="/auth/login" class="submit-button">Login</a>
-	  
+    <script>
+         // Wait 5 seconds then redirect to home page
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 5000);
 
-	 </div>
-</div>
-
-<th:block th:insert="~{fragments/footer.html}"/>
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:src="@{/js/homepage.js}"></script>
-<script th:src="@{/js/cart.js}"></script>
-<script th:src="@{/js/wishlist.js}"></script>
+        // Countdown timer
+        const countdown = document.querySelector('.countdown span');
+        let count = 5;
+        countdown.textContent = count;
+        function updateCountdown() {
+            count--;
+            countdown.textContent = count;
+        }
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
