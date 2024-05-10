@@ -10,14 +10,14 @@
 	<div class="container">
 
 		<div class="flex flex-col">
-			<h1 class="text-4xl opacity-65 mt-10 mb-6 ml-40">Account</h1>
+			<h1 class="text-4xl text-primary mt-10 mb-6 ml-40">Account</h1>
 			<div class="my-12 mx-40 flex justify-between">
 				<form id="account-form" action="" class="w-full">
 					<table class="w-full shadow-2xl">
 						<tr class="border-2 text-left">
-							<th class="p-4 opacity-65">Name</th>
-							<th class="opacity-65">Email</th>
-							<th class="opacity-65">Address</th>
+							<th class="p-4 text-primary">Name</th>
+							<th class="text-primary">Email</th>
+							<th class="text-primary">Address</th>
 							<th></th>
 						</tr>
 	
@@ -25,7 +25,7 @@
 							<td class="p-4"><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" placeholder="John Doe"></td>
 							<td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="email" placeholder="johndoe@gmail.com"></td>
 							<td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" placeholder="1234 Elm St, Springfield, IL 62701"></td>
-							<td><button id="save-button" class="bg-gray-900 text-white w-32 h-10 transition-all cursor-not-allowed opacity-80" type="submit" disabled>Save Changes</button></td>
+							<td><button id="save-button" class="bg-button-hover text-white w-32 h-10 transition-all cursor-not-allowed" type="submit" disabled>Save Changes</button></td>
 						</tr>
 					</table>
 				</form>
@@ -53,7 +53,8 @@
 			// Disable save button and add the appropriate classes
 			saveButton.disabled = true;
 			saveButton.classList.add('cursor-not-allowed');
-			saveButton.classList.add('opacity-80');
+			saveButton.classList.add('bg-button-hover');
+			saveButton.classList.remove('bg-button');
 		});
 
 		// when the user types in the input fields, enable the save changes button
@@ -61,7 +62,8 @@
 			input.addEventListener('input', () => {
 				saveButton.disabled = false;
 				saveButton.classList.remove('cursor-not-allowed');
-				saveButton.classList.remove('opacity-80');
+				saveButton.classList.remove('bg-button-hover');
+				saveButton.classList.add('bg-button');
 			});
 		});
 		
@@ -78,7 +80,8 @@
 				if (allEmpty) {
 					saveButton.disabled = true;
 					saveButton.classList.add('cursor-not-allowed');
-					saveButton.classList.add('opacity-80');
+					saveButton.classList.add('bg-button-hover');
+					saveButton.classList.remove('bg-button');
 				}
 			});
 		});
