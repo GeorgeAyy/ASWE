@@ -54,6 +54,13 @@ public class IndexController {
         return mav;
     }
 
+    @GetMapping("account")
+    public ModelAndView getaccount(HttpSession session) {
+        ModelAndView mav = new ModelAndView("account.html");
+        mav.addObject("username", (Long) session.getAttribute("username"));
+        return mav;
+    }
+
     @GetMapping("logout")
     public ModelAndView logout (HttpSession session) {
         session.invalidate(); 
