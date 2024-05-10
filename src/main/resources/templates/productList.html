@@ -9,7 +9,11 @@
 
 	<div class="container">
 		<div class="mx-32 my-12">
-			<h1 class="mb-10 text-3xl opacity-65">Baby & Child Care</h1>
+			<div class="flex justify-between items-center mb-10">
+				<h1 class="text-3xl opacity-65">Baby & Child Care</h1>
+
+				<button id="filter-open" class="bg-gray-900 text-white w-32 h-10 mr-14 hover:cursor-pointer hover:bg-gray-800 transition-all">Filter</button>
+			</div>
 
 			<div class="flex flex-wrap justify-start items-center">
 				<div class="card flex flex-col justify-between items-center border-b-4 border-l-4 rounded p-6 mb-10 mr-8 w-72 h-96 hover:shadow-2xl transition-all">
@@ -190,10 +194,90 @@
 		<th:block th:insert="~{fragments/footer.html}"/>
 	</div>
 
+	<div id="filter-overlay" class="bg-white fixed z-10 top-0 right-0 w-1/4 h-screen p-12 flex flex-col translate-x-full transition-all">
+		<svg id="filter-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute right-5 top-6 opacity-50 hover:cursor-pointer">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+		  </svg>					  
+
+		<form action="" class="flex flex-col h-full">
+			<p class="text-4xl font-bold opacity-65 mb-14">Filter</p>
+
+			<div class="mb-12">
+				<p class="text-xl">Sort</p>
+				<select class="w-full h-10 border border-gray-300 rounded mt-2">
+					<option value="1">None</option>
+					<option value="2">Price: Low to High</option>
+					<option value="3">Price: High to Low</option>
+					<option value="4">Newest</option>
+				</select>
+			</div>
+
+			<div class="mb-12">
+				<p class="text-xl">Company</p>
+				<div class="flex flex-col mt-2">
+					<label class="flex items-center">
+						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+						<span class="ml-2 text-gray-700">Company 1</span>
+					</label>
+					<label class="flex items-center">
+						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+						<span class="ml-2 text-gray-700">Company 2</span>
+					</label>
+					<label class="flex items-center">
+						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+						<span class="ml-2 text-gray-700">Company 3</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="mb-12">
+				<p class="text-xl">Price</p>
+				<div class="flex flex-row justify-start items-center gap-4">
+					<input type="number" class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2" placeholder="Min">
+					<input type="number" class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2" placeholder="Max">
+				</div>
+			</div>
+
+			<button id="filter-open" class="bg-gray-900 text-white w-40 h-14 mr-14 hover:cursor-pointer hover:bg-gray-800 transition-all" type="submit">Apply</button>
+		</form>
+	</div>
+
 	<script>
 		function GoToItemPage() {
-			window.location.href = "/itempage";
+		window.location.href = "/itempage";
 		}
+
+		var container = document.querySelector('.container');
+		var filterOpen = document.getElementById('filter-open');
+		var filterClose = document.getElementById('filter-close');
+		var filterOverlay = document.getElementById('filter-overlay');
+
+		// Function to open the filter
+		function openFilter() {
+			filterOverlay.classList.remove('translate-x-full');
+		}
+
+		// Function to close the filter
+		function closeFilter() {
+			filterOverlay.classList.add('translate-x-full');
+		}
+
+		// Event listener to open the filter
+		filterOpen.addEventListener('click', function(event) {
+			event.stopPropagation();
+			openFilter();
+		});
+
+		// Event listener to close the filter
+		filterClose.addEventListener('click', closeFilter);
+
+		// Event listener to close the filter when clicking outside of the overlay
+		document.addEventListener('click', function(event) {
+			// Check if the click target is outside the filter overlay
+			if (!filterOverlay.contains(event.target) && event.target !== filterOpen) {
+				closeFilter();
+			}
+		});
 	</script>
 </body>
 </html>
