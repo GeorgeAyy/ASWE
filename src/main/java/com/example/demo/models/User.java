@@ -39,8 +39,7 @@ public class User {
     public User() {
     }
 
-    public User(Long user_id, String user_Lname, String email, String userPassword, String user_fname, String user_address, boolean user_isAdmin) {
-        this.user_id = user_id;
+    public User( String user_Lname, String email, String userPassword, String user_fname, String user_address, boolean user_isAdmin) {
         this.user_Lname = user_Lname;
         this.email = email;
         this.userPassword = userPassword;
