@@ -46,25 +46,25 @@ public class AuthenticationController {
     private UserService userService;
 
     @GetMapping("/login")
-    public ModelAndView login() {
+    public ModelAndView login(@ModelAttribute UserDTO userDTO,Model model) {
         ModelAndView mav = new ModelAndView("login.html");
-        User newUser = new User();
-        mav.addObject("user", newUser);
+        model.addAttribute("userDTO", userDTO);
         return mav;
     }
 
     @PostMapping("/login")
-    public RedirectView getuser(@RequestParam("email") String email,
-    @RequestParam("userPassword") String userPassword, HttpSession session) {
-        
-        User dbUser= this.UserRepository.findByEmail(email);
-        Boolean isPassword = BCrypt.checkpw(userPassword, dbUser.getUserPassword());
-        if (isPassword) {
-        session.setAttribute("username", dbUser.getUser_id());
-        return new RedirectView("/");}
-        else{
-            return new RedirectView("/auth/login");
+    public ModelAndView getUser(@Valid @ModelAttribute UserDTO userDTO, BindingResult bindingResult,HttpSession session) {
+       
+        if( bindingResult.hasFieldErrors("email")||bindingResult.hasFieldErrors("password")) {
+            System.out.println(bindingResult.hasErrors());
+            return new ModelAndView("login.html");
         }
+        if(!this.userService.getUser(userDTO.getEmail(), userDTO.getUserPassword(),session)){
+            System.out.println(bindingResult.hasErrors());
+            bindingResult.addError(new FieldError("userDTO", "userPassword", "Password incorrector Incoreect emaill"));
+            return new ModelAndView("login.html");
+        }
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/signup")
