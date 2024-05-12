@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.servlet.ModelAndView;
 
-
+import com.example.demo.models.User;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,19 +23,19 @@ public class IndexController {
     @GetMapping("")
     public ModelAndView index(HttpSession session) {
         ModelAndView mav = new ModelAndView("index.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
     @GetMapping("productlist")
     public ModelAndView getproductlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
     @GetMapping("itempage")
     public ModelAndView getitempage(HttpSession session) {
         ModelAndView mav = new ModelAndView("itemPage.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
     
@@ -43,14 +43,14 @@ public class IndexController {
     @GetMapping("product/wishlist")
     public ModelAndView getproductwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
 
     @GetMapping("account")
     public ModelAndView getaccount(HttpSession session) {
         ModelAndView mav = new ModelAndView("account.html");
-        mav.addObject("username", (Long) session.getAttribute("username"));
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
 
@@ -63,8 +63,9 @@ public class IndexController {
     
     
     @GetMapping("wishlist")
-    public ModelAndView getwishlist() {
+    public ModelAndView getwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");
+        mav.addObject("user", (User) session.getAttribute("user"));
         return mav;
     }
 }

@@ -8,6 +8,8 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class UserService {
 
@@ -74,5 +76,15 @@ public class UserService {
 
     public boolean existEmail(String email){
         return userRepository.existsByEmail(email);
+    }
+
+     public boolean getUser (String email,String password,HttpSession session){
+        
+        User user = this.userRepository.findByEmail(email);
+        if(user!=null && BCrypt.checkpw(password, user.getUserPassword())){
+            session.setAttribute("user", user);
+            return true;
+        }
+        return false;
     }
 }
