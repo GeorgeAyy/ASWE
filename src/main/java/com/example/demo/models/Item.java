@@ -1,11 +1,15 @@
 package com.example.demo.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,12 +42,14 @@ public class Item {
     @Column(name = "item_offers", nullable = false)
     private double itemOffers;
 
-    // Add getters and setters
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemImages> images;
 
     public Item() {
     }
 
-    public Item(Long itemId, String itemTitle, String itemBrand, String itemCategory, String itemDetails, int itemQuantity, int itemPrice, int itemOffers) {
+    public Item(Long itemId, String itemTitle, String itemBrand, String itemCategory, String itemDetails,
+            int itemQuantity, int itemPrice, int itemOffers) {
         this.itemId = itemId;
         this.itemTitle = itemTitle;
         this.itemBrand = itemBrand;
@@ -53,7 +59,7 @@ public class Item {
         this.itemPrice = itemPrice;
         this.itemOffers = itemOffers;
     }
-    
+
     public Item(String productName, String category, String brand, double price, String description, int quantity,
             double offers) {
         this.itemTitle = productName;
@@ -177,26 +183,38 @@ public class Item {
             return false;
         }
         Item item = (Item) o;
-        return Objects.equals(itemId, item.itemId) && Objects.equals(itemTitle, item.itemTitle) && Objects.equals(itemBrand, item.itemBrand) && Objects.equals(itemCategory, item.itemCategory) && Objects.equals(itemDetails, item.itemDetails) && itemQuantity == item.itemQuantity && itemPrice == item.itemPrice && itemOffers == item.itemOffers;
+        return Objects.equals(itemId, item.itemId) && Objects.equals(itemTitle, item.itemTitle)
+                && Objects.equals(itemBrand, item.itemBrand) && Objects.equals(itemCategory, item.itemCategory)
+                && Objects.equals(itemDetails, item.itemDetails) && itemQuantity == item.itemQuantity
+                && itemPrice == item.itemPrice && itemOffers == item.itemOffers;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemId, itemTitle, itemBrand, itemCategory, itemDetails, itemQuantity, itemPrice, itemOffers);
+        return Objects.hash(itemId, itemTitle, itemBrand, itemCategory, itemDetails, itemQuantity, itemPrice,
+                itemOffers);
     }
 
     @Override
     public String toString() {
         return "{" +
-            " itemId='" + getItemId() + "'" +
-            ", itemTitle='" + getItemTitle() + "'" +
-            ", itemBrand='" + getItemBrand() + "'" +
-            ", itemCategory='" + getItemCategory() + "'" +
-            ", itemDetails='" + getItemDetails() + "'" +
-            ", itemQuantity='" + getItemQuantity() + "'" +
-            ", itemPrice='" + getItemPrice() + "'" +
-            ", itemOffers='" + getItemOffers() + "'" +
-            "}";
+                " itemId='" + getItemId() + "'" +
+                ", itemTitle='" + getItemTitle() + "'" +
+                ", itemBrand='" + getItemBrand() + "'" +
+                ", itemCategory='" + getItemCategory() + "'" +
+                ", itemDetails='" + getItemDetails() + "'" +
+                ", itemQuantity='" + getItemQuantity() + "'" +
+                ", itemPrice='" + getItemPrice() + "'" +
+                ", itemOffers='" + getItemOffers() + "'" +
+                "}";
+    }
+
+    public void setImages(Iterable<ItemImages> itemImages) {
+        // Convert Iterable to List for easier manipulation
+        List<ItemImages> imageList = (List<ItemImages>) itemImages;
+
+        // Assuming there's a property in Item for images, e.g., List<ItemImage> images
+        this.images = imageList;
     }
 
 }

@@ -84,7 +84,8 @@ public class ItemImages {
             return false;
         }
         ItemImages itemImages = (ItemImages) o;
-        return Objects.equals(imageId, itemImages.imageId) && Objects.equals(item, itemImages.item) && Objects.equals(imagePath, itemImages.imagePath);
+        return Objects.equals(imageId, itemImages.imageId) && Objects.equals(item, itemImages.item)
+                && Objects.equals(imagePath, itemImages.imagePath);
     }
 
     @Override
@@ -95,10 +96,10 @@ public class ItemImages {
     @Override
     public String toString() {
         return "{" +
-            " imageId='" + getImageId() + "'" +
-            ", item='" + getItem() + "'" +
-            ", imagePath='" + getImagePath() + "'" +
-            "}";
+                " imageId='" + getImageId() + "'" +
+                ", item='" + getItem() + "'" +
+                ", imagePath='" + getImagePath() + "'" +
+                "}";
     }
 
 }
