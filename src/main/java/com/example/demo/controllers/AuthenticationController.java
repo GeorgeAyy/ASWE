@@ -4,14 +4,16 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
+// import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.models.User;
 
 
@@ -36,6 +41,9 @@ public class AuthenticationController {
 
     @Autowired
     private UserRepository UserRepository;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login")
     public ModelAndView login() {
@@ -60,10 +68,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("/signup")
-    public ModelAndView signup() {
+    public ModelAndView signup(@ModelAttribute UserDTO userDTO,Model model ) {
         ModelAndView mav = new ModelAndView("signup.html");
-        User user = new User();
-        mav.addObject("signupRequest", user);
+        model.addAttribute("userDTO", userDTO);
         return mav;
     }
 
@@ -94,50 +101,23 @@ public class AuthenticationController {
         }
     }
     @PostMapping("/signup")
-    public RedirectView signup(@Valid @ModelAttribute User signupRequest, BindingResult result) {
+    public ModelAndView signup(@Valid @ModelAttribute UserDTO userDTO, BindingResult result) {
         
-        System.out.println("Signup request received");
+       if(userService.existEmail(userDTO.getEmail())){
+        result.addError(new FieldError("userDTO", "email", "Email address already in use"));
+       }
 
-     
-
-        String firstname = signupRequest.getUser_fname();
-        String lastname = signupRequest.getUser_Lname();
-        String email = signupRequest.getEmail();
-        String password = signupRequest.getUserPassword();
-        String address = signupRequest.getUser_address();
-
-        List<String> errors = new ArrayList<>();
-
-        if (firstname == null || firstname.isEmpty()) {
-            errors.add("First name is required");
-            return new RedirectView("/auth/signup?error=firstNameError");
+        if(userDTO.getUserPassword()!=null && userDTO.getCpassword()!=null){
+            if(!userDTO.getUserPassword().equals(userDTO.getCpassword())){
+                result.addError(new FieldError("userDTO", "cpassword", "Password must match"));
+            }
         }
 
-        if (lastname == null || lastname.isEmpty()) {
-            errors.add("Last name is required");
-            return new RedirectView("/auth/signup?error=lastNameError");
+        if (result.hasErrors()) {
+            System.out.println(result.hasErrors());
+           return new ModelAndView("signup.html");
         }
-
-        if (email == null || email.isEmpty() || !email.contains("@") || !email.contains(".")) {
-            errors.add("Invalid email");
-            return new RedirectView("/auth/signup?error=emailError");
-        }
-
-        if (password == null || password.length() < 8) {
-            errors.add("Password must be at least 8 characters long");
-            return new RedirectView("/auth/signup?error=passwordError");
-        }
-
-        if (address == null || address.isEmpty()) {
-            errors.add("Address is required");
-            return new RedirectView("/auth/signup?error=addressError");
-        }
-     
-        String encodedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
-
-        signupRequest.setUserPassword(encodedPassword);
-        this.UserRepository.save(signupRequest);
-        
-        return new RedirectView("/auth/login");
-    }
+        userService.saveUser(userDTO);
+      return new ModelAndView("redirect:/auth/login");
+}
 }

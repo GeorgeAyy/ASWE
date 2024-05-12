@@ -1,22 +1,44 @@
 package com.example.demo.dto;
 import java.util.Objects;
 
+import org.hibernate.validator.constraints.Length;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class UserDTO {
     private Long userId;
+    @NotBlank(message = "enter the frist name")
     private String userFname;
+    @NotBlank(message = "enter the last name")
     private String userLname;
+    
+    @NotBlank(message = "Enter your email")
+    @Email(message = "Enter a valid email address")
     private String email;
+
+    @NotBlank(message = "Enter your password")
+    @Length(min=8,message = "Password must be at least 8 characters")
+    private String userPassword;
+
+    @NotBlank(message = "Re-enter your password")
+    private String cpassword;
+    
+    @NotBlank(message = "Enter your address")
     private String userAddress;
+
 
 
     public UserDTO() {
     }
 
-    public UserDTO(Long userId, String userFname, String userLname, String email, String userAddress) {
+    public UserDTO(Long userId, String userFname, String userLname, String email, String userPassword, String cpassword, String userAddress) {
         this.userId = userId;
         this.userFname = userFname;
         this.userLname = userLname;
         this.email = email;
+        this.userPassword = userPassword;
+        this.cpassword = cpassword;
         this.userAddress = userAddress;
     }
 
@@ -52,6 +74,22 @@ public class UserDTO {
         this.email = email;
     }
 
+    public String getUserPassword() {
+        return this.userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getCpassword() {
+        return this.cpassword;
+    }
+
+    public void setCpassword(String cpassword) {
+        this.cpassword = cpassword;
+    }
+
     public String getUserAddress() {
         return this.userAddress;
     }
@@ -80,6 +118,16 @@ public class UserDTO {
         return this;
     }
 
+    public UserDTO userPassword(String userPassword) {
+        setUserPassword(userPassword);
+        return this;
+    }
+
+    public UserDTO cpassword(String cpassword) {
+        setCpassword(cpassword);
+        return this;
+    }
+
     public UserDTO userAddress(String userAddress) {
         setUserAddress(userAddress);
         return this;
@@ -93,12 +141,12 @@ public class UserDTO {
             return false;
         }
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(userId, userDTO.userId) && Objects.equals(userFname, userDTO.userFname) && Objects.equals(userLname, userDTO.userLname) && Objects.equals(email, userDTO.email) && Objects.equals(userAddress, userDTO.userAddress);
+        return Objects.equals(userId, userDTO.userId) && Objects.equals(userFname, userDTO.userFname) && Objects.equals(userLname, userDTO.userLname) && Objects.equals(email, userDTO.email) && Objects.equals(userPassword, userDTO.userPassword) && Objects.equals(cpassword, userDTO.cpassword) && Objects.equals(userAddress, userDTO.userAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userFname, userLname, email, userAddress);
+        return Objects.hash(userId, userFname, userLname, email, userPassword, cpassword, userAddress);
     }
 
     @Override
@@ -108,8 +156,11 @@ public class UserDTO {
             ", userFname='" + getUserFname() + "'" +
             ", userLname='" + getUserLname() + "'" +
             ", email='" + getEmail() + "'" +
+            ", userPassword='" + getUserPassword() + "'" +
+            ", cpassword='" + getCpassword() + "'" +
             ", userAddress='" + getUserAddress() + "'" +
             "}";
     }
+    
     
 }
