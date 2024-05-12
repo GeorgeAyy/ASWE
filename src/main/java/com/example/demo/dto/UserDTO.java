@@ -8,9 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public class UserDTO {
     private Long userId;
-    @NotBlank(message = "enter the frist name")
+    @NotBlank(message = "Enter the first name")
     private String userFname;
-    @NotBlank(message = "enter the last name")
+    @NotBlank(message = "Enter the last name")
     private String userLname;
     
     @NotBlank(message = "Enter your email")
