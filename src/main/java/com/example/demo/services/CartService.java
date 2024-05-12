@@ -23,8 +23,8 @@ public class CartService {
     @Autowired
     private UserRepository userRepository;
 
-    public void addToCart(Long itemId, Long username) {
-        User user = this.userRepository.findById(username).get();
+    public void addToCart(Long itemId, User user) {
+        
         Item item = this.itemRepository.findByItemId(itemId);
 
         if (user != null && item != null) {
@@ -57,17 +57,16 @@ public class CartService {
         }
     }
 
-    public List getItemsInCart(Long userId) {
-        User user = this.userRepository.findById(userId).get();
+    public List getItemsInCart(User user) {
         List<Cart> items = this.cartRepository.findByUser(user);
         System.out.println("items" + items);
         return items;
     }
 
-    public void updateCartItemQuantity(Long itemId,Long userId,int quantity){
+    public void updateCartItemQuantity(Long itemId,User user,int quantity){
         
 
-        User user = this.userRepository.findById(userId).get();
+
         Item item = this.itemRepository.findByItemId(itemId);
 
         Cart cartItem = cartRepository.findByUserAndItem(user, item);
@@ -86,8 +85,7 @@ public class CartService {
             itemRepository.save(item);
         }
     }
-    public void removeItemFromCart(Long itemId, Long userId) {
-        User user = this.userRepository.findById(userId).get();
+    public void removeItemFromCart(Long itemId, User user) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item not found"));
         Cart cartItem = cartRepository.findByUserAndItem(user, item);
         if (cartItem != null) {
