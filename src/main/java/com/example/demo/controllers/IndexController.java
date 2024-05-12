@@ -49,8 +49,17 @@ public class IndexController {
 
     @GetMapping("account")
     public ModelAndView getaccount(HttpSession session) {
-        ModelAndView mav = new ModelAndView("account.html");
-        mav.addObject("user", (User) session.getAttribute("user"));
+        ModelAndView mav = new ModelAndView();
+    
+        // Check if there is a user in the session
+        if (session != null && session.getAttribute("user") != null) {
+            mav.setViewName("account.html");
+            mav.addObject("user", (User) session.getAttribute("user"));
+        } else {
+            // User is not authenticated, render the registration/login prompt view
+            mav.setViewName("redirect:/auth/login");
+        }
+        
         return mav;
     }
 

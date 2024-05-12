@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</div>
-	
+			<span th:if="${user != null}" th:text="${user.user_fname}"></span>
 		<!-- Categories -->
 		<div class="categories flex flex-wrap">
 			<a href="/productlist"><div class="flex flex-col justify-center items-center border-2 border-gray-100 min-w-64 h-72 hover:bg-gray-100 hover:shadow-2xl hover:cursor-pointer transition-all">
