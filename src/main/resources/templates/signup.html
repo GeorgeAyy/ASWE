@@ -9,13 +9,25 @@
 
 	<div class="container">
 		<div class="flex flex-col items-center mt-32 h-screen">
-			<form action="post" class="flex flex-col w-1/3 h-full justify-between border-2 p-8 rounded shadow-2xl">
+			<form  th:action="@{/auth/signup}" method="post" th:object="${userDTO}" class="flex flex-col w-1/3 h-full justify-between border-2 p-8 rounded shadow-2xl">
 				<h1 class="text-center text-2xl text-primary">Sign Up</h1>
-				<input type="text" name="firstname" id="firstname" placeholder="Firstname" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<input type="text" name="lastname" id="lastname" placeholder="Lastname" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<input type="email" name="email" id="email" placeholder="Email" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<input type="password" name="password" id="password" placeholder="Password" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<input type="text" name="address" id="address" placeholder="Address" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<input type="text" name="userFname" id="userFname" placeholder="First name" th:field="*{userFname}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('userFname')}" th:errors="*{userFname}" class="text-red-500"></div>
+
+				<input type="text" name="userLname" id="userLname" placeholder="Last name" th:field="*{userLname}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('userLname')}" th:errors="*{userLname}" class="text-red-500"></div>
+				
+				<input type="text" name="email" id="email" placeholder="Email" th:field="*{email}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500"></div>
+
+				<input type="password" name="userPassword" id="userPassword" placeholder="Password" th:field="*{userPassword}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="text-red-500"></div>
+				
+				<input type="password" name="cpassword" id="cpassword" placeholder="Confirm password" th:field="*{cpassword}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('cpassword')}" th:errors="*{cpassword}" class="text-red-500"></div>
+
+				<input type="text" name="userAddress" id="userAddress" placeholder="Address" th:field="*{userAddress}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
+				<div th:if="${#fields.hasErrors('userAddress')}" th:errors="*{userAddress}" class="text-red-500"></div>
 				<input type="submit" value="Sign Up" class="bg-button text-white w-1/2 h-16 self-center hover:cursor-pointer hover:bg-button-hover transition-all">
 			</form>
 		</div>

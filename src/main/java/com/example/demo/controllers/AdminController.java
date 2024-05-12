@@ -1,9 +1,9 @@
 package com.example.demo.controllers;
 
-import org.json.JSONArray;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +25,9 @@ import com.example.demo.repositories.ItemRepository;
 import com.example.demo.repositories.UserRepository;
 import com.example.demo.services.ItemService;
 import com.example.demo.services.UserService;
+
+import jakarta.servlet.http.HttpSession;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,52 +61,91 @@ public class AdminController {
     private ItemImagesRepository itemImageRepository;
 
     @GetMapping("/")
-    public ModelAndView index() {
+    public ModelAndView index(HttpSession session) {
         ModelAndView mav = new ModelAndView("admin_templates/dashboard.html");
         mav.addObject("title", "Dashboard");
         return mav;
     }
 
     @GetMapping("/dashboard")
-    public ModelAndView getDashboard() {
-        ModelAndView mav = new ModelAndView("admin_templates/dashboard.html");
-        mav.addObject("title", "Dashboard");
-        return mav;
+    public ModelAndView getDashboard(HttpSession session) {
+        if (session != null && session.getAttribute("user") != null) {
+            // Retrieve the user object from the session
+            User user = (User) session.getAttribute("user");
+            // Check if the user is an admin
+            if (user.getUser_isAdmin()) {
+                // User is an admin, allow access to admin dashboard
+                ModelAndView mav = new ModelAndView("admin_templates/dashboard.html");
+                mav.addObject("title", "Dashboard");
+                return mav;
+            }
+        }
+        // If the session is null or the user is not an admin, redirect to a suitable page (e.g., login page)
+        return new ModelAndView("redirect:/auth/login");
     }
 
     @GetMapping("/orders")
-    public ModelAndView getOrders() {
-        ModelAndView mav = new ModelAndView("admin_templates/orders.html");
-        mav.addObject("title", "Orders");
-        return mav;
+    public ModelAndView getOrders(HttpSession session) {
+        if (session != null && session.getAttribute("user") != null) {
+            // Retrieve the user object from the session
+            User user = (User) session.getAttribute("user");
+            // Check if the user is an admin
+            if (user.getUser_isAdmin()) {
+                // User is an admin, allow access to admin dashboard
+                ModelAndView mav = new ModelAndView("admin_templates/orders.html");
+                mav.addObject("title", "Orders");
+                return mav;
+            }
+        }
+        // If the session is null or the user is not an admin, redirect to a suitable page (e.g., login page)
+        return new ModelAndView("redirect:/auth/login");
     }
 
     @GetMapping("/products")
-    public ModelAndView getProducts() {
-        // Assuming you have a service or repository to fetch the products
-        List<Item> products = itemRepository.findAll(); // Fetch products from your data source
-
-        // Create a new ModelAndView object and set the view name
-        ModelAndView mav = new ModelAndView("admin_templates/products");
-
-        // Add the products list as an attribute to the ModelAndView
-        mav.addObject("products", products);
-
-        // You can also add other attributes if needed
-        mav.addObject("title", "Products");
-
-        // Return the ModelAndView object
-        return mav;
+    public ModelAndView getProducts(HttpSession session) {
+        
+        // Check if there is a user in the session
+     if (session != null && session.getAttribute("user") != null) {
+        // Retrieve the user object from the session
+        User user = (User) session.getAttribute("user");
+        // Check if the user is an admin
+        if (user.getUser_isAdmin()) {
+            // User is an admin, allow access to the products page
+            // Fetch products from your data source
+            List<Item> products = itemRepository.findAll();
+            // Create a new ModelAndView object and set the view name
+            ModelAndView mav = new ModelAndView("admin_templates/products");
+            // Add the products list as an attribute to the ModelAndView
+            mav.addObject("products", products);
+            // Add other attributes if needed
+            mav.addObject("title", "Products");
+            // Return the ModelAndView object
+            return mav;
+        }
     }
+    // If the session is null or the user is not an admin, redirect to a suitable page (e.g., login page)
+    return new ModelAndView("redirect:/auth/login");
+}
 
     @GetMapping("/users")
-    public ModelAndView getUsers() {
-
-        ModelAndView mav = new ModelAndView("admin_templates/users.html");
-        mav.addObject("title", "Users");
-        mav.addObject("users", userRepository.findAll());
-        return mav;
+    public ModelAndView getUsers(HttpSession session) {
+        
+       // Check if there is a user in the session
+       if (session != null && session.getAttribute("user") != null) {
+        // Retrieve the user object from the session
+        User user = (User) session.getAttribute("user");
+        // Check if the user is an admin
+        if (user.getUser_isAdmin()) {
+            // User is an admin, allow access to the users page
+            ModelAndView mav = new ModelAndView("admin_templates/users.html");
+            mav.addObject("title", "Users");
+            mav.addObject("users", userRepository.findAll());
+            return mav;
+        }
     }
+    // If the session is null or the user is not an admin, redirect to a suitable page (e.g., login page)
+    return new ModelAndView("redirect:/auth/login");
+}
 
     @GetMapping("/users/toggle_admin/{id}")
     public String toggleAdmin(@PathVariable Long id) {
