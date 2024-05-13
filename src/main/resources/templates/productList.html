@@ -44,7 +44,7 @@
 		<th:block th:insert="~{fragments/footer.html}"/>
 	</div>
 
-	<div id="filter-overlay" class="bg-white fixed z-10 top-0 right-0 w-1/4 h-screen p-12 flex flex-col translate-x-full transition-all">
+	<div id="filter-overlay" class="bg-white fixed z-50 top-0 right-0 w-1/4 h-screen p-12 flex flex-col translate-x-full transition-all overflow-y-auto">
 		<svg id="filter-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute right-5 top-6 opacity-50 hover:cursor-pointer">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
 		  </svg>					  
@@ -64,19 +64,21 @@
 
 			<div class="mb-12">
 				<p class="text-xl">Company</p>
-				<div class="flex flex-col mt-2">
-					<label class="flex items-center">
-						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
-						<span class="ml-2 text-gray-700">Company 1</span>
-					</label>
-					<label class="flex items-center">
-						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
-						<span class="ml-2 text-gray-700">Company 2</span>
-					</label>
-					<label class="flex items-center">
-						<input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
-						<span class="ml-2 text-gray-700">Company 3</span>
-					</label>
+				<div class="flex flex-col justify-start items-start mt-2">
+					<div>
+						<input type="checkbox" id="company1" name="company1" value="company1">
+						<label for="company1" class="ml-2">Company 1</label>
+					</div>
+					
+					<div>
+						<input type="checkbox" id="company2" name="company2" value="company2">
+						<label for="company2" class="ml-2">Company 2</label>
+					</div>
+
+					<div>
+						<input type="checkbox" id="company3" name="company3" value="company3">
+						<label for="company3" class="ml-2">Company 3</label>
+					</div>
 				</div>
 			</div>
 
@@ -131,4 +133,3 @@
 	</script>
 </body>
 </html>
-

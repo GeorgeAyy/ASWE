@@ -642,6 +642,10 @@ video {
   z-index: 40;
 }
 
+.z-50{
+  z-index: 50;
+}
+
 .mx-32{
   margin-left: 8rem;
   margin-right: 8rem;
@@ -946,6 +950,10 @@ video {
   flex-wrap: nowrap;
 }
 
+.items-start{
+  align-items: flex-start;
+}
+
 .items-center{
   align-items: center;
 }
@@ -970,8 +978,16 @@ video {
   gap: 1rem;
 }
 
+.gap-2{
+  gap: 0.5rem;
+}
+
 .self-center{
   align-self: center;
+}
+
+.overflow-y-auto{
+  overflow-y: auto;
 }
 
 .rounded{
