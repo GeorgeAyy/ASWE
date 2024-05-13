@@ -1,14 +1,17 @@
 package com.example.demo.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.CartDTO;
 import com.example.demo.models.Cart;
 import com.example.demo.models.Item;
 import com.example.demo.models.User;
 import com.example.demo.repositories.CartRepository;
+import com.example.demo.repositories.ItemImagesRepository;
 import com.example.demo.repositories.ItemRepository;
 import com.example.demo.repositories.UserRepository;
 
@@ -22,6 +25,9 @@ public class CartService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ItemImagesRepository imagesRepository;
 
     public void addToCart(Long itemId, User user) {
         
@@ -57,11 +63,31 @@ public class CartService {
         }
     }
 
-    public List getItemsInCart(User user) {
+  public List getItemsInCart(User user) {
         List<Cart> items = this.cartRepository.findByUser(user);
-        System.out.println("items" + items);
-        return items;
+      
+
+        List<CartDTO> cartItemDTOs = new ArrayList<>();
+
+        for (Cart cart : items) {
+            CartDTO cartItemDTO = new CartDTO();
+            cartItemDTO.setItemId(cart.getItem().getItemId());
+            cartItemDTO.setItemName(cart.getItem().getItemTitle());
+            cartItemDTO.setItemPrice(cart.getItem().getItemPrice());
+            cartItemDTO.setQuantity(cart.getQuantity());
+
+            // Fetch and add image paths
+            List<String> imagePaths = this.imagesRepository.findImagePathsByItemId(cart.getItem().getItemId());
+                                                         
+            cartItemDTO.setImages(imagePaths);
+
+            cartItemDTOs.add(cartItemDTO);
+        }
+        System.out.println("cartItemDTOs"+cartItemDTOs);
+        
+        return cartItemDTOs;
     }
+
 
     public void updateCartItemQuantity(Long itemId,User user,int quantity){
         
