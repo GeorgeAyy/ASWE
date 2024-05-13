@@ -113,6 +113,27 @@ public class AuthenticationController {
             }
         }
 
+        if(userDTO.getUserPassword()!=null){
+            if(userDTO.getUserPassword().length()<8){
+                result.addError(new FieldError("userDTO", "userPassword", "Password must be at least 8 characters"));
+            }
+        }
+
+        if(userDTO.getUserAddress()==null){
+            result.addError(new FieldError("userDTO", "userAddress", "Address must be provided"));
+        }
+
+        if(userDTO.getUserFname()==null){
+            result.addError(new FieldError("userDTO", "userFname", "First name must be provided"));
+        }
+
+        if(userDTO.getUserLname()==null){
+            result.addError(new FieldError("userDTO", "userLname", "Last name must be provided"));
+        }
+        if(userDTO.getEmail()==null){
+            result.addError(new FieldError("userDTO", "email", "Email must be provided"));
+        }
+
         if (result.hasErrors()) {
             System.out.println(result.hasErrors());
            return new ModelAndView("signup.html");
