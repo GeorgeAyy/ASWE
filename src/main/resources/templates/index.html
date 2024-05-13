@@ -1,107 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
 
+  <body class="font-poppins text-lg w-screen">
+    <th:block th:insert="~{fragments/header.html}" />
 
-<th:block th:insert="~{fragments/head.html}"/>
+    <div class="container">
+      <!-- Banner -->
+      <div class="bg-gradient-to-b from-white to-gray-200 h-96 mb-36 w-screen">
+        <div class="flex justify-center">
+          <div class="welcome w-1/2 flex flex-col text-center">
+            <p class="font-thin text-gray-500 text-4xl text-center">
+              You thought you ate with that
+            </p>
+            <div class="flex">
+              <img class="mx-auto w-96 mt-10" src="images/header3.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
 
-<body class="font-poppins text-lg w-screen">
+      <!-- Categories -->
+      <div class="categories flex flex-wrap">
+        <a
+          th:each="category: ${categories}"
+          th:href="@{'/api/search?category='+${category.category_name}}"
+          ><div
+            class="flex flex-col justify-center items-center border-2 border-gray-100 min-w-64 h-72 hover:bg-gray-100 hover:shadow-2xl hover:cursor-pointer transition-all"
+          >
+            <!-- <svg width="120px" height="120px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dfdfdf"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99057 13.6019C1.33648 10.9478 1.33648 6.64466 3.99057 3.99057C6.64466 1.33648 10.9478 1.33648 13.6019 3.99057L20.0094 10.3981C22.6635 13.0522 22.6635 17.3553 20.0094 20.0094C17.3553 22.6635 13.0522 22.6635 10.3981 20.0094L3.99057 13.6019Z" stroke="#dfdfdf" stroke-width="1.5"></path> <path d="M16.8057 7.19434C16.8057 7.19434 16.2649 9.99999 13.1322 13.1327C9.99952 16.2653 7.19434 16.8057 7.19434 16.8057" stroke="#dfdfdf" stroke-width="1.5"></path> </g></svg> -->
 
-	<th:block th:insert="~{fragments/header.html}"/>
-	
-	<div class="container">
+            <p
+              class="text-gray-400 text-center"
+              th:text="${category.category_name}"
+            ></p></div
+        ></a>
+      </div>
 
-		<!-- Banner -->
-		<div class="bg-gradient-to-b from-white to-gray-200 h-96 mb-36 w-screen">
-			<div class="flex justify-center">
-				<div class="welcome w-1/2 flex flex-col text-center">
-					<p class="font-thin text-gray-500 text-4xl text-center">You thought you ate with that</p>
-					<div class="flex">
-						<img class="mx-auto w-96 mt-10" src="images/header3.png" alt="">
-					</div>
-				</div>
-			</div>
-		</div>
-	
-		<!-- Categories -->
-		<div class="categories flex flex-wrap">
-			<a th:each="category: ${categories}" th:href="@{'/productlist?category='+${category.category_name}}"><div class="flex flex-col justify-center items-center border-2 border-gray-100 min-w-64 h-72 hover:bg-gray-100 hover:shadow-2xl hover:cursor-pointer transition-all">
-			<!-- <svg width="120px" height="120px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dfdfdf"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.99057 13.6019C1.33648 10.9478 1.33648 6.64466 3.99057 3.99057C6.64466 1.33648 10.9478 1.33648 13.6019 3.99057L20.0094 10.3981C22.6635 13.0522 22.6635 17.3553 20.0094 20.0094C17.3553 22.6635 13.0522 22.6635 10.3981 20.0094L3.99057 13.6019Z" stroke="#dfdfdf" stroke-width="1.5"></path> <path d="M16.8057 7.19434C16.8057 7.19434 16.2649 9.99999 13.1322 13.1327C9.99952 16.2653 7.19434 16.8057 7.19434 16.8057" stroke="#dfdfdf" stroke-width="1.5"></path> </g></svg> -->
-				
-				<p class="text-gray-400 text-center" th:text="${category.category_name}"></p>
-			</div></a>
-		
-			
-		</div>
-		
-        <th:block th:insert="~{fragments/footer.html}"/>
-	</div>
-	
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
 
-			//-------------------------------------------- Piano Effect -------------------------------------------- //
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        //-------------------------------------------- Piano Effect -------------------------------------------- //
 
-			// Select the categories container
-			const categoriesContainer = document.querySelector('.categories');
+        // Select the categories container
+        const categoriesContainer = document.querySelector(".categories");
 
-			// Get all child div elements of the .categories container
-			const childDivs = categoriesContainer.children;
+        // Get all child div elements of the .categories container
+        const childDivs = categoriesContainer.children;
 
-			// Define the array of background color classes
-			const bgClasses = [
-				'bg-gray-100',
-				'bg-gray-200',
-				'bg-gray-300',
-				'bg-gray-300',
-				'bg-gray-500',
-				'bg-gray-600',
-				'bg-button-hover',
-				'bg-gray-800',
-				'bg-button',
-				'bg-gray-950'
-			];
+        // Define the array of background color classes
+        const bgClasses = [
+          "bg-gray-100",
+          "bg-gray-200",
+          "bg-gray-300",
+          "bg-gray-300",
+          "bg-gray-500",
+          "bg-gray-600",
+          "bg-button-hover",
+          "bg-gray-800",
+          "bg-button",
+          "bg-gray-950",
+        ];
 
-			const interval = 200;
+        const interval = 200;
 
-			// Track whether the piano action has occurred
-			let pianoPlayed = false;
+        // Track whether the piano action has occurred
+        let pianoPlayed = false;
 
-			// Function to handle the scroll event
-			function handleScroll() {
-				// Loop through each child div
-				for (let i = 0; i < childDivs.length; i++) {
-					// Get the current div and its bounding rectangle
-					const div = childDivs[i];
-					const targetRect = div.getBoundingClientRect();
+        // Function to handle the scroll event
+        function handleScroll() {
+          // Loop through each child div
+          for (let i = 0; i < childDivs.length; i++) {
+            // Get the current div and its bounding rectangle
+            const div = childDivs[i];
+            const targetRect = div.getBoundingClientRect();
 
-					// Check if the div is in view and if the action has not occurred yet
-					if (targetRect.top <= window.innerHeight && targetRect.bottom >= 0 && !pianoPlayed) {
-						// Add the background color classes to each div with intervals
-						for (let j = 0; j < childDivs.length; j++) {
-							setTimeout(() => {
-								childDivs[j].classList.add(bgClasses[j]);
-							}, j * interval); // Add class with an interval
-						}
+            // Check if the div is in view and if the action has not occurred yet
+            if (
+              targetRect.top <= window.innerHeight &&
+              targetRect.bottom >= 0 &&
+              !pianoPlayed
+            ) {
+              // Add the background color classes to each div with intervals
+              for (let j = 0; j < childDivs.length; j++) {
+                setTimeout(() => {
+                  childDivs[j].classList.add(bgClasses[j]);
+                }, j * interval); // Add class with an interval
+              }
 
-						// Remove the background color classes from each div with intervals
-						setTimeout(() => {
-							for (let j = 0; j < childDivs.length; j++) {
-								setTimeout(() => {
-									childDivs[j].classList.remove(bgClasses[j]);
-								}, j * interval);
-							}
-						}, childDivs.length * interval); // Start removal after all classes have been added
+              // Remove the background color classes from each div with intervals
+              setTimeout(() => {
+                for (let j = 0; j < childDivs.length; j++) {
+                  setTimeout(() => {
+                    childDivs[j].classList.remove(bgClasses[j]);
+                  }, j * interval);
+                }
+              }, childDivs.length * interval); // Start removal after all classes have been added
 
-						// Set the flag to true to indicate that the action has occurred
-						pianoPlayed = true;
-					}
-				}
-			}
+              // Set the flag to true to indicate that the action has occurred
+              pianoPlayed = true;
+            }
+          }
+        }
 
-			// Add the scroll event listener
-			window.addEventListener('scroll', handleScroll);
-		});
-	</script>
-</body>
+        // Add the scroll event listener
+        window.addEventListener("scroll", handleScroll);
+      });
+    </script>
+  </body>
 </html>
-
