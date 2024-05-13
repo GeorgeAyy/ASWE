@@ -52,6 +52,7 @@ public class AuthControllerTest {
         ModelAndView mav = authenticationController.getUser(userDTO, bindingResult, session);
 
         assert mav.getViewName().equals("redirect:/");
+        assertFalse(bindingResult.hasErrors());
     }
     @Test
     public void testLogin_InvalidUser_ReturnsError() {
@@ -68,17 +69,6 @@ public class AuthControllerTest {
 
         assert mav.getViewName().equals("login.html");
         assert bindingResult.hasErrors();
-
-        if (bindingResult.hasErrors()) {
-            System.out.println("Errors found in BindingResult:");
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                System.out.println("Field: " + error.getField() + ", Message: " + error.getDefaultMessage());
-            }
-        }
-        else {
-            System.out.println("No errors found in BindingResult");
-        }
- 
     }
 
    @Test
