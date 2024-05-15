@@ -157,7 +157,7 @@ $(document).ready(function(){
 });
 $(document).ready(function() {
   $('.button-remove').click(function() {
-      var itemId = $(this).closest(".Qty_div").find(".quantityvalue").data("itemid");
+      var itemId = $(this).closest("tr").find(".quantityvalue").data("itemid");
       console.log("Item ID:", itemId); 
       var $lineItem = $(this).closest('tr');
       $.ajax({
