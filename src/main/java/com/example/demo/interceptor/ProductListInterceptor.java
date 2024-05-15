@@ -33,17 +33,16 @@ public class ProductListInterceptor implements HandlerInterceptor {
             if (categoryName != null && !categoryName.isEmpty()) {
                 List<Item> itemsByCategory = this.ItemRepository.findByItemCategory(categoryName);
                 System.out.println("Items by category: " + itemsByCategory);
-                modelAndView.addObject("itemsByCategory", itemsByCategory);
-
-                 List<List<ItemImages>> allItemImages = new ArrayList<>();
+                List<ItemImages> allItemImages = new ArrayList<>();
                 for(Item item:itemsByCategory){
                     List<ItemImages> itemImages = this.imagesRepository.findByItemItemId(item.getItemId());
                     System.out.println("images: " + itemImages);
-                    allItemImages.add(itemImages);
+                    allItemImages.addAll(itemImages);
                 }
                
                 modelAndView.addObject("itemImages", allItemImages);
                 System.out.println("allllimages: " + allItemImages);
+
 
             }
         }

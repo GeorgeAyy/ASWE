@@ -1,141 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-<th:block th:insert="~{fragments/head.html}"/>
+  <th:block th:insert="~{fragments/head.html}" />
 
 <body class="font-poppins text-lg w-screen overflow-x-hidden">
 
     <th:block th:insert="~{fragments/header.html}"/>
 
-	<div class="container">
-		<div class="mx-32 my-12">
-			<div class="flex justify-between items-center mb-10">
-				<h1 class="text-3xl text-primary">Baby & Child Care</h1>
+    <div class="container">
+      <div class="mx-32 my-12">
+        <div class="flex justify-between items-center mb-10">
+          <h1 class="text-3xl text-primary" th:text="${category}"></h1>
 
-				<button id="filter-open" class="bg-button text-white w-32 h-10 mr-14 hover:cursor-pointer hover:bg-button-hover transition-all">Filter</button>
-			</div>
+          <button
+            id="filter-open"
+            class="bg-button text-white w-32 h-10 mr-14 hover:cursor-pointer hover:bg-button-hover transition-all"
+          >
+            Filter
+          </button>
+        </div>
+        <!-- Check if there are products -->
+        <!-- Check if there are products -->
+        <th:block th:if="${products.empty}">
+          <div class="flex flex-col items-center justify-center h-72">
+            <!-- Use Tailwind CSS icon for a box with an X -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-12 h-12"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
+              />
+            </svg>
 
-			<div class="flex flex-wrap justify-start items-center">
-				<div th:each="item:${itemsByCategory}" class="card flex flex-col justify-between items-center border-b-4 border-l-4 rounded p-6 mb-10 mr-8 w-72 h-96 hover:shadow-2xl transition-all">
-					<div class="flex flex-col justify-between hover:cursor-pointer" onclick="GoToItemPage()">
-						<img src="images/kirito.jpg" alt="" class="w-60">
-						<p class="text-2xl mt-5" th:text="${item.itemTitle}"></p>
-					</div>
+            <p class="mt-4 text-lg text-gray-600">No products to display</p>
+          </div>
+        </th:block>
 
-					<div class="w-full flex flex-row justify-between items-center">
-						<p class="font-bold text-xl">$999.99</p>
-						<div class="w-1/3 flex flex-row justify-between">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:cursor-pointer transition-all">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-							</svg>
-							  
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:cursor-pointer transition-all">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-							</svg>											
-						</div>										
-					</div>
-				</div>
+        <div class="flex flex-wrap justify-start items-center">
+          <!-- Iterate over the list of products -->
+          <div
+            th:each="itemWithImages : ${products}"
+            class="card flex flex-col justify-between items-center border-b-4 border-l-4 rounded p-6 mb-10 mr-8 w-72 h-96 hover:shadow-2xl transition-all"
+          >
+            <div
+              class="flex flex-col justify-between hover:cursor-pointer"
+              onclick="GoToItemPage()"
+            >
+              <!-- Display the first image of the product -->
+              <img
+                th:src="@{${'/images/' + itemWithImages.images.iterator().next().imagePath}}"
+                alt=""
+                class="w-60"
+              />
 
-				
-			</div>
-		</div>
+              <p
+                class="text-2xl mt-5"
+                th:text="${itemWithImages.item.itemTitle}"
+              >
+                Kirito
+              </p>
+            </div>
 
-		<th:block th:insert="~{fragments/footer.html}"/>
-	</div>
+            <div class="w-full flex flex-row justify-between items-center">
+              <p
+                class="font-bold text-xl"
+                th:text="${' $' + itemWithImages.item.itemPrice}"
+              >
+                EGP999.99
+              </p>
+              <div class="w-1/3 flex flex-row justify-between">
+                <form th:action="@{/cart/add}" method="post">
+                  <button type="submit" class="add_to_bag_btn hover:cursor-pointer transition-all focus:outline-none">
+                    <input type="hidden" name="itemId" th:value="${itemWithImages.item.itemId}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:cursor-pointer transition-all">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>	
+                    </button>
+                </form>		
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 
-	<div id="filter-overlay" class="bg-white fixed z-50 top-0 right-0 w-1/4 p-10 h-full border-2 flex flex-col translate-x-full transition-all overflow-y-scroll">
-		<svg id="filter-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute right-5 top-6 opacity-50 hover:cursor-pointer">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-		  </svg>					  
 
-		<form action="" class="flex flex-col h-full mt-12">
-			<div class="flex justify-between items-center mb-12 w-full">
-				<p class="text-4xl font-bold text-primary">Filter</p>
+        <!-- Popup -->
+        <div class="popup" style="display: none;" id="popup">
+            
+                <button class="close-popup" onclick="closePopup()"><i class='bx bx-x'></i></button>
+                <p>Product added to cart!</p>
+            
+        </div>
+        
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
 
-				<button id="filter-open" class="bg-button text-white w-32 h-10 hover:cursor-pointer hover:bg-button-hover transition-all" type="submit">Apply</button>
-			</div>
+    <div
+      id="filter-overlay"
+      class="bg-white fixed z-50 top-0 right-0 w-1/4 p-10 h-full border-2 flex flex-col translate-x-full transition-all overflow-y-scroll"
+    >
+      <svg
+        id="filter-close"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6 absolute right-5 top-6 opacity-50 hover:cursor-pointer"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18 18 6M6 6l12 12"
+        />
+      </svg>
 
-			<div class="sort mb-12">
-				<p class="text-xl">Sort</p>
-				<select class="w-full h-10 border border-gray-300 rounded mt-2">
-					<option value="1">None</option>
-					<option value="2">Price: Low to High</option>
-					<option value="3">Price: High to Low</option>
-					<option value="4">Newest</option>
-				</select>
-			</div>
+      <form action="/api/search" method="get" class="flex flex-col h-full">
+        <p class="text-4xl font-bold text-primary mb-14">Filter</p>
 
-			<div class="price mb-12">
-				<p class="text-xl">Price</p>
-				<div class="flex flex-row justify-start items-center gap-4">
-					<input type="number" class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2" placeholder="Min">
-					<input type="number" class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2" placeholder="Max">
-				</div>
-			</div>
+        <input type="hidden" name="title" th:value="${name}" />
+        <div class="mb-12">
+          <p class="text-xl">Sort</p>
+          <select
+            name="sort"
+            class="w-full h-10 border border-gray-300 rounded mt-2"
+          >
+            <option value="1">None</option>
+            <option value="2">Price: Low to High</option>
+            <option value="3">Price: High to Low</option>
+            <option value="4">Newest</option>
+          </select>
+        </div>
 
-			<div class="company mb-12">
-				<p class="text-xl">Company</p>
-				<div class="flex flex-col justify-start items-start mt-2">
-					<div>
-						<input type="checkbox" id="company1" name="company1" value="company1">
-						<label for="company1" class="ml-2">Company 1</label>
-					</div>
-					
-					<div>
-						<input type="checkbox" id="company2" name="company2" value="company2">
-						<label for="company2" class="ml-2">Company 2</label>
-					</div>
+        <div class="mb-12">
+          <p class="text-xl">Category</p>
+          <div class="flex flex-col mt-2">
+            <!-- Radio buttons for categories -->
+            <details class="mb-2">
+              <summary>Categories</summary>
+              <div class="ml-4">
+                <th:block th:each="cat : ${categories}">
+                  <label class="flex items-center">
+                    <input
+                      type="radio"
+                      name="category"
+                      class="form-radio h-5 w-5 text-gray-600"
+                      th:value="${cat.category_name}"
+                      th:checked="${cat.category_name == category}"
+                    />
+                    <span
+                      class="ml-2 text-gray-700"
+                      th:text="${cat.category_name}"
+                    ></span>
+                  </label>
+                </th:block>
+              </div>
+            </details>
+          </div>
+        </div>
 
-					<div>
-						<input type="checkbox" id="company3" name="company3" value="company3">
-						<label for="company3" class="ml-2">Company 3</label>
-					</div>
-				</div>
-			</div>
+        <div class="mb-12">
+          <p class="text-xl">Price</p>
+          <div class="flex flex-row justify-start items-center gap-4">
+            <input
+              type="number"
+              name="minPrice"
+              class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2"
+              placeholder="Min"
+            />
+            <input
+              type="number"
+              name="maxPrice"
+              class="w-24 h-10 border border-gray-300 rounded mt-2 placeholder:p-2"
+              placeholder="Max"
+            />
+          </div>
+        </div>
 
-			<div class="gap mt-2">
-				<p class="invisible">ladjklfjkadjfkjdfkj</p>
-			</div>
-		</form>
-	</div>
+        <button
+          id="filter-open"
+          class="bg-button text-white w-40 h-14 mr-14 hover:cursor-pointer hover:bg-button-hover transition-all"
+          type="submit"
+        >
+          Apply
+        </button>
+      </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/js/cart.js}"></script>
+    <script>
+      function GoToItemPage() {
+        window.location.href = "/itempage";
+      }
 
-	<script>
-		function GoToItemPage() {
-		window.location.href = "/itempage";
-		}
+      var container = document.querySelector(".container");
+      var filterOpen = document.getElementById("filter-open");
+      var filterClose = document.getElementById("filter-close");
+      var filterOverlay = document.getElementById("filter-overlay");
 
-		var container = document.querySelector('.container');
-		var filterOpen = document.getElementById('filter-open');
-		var filterClose = document.getElementById('filter-close');
-		var filterOverlay = document.getElementById('filter-overlay');
+      // Function to open the filter
+      function openFilter() {
+        filterOverlay.classList.remove("translate-x-full");
+      }
 
-		// Function to open the filter
-		function openFilter() {
-			filterOverlay.classList.remove('translate-x-full');
-		}
+      // Function to close the filter
+      function closeFilter() {
+        filterOverlay.classList.add("translate-x-full");
+      }
 
-		// Function to close the filter
-		function closeFilter() {
-			filterOverlay.classList.add('translate-x-full');
-		}
+      // Event listener to open the filter
+      filterOpen.addEventListener("click", function (event) {
+        event.stopPropagation();
+        openFilter();
+      });
 
-		// Event listener to open the filter
-		filterOpen.addEventListener('click', function(event) {
-			event.stopPropagation();
-			openFilter();
-		});
+      // Event listener to close the filter
+      filterClose.addEventListener("click", closeFilter);
 
-		// Event listener to close the filter
-		filterClose.addEventListener('click', closeFilter);
-
-		// Event listener to close the filter when clicking outside of the overlay
-		document.addEventListener('click', function(event) {
-			// Check if the click target is outside the filter overlay
-			if (!filterOverlay.contains(event.target) && event.target !== filterOpen) {
-				closeFilter();
-			}
-		});
-	</script>
-</body>
+      // Event listener to close the filter when clicking outside of the overlay
+      document.addEventListener("click", function (event) {
+        // Check if the click target is outside the filter overlay
+        if (
+          !filterOverlay.contains(event.target) &&
+          event.target !== filterOpen
+        ) {
+          closeFilter();
+        }
+      });
+    </script>
+  </body>
 </html>

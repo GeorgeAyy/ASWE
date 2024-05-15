@@ -17,10 +17,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.repositories.ItemImagesRepository;
 import com.example.demo.repositories.ItemRepository;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.example.demo.dto.ItemWithImagesDTO;
 import com.example.demo.models.Category;
 import com.example.demo.models.Item;
 import com.example.demo.models.ItemImages;
+import com.example.demo.models.User;
 
 @Controller
 @RequestMapping("/api")
@@ -37,9 +41,9 @@ public class SearchController {
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice,
-            @RequestParam(value = "sort", required = false) String sort) {
+            @RequestParam(value = "sort", required = false) String sort,HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-
+         mav.addObject("user", (User) session.getAttribute("user"));
         List<ItemWithImagesDTO> itemsWithImages = new ArrayList<>();
         Set<String> categories = new HashSet<>();
         // Search for items based on all provided parameters
