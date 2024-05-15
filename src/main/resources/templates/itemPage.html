@@ -9,9 +9,24 @@
 
 	<div class="container">
 		<div class="my-12 mx-60 flex">
-			<div class="w-1/2">
-				<img src="images/kirito.jpg" alt="" class="w-full">
+			<div class="w-1/2 relative">
+				<div class="carousel max-w-screen-md mx-auto overflow-hidden">
+					<div class="carousel-inner flex transition-transform ease-in-out duration-500">
+						<img class="w-full h-auto" src="images/kirito.jpg" alt="Image 1">
+						<img class="w-full h-auto hidden" src="images/kirito2.jpg" alt="Image 2">
+						<img class="w-full h-auto hidden" src="images/zenitsu.jpg" alt="Image 3">
+					</div>
+					<button class="carousel-control prev absolute top-1/2 left-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10" onclick="changeSlide(-1)">&lt;</button>
+					<button class="carousel-control next absolute top-1/2 right-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10" onclick="changeSlide(1)">&gt;</button>
+					<div class="carousel-indicators absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(1)"></span>
+						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(2)"></span>
+						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(3)"></span>
+					</div>
+				</div>
 			</div>
+			
+			
 
 			<div class="flex flex-col justify-between w-1/2 bg-gray-50 px-20 border-l-8 shadow-xl">
 				<div class="flex flex-col">
@@ -30,5 +45,43 @@
 
 		<th:block th:insert="~{fragments/footer.html}"/>
 	</div>
+
+	<script>
+		let slideIndex = 0;
+	
+		function showSlide(n) {
+			const slides = document.getElementsByClassName("carousel-inner")[0].children;
+			const indicators = document.getElementsByClassName("indicator");
+	
+			if (n >= slides.length) {
+				slideIndex = 0;
+			}
+	
+			if (n < 0) {
+				slideIndex = slides.length - 1;
+			}
+	
+			for (let i = 0; i < slides.length; i++) {
+				slides[i].classList.add("hidden");
+			}
+	
+			for (let i = 0; i < indicators.length; i++) {
+				indicators[i].classList.remove("bg-black");
+			}
+	
+			slides[slideIndex].classList.remove("hidden");
+			indicators[slideIndex].classList.add("bg-black");
+		}
+	
+		function changeSlide(n) {
+			showSlide(slideIndex += n);
+		}
+	
+		function currentSlide(n) {
+			showSlide(slideIndex = n - 1);
+		}
+	
+		showSlide(slideIndex);
+	</script>	
 </body>
 </html>
