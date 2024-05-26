@@ -1,90 +1,86 @@
 package com.example.demo.services;
 
-import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.UserDTO;
 import com.example.demo.models.User;
-import com.example.demo.repositories.UserRepository;
+
+import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private RestTemplate restTemplate;
+    private String baseUrl = "http://localhost:8081"; // Base URL for the user microservice
+
+    public UserService() {
+        this.restTemplate = new RestTemplate(); // Initialize a new RestTemplate instance
+    }
 
     public void toggleAdmin(Long userId) {
-        // Fetch user by ID
-        User user = userRepository.findById(userId)
-                                   .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Toggle admin status
-        user.setUser_isAdmin(!user.isUserAdmin());
-
-        // Save the updated user
-        userRepository.save(user);
+        String url = baseUrl + "/User/" + userId + "/toggle-admin";
+        logger.info("Calling toggleAdmin for userId: {}", userId);
+        this.restTemplate.postForObject(url, null, Void.class);
     }
 
     public void updateUser(UserDTO userDTO) {
-        // Validate user data if necessary
-        
-        // Assuming you have a UserRepository or another data access layer to interact with the database
-        User userToUpdate = userRepository.findById(userDTO.getUserId())
-                                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Update user fields
-        userToUpdate.setUser_fname(userDTO.getUserFname());
-        userToUpdate.setUser_Lname(userDTO.getUserLname());
-        userToUpdate.setEmail(userDTO.getEmail());
-        userToUpdate.setUser_address(userDTO.getUserAddress());
-
-        // Save the updated user back to the database
-        userRepository.save(userToUpdate);
+        String url = baseUrl + "/User/" + userDTO.getUserId();
+        logger.info("Updating user with id: {}", userDTO.getUserId());
+        this.restTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(userDTO), Void.class);
     }
 
     public User getUserDetails(Long userId) {
-        // Fetch user details from the database
-        return userRepository.findById(userId)
-                             .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        String url = baseUrl + "/User/" + userId;
+        logger.info("Fetching user details for userId: {}", userId);
+        return this.restTemplate.getForObject(url, User.class);
     }
 
     public void deleteUser(Long id) {
-        
-        // Fetch user by ID
-        User user = userRepository.findById(id)
-                                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Delete the user
-        userRepository.delete(user);
+        String url = baseUrl + "/User/" + id;
+        logger.info("Deleting user with id: {}", id);
+        this.restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
     }
 
-    public void saveUser(UserDTO userDTO){
-        User user = new User( userDTO.getUserLname()
-        , userDTO.getEmail()
-        , userDTO.getUserPassword()
-        , userDTO.getUserFname(),
-         userDTO.getUserAddress(), 
-         false);
-
-         String encodedPassword = BCrypt.hashpw(user.getUserPassword(), BCrypt.gensalt(12));
-         user.setUserPassword(encodedPassword);
-         userRepository.save(user);
+    public void saveUser(UserDTO userDTO) {
+        String url = baseUrl + "/User/Registration";
+        logger.info("Saving user with email: {}", userDTO.getEmail());
+        this.restTemplate.postForObject(url, userDTO, User.class);
     }
 
-    public boolean existEmail(String email){
-        return userRepository.existsByEmail(email);
+    public boolean existEmail(String email) {
+        String url = baseUrl + "/User/exists?email=" + email;
+        logger.info("Checking if email exists: {}", email);
+        return this.restTemplate.getForObject(url, Boolean.class);
     }
 
-     public boolean getUser (String email,String password,HttpSession session){
-        
-        User user = this.userRepository.findByEmail(email);
-        if(user!=null && BCrypt.checkpw(password, user.getUserPassword())){
-            session.setAttribute("user", user);
-            return true;
+    public boolean getUser(String email, String password, HttpSession session) {
+        String url = baseUrl + "/User/login?email=" + email + "&password=" + password;
+        logger.info("Logging in user with email: {}", email);
+        try {
+            ResponseEntity<Boolean> response = this.restTemplate.exchange(url, HttpMethod.POST, null, Boolean.class);
+            if (response.getBody() != null && response.getBody()) {
+                User user = this.restTemplate.getForObject(baseUrl + "/User/by-email?email=" + email, User.class);
+                session.setAttribute("user", user);
+                logger.info("User logged in successfully: {}", email);
+                return true;
+            }
+            logger.warn("User login failed: {}", email);
+            return false;
+        } catch (HttpClientErrorException e) {
+            logger.error("Error logging in user with email: {}. Status code: {}, Response body: {}", email,
+                    e.getStatusCode(), e.getResponseBodyAsString());
+            return false;
         }
-        return false;
     }
 }
