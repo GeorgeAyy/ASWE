@@ -38,13 +38,14 @@ public class CartService {
         this.restTemplate = new RestTemplate(); // Initialize a new RestTemplate instance
     }
 
-    public void addToCart(Long itemId, User user) {
+    public void addToCart(Long itemId, User user, int quantity) {
         CartRequestDTO cartRequest = new CartRequestDTO();
         cartRequest.setItemId(itemId);
         cartRequest.setUserId(user.getUser_id());
-        cartRequest.setQuantity(1);
+        cartRequest.setQuantity(quantity); // Set the quantity from the parameter
 
-        logger.info("Adding item with ID: {} to cart for user with ID: {}", itemId, user.getUser_id());
+        logger.info("Adding item with ID: {} to cart for user with ID: {} with quantity: {}", itemId, user.getUser_id(),
+                quantity);
         String url = baseUrl + "/cart/add";
         this.restTemplate.postForObject(url, cartRequest, Void.class);
         logger.info("Item added to cart successfully");
