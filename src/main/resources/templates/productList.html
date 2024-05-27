@@ -2,23 +2,27 @@
 <html lang="en">
   <th:block th:insert="~{fragments/head.html}" />
 
-<body class="font-poppins text-lg w-screen overflow-x-hidden">
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/header.html}" />
 
-    <th:block th:insert="~{fragments/header.html}"/>
-
-    <div class="container">
-      <div class="mx-32 my-12">
-        <div class="flex justify-between items-center mb-10">
-          <h1 class="text-3xl text-primary" th:text="${category}"></h1>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-4 sm:mx-6 lg:mx-32 my-12">
+        <div
+          class="flex flex-col sm:flex-row justify-between items-center mb-10"
+        >
+          <h1
+            class="text-3xl text-primary mb-4 sm:mb-0"
+            th:text="${category}"
+          ></h1>
 
           <button
             id="filter-open"
-            class="bg-button text-white w-32 h-10 mr-14 hover:cursor-pointer hover:bg-button-hover transition-all"
+            class="bg-button text-white w-32 h-10 hover:cursor-pointer hover:bg-button-hover transition-all"
           >
             Filter
           </button>
         </div>
-        <!-- Check if there are products -->
+
         <!-- Check if there are products -->
         <th:block th:if="${products.empty}">
           <div class="flex flex-col items-center justify-center h-72">
@@ -42,69 +46,122 @@
           </div>
         </th:block>
 
-        <div class="flex flex-wrap justify-start items-center">
+        <!-- Product listing -->
+        <div class="flex flex-wrap justify-center gap-8">
           <!-- Iterate over the list of products -->
           <div
             th:each="itemWithImages : ${products}"
-            class="card flex flex-col justify-between items-center border-b-4 border-l-4 rounded p-6 mb-10 mr-8 w-72 h-96 hover:shadow-2xl transition-all"
+            class="card border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow duration-300"
+            style="width: 220px; margin: 10px"
           >
             <div
-              class="flex flex-col justify-between hover:cursor-pointer"
+              class="flex flex-col justify-between items-center hover:cursor-pointer"
               onclick="GoToItemPage()"
             >
               <!-- Display the first image of the product -->
               <img
                 th:src="@{${'/images/' + itemWithImages.images.iterator().next().imagePath}}"
                 alt=""
-                class="w-60"
+                class="object-cover rounded-t-lg"
+                style="width: 200px; height: 200px"
               />
 
               <p
-                class="text-2xl mt-5"
+                class="text-lg mt-4 text-center font-semibold text-gray-800"
                 th:text="${itemWithImages.item.itemTitle}"
               >
-                Kirito
+                Product Title
               </p>
             </div>
 
-            <div class="w-full flex flex-row justify-between items-center">
+            <div class="w-full flex flex-col items-center mt-4">
               <p
-                class="font-bold text-xl"
+                class="font-bold text-xl text-gray-900 mb-2"
                 th:text="${' $' + itemWithImages.item.itemPrice}"
               >
-                EGP999.99
+                $0.00
               </p>
-              <div class="w-1/3 flex flex-row justify-between">
+              <div class="w-full flex justify-center">
                 <form th:action="@{/cart/add}" method="post">
-                  <button type="submit" class="add_to_bag_btn hover:cursor-pointer transition-all focus:outline-none">
-                    <input type="hidden" name="itemId" th:value="${itemWithImages.item.itemId}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:cursor-pointer transition-all">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                    </svg>	
-                    </button>
-                </form>		
+                  <button
+                    type="submit"
+                    class="hover:cursor-pointer transition-all focus:outline-none"
+                  >
+                    <input
+                      type="hidden"
+                      name="itemId"
+                      th:value="${itemWithImages.item.itemId}"
+                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                      />
+                    </svg>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      
 
-
-        <!-- Popup -->
-        <div class="popup" style="display: none;" id="popup">
-            
-                <button class="close-popup" onclick="closePopup()"><i class='bx bx-x'></i></button>
-                <p>Product added to cart!</p>
-            
+        <!-- Pagination Controls -->
+        <div class="flex justify-center mt-8">
+          <nav aria-label="Page navigation">
+            <ul class="inline-flex items-center -space-x-px">
+              <li>
+                <a
+                  th:href="@{/search(page=${currentPage - 1}, size=${pageSize}, title=${title}, category=${category}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${sort})}"
+                  th:if="${currentPage > 0}"
+                  class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Previous
+                </a>
+              </li>
+              <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                <a
+                  th:href="@{/api/search(page=${pageNum}, size=${pageSize}, title=${title}, category=${category}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${sort})}"
+                  th:text="${pageNum + 1}"
+                  th:classappend="${pageNum == currentPage} ? 'z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'"
+                >
+                </a>
+              </li>
+              <li>
+                <a
+                  th:href="@{/search(page=${currentPage + 1}, size=${pageSize}, title=${title}, category=${category}, minPrice=${minPrice}, maxPrice=${maxPrice}, sort=${sort})}"
+                  th:if="${currentPage < totalPages - 1}"
+                  class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-        
+      </div>
+
+      <!-- Popup -->
+      <div class="popup" style="display: none" id="popup">
+        <button class="close-popup" onclick="closePopup()">
+          <i class="bx bx-x"></i>
+        </button>
+        <p>Product added to cart!</p>
+      </div>
+
       <th:block th:insert="~{fragments/footer.html}" />
     </div>
 
     <div
       id="filter-overlay"
-      class="bg-white fixed z-50 top-0 right-0 w-1/4 p-10 h-full border-2 flex flex-col translate-x-full transition-all overflow-y-scroll"
+      class="bg-white fixed z-50 top-0 right-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-10 h-full border-2 flex flex-col translate-x-full transition-all overflow-y-scroll"
     >
       <svg
         id="filter-close"
@@ -186,13 +243,14 @@
 
         <button
           id="filter-open"
-          class="bg-button text-white w-40 h-14 mr-14 hover:cursor-pointer hover:bg-button-hover transition-all"
+          class="bg-button text-white w-40 h-14 hover:cursor-pointer hover:bg-button-hover transition-all"
           type="submit"
         >
           Apply
         </button>
       </form>
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/js/cart.js}"></script>
     <script>
