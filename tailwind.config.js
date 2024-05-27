@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const twElementsPlugin = require("tw-elements/plugin.cjs");
 
-  purge: [
+module.exports = {
+  content: [
     "./src/main/resources/templates/**/*.html",
+    "./node_modules/tw-elements/js/**/*.js"
+  ],
+  
+  purge: [
+    "./src/main/resources/templates/**/*.html",,
   ],
   theme: {
     extend: {
@@ -17,6 +23,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    twElementsPlugin,
+  ],
+  darkMode: "class"
 }
-

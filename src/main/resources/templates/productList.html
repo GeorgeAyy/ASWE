@@ -2,8 +2,9 @@
 <html lang="en">
   <th:block th:insert="~{fragments/head.html}" />
 
-  <body class="font-poppins text-lg w-screen">
-    <th:block th:insert="~{fragments/header.html}" />
+<body class="font-poppins text-lg w-screen overflow-x-hidden">
+
+    <th:block th:insert="~{fragments/header.html}"/>
 
     <div class="container">
       <div class="mx-32 my-12">
@@ -103,7 +104,7 @@
 
     <div
       id="filter-overlay"
-      class="bg-white fixed z-10 top-0 right-0 w-1/4 h-screen p-12 flex flex-col translate-x-full transition-all overflow-y-auto"
+      class="bg-white fixed z-50 top-0 right-0 w-1/4 p-10 h-full border-2 flex flex-col translate-x-full transition-all overflow-y-scroll"
     >
       <svg
         id="filter-close"
