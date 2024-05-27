@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <th:block th:insert="~{fragments/head.html}" />
-
+  <head>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"
+      defer
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
   <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/head.html}" />
     <th:block th:insert="~{fragments/header.html}" />
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 my-12">
       <div class="mx-4 sm:mx-6 lg:mx-32 my-12">
         <div
           class="flex flex-col sm:flex-row justify-between items-center mb-10"
@@ -14,7 +23,6 @@
             class="text-3xl text-primary mb-4 sm:mb-0"
             th:text="${category}"
           ></h1>
-
           <button
             id="filter-open"
             class="bg-button text-white w-32 h-10 hover:cursor-pointer hover:bg-button-hover transition-all"
@@ -26,7 +34,6 @@
         <!-- Check if there are products -->
         <th:block th:if="${products.empty}">
           <div class="flex flex-col items-center justify-center h-72">
-            <!-- Use Tailwind CSS icon for a box with an X -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +48,6 @@
                 d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
               />
             </svg>
-
             <p class="mt-4 text-lg text-gray-600">No products to display</p>
           </div>
         </th:block>
@@ -65,7 +71,6 @@
                 class="object-cover rounded-t-lg"
                 style="width: 200px; height: 200px"
               />
-
               <p
                 class="text-lg mt-4 text-center font-semibold text-gray-800"
                 th:text="${itemWithImages.item.itemTitle}"
@@ -73,7 +78,6 @@
                 Product Title
               </p>
             </div>
-
             <div class="w-full flex flex-col items-center mt-4">
               <p
                 class="font-bold text-xl text-gray-900 mb-2"
@@ -81,34 +85,108 @@
               >
                 EGP0.00
               </p>
-              <div class="w-full flex justify-center">
-                <form th:action="@{/cart/add}" method="post">
-                  <button
-                    type="submit"
-                    class="hover:cursor-pointer transition-all focus:outline-none"
-                  >
-                    <input
-                      type="hidden"
-                      name="itemId"
-                      th:value="${itemWithImages.item.itemId}"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                      />
-                    </svg>
-                  </button>
-                </form>
-              </div>
+              <!-- Check if the item is in stock -->
+              <th:block th:if="${itemWithImages.item.itemQuantity > 0}">
+                <div class="w-full flex justify-center">
+                  <form th:action="@{/cart/add}" method="post">
+                    <!-- Modal Container with Alpine.js -->
+                    <div x-data="{ open: false }">
+                      <!-- Button to trigger modal -->
+                      <button
+                        @click="open = true"
+                        type="submit"
+                        class="add_to_bag_btn hover:cursor-pointer transition-all focus:outline-none"
+                      >
+                        <input
+                          type="hidden"
+                          name="itemId"
+                          th:value="${itemWithImages.item.itemId}"
+                        />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                          />
+                        </svg>
+                      </button>
+
+                      <!-- Modal -->
+                      <div
+                        x-show="open"
+                        class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4"
+                      >
+                        <div
+                          class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full"
+                        >
+                          <div class="p-4">
+                            <div
+                              class="flex justify-between items-center border-b pb-2"
+                            >
+                              <h3 class="text-lg font-medium text-gray-900">
+                                Item Added to Cart
+                              </h3>
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="text-gray-400 hover:text-gray-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div class="mt-4">
+                              <p class="text-gray-600">
+                                Your item has been successfully added to the
+                                cart.
+                              </p>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </th:block>
+              <th:block th:if="${itemWithImages.item.itemQuantity == 0}">
+                <div class="w-full flex justify-center items-center mt-2">
+                  <span class="text-red-500 font-semibold">Out of Stock</span>
+                </div>
+              </th:block>
             </div>
           </div>
         </div>
@@ -146,14 +224,6 @@
             </ul>
           </nav>
         </div>
-      </div>
-
-      <!-- Popup -->
-      <div class="popup" style="display: none" id="popup">
-        <button class="close-popup" onclick="closePopup()">
-          <i class="bx bx-x"></i>
-        </button>
-        <p>Product added to cart!</p>
       </div>
 
       <th:block th:insert="~{fragments/footer.html}" />
@@ -199,7 +269,6 @@
         <div class="mb-12">
           <p class="text-xl">Category</p>
           <div class="flex flex-col mt-2">
-            <!-- Radio buttons for categories -->
             <details class="mb-2">
               <summary>Categories</summary>
               <div class="ml-4">

@@ -119,41 +119,51 @@
               ></p>
             </div>
 
-            <form
-              method="post"
-              th:action="@{/cart/add}"
-              class="flex flex-col sm:flex-row justify-between items-center w-full"
-            >
-              <input type="hidden" name="itemId" th:value="${item.itemId}" />
-              <div class="flex items-center mb-4 sm:mb-0 sm:mr-4">
-                <label for="quantity" class="mr-2">Quantity:</label>
-                <input
-                  type="number"
-                  id="quantity"
-                  name="quantity"
-                  min="1"
-                  th:attr="max=${item.itemQuantity}"
-                  value="1"
-                  class="w-20 p-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div
-                class="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto"
+            <th:block th:if="${item.itemQuantity > 0}">
+              <form
+                method="post"
+                th:action="@{/cart/add}"
+                class="flex flex-col sm:flex-row justify-between items-center w-full"
               >
-                <button
-                  type="submit"
-                  class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 sm:mr-4 hover:bg-button-hover transition-all"
+                <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                <div class="flex items-center mb-4 sm:mb-0 sm:mr-4">
+                  <label for="quantity" class="mr-2">Quantity:</label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    th:attr="max=${item.itemQuantity}"
+                    value="1"
+                    class="w-20 p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto"
                 >
-                  Add to Cart
-                </button>
-                <button
-                  type="button"
-                  class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
-                >
-                  Add to Wishlist
-                </button>
+                  <button
+                    type="submit"
+                    class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 sm:mr-4 hover:bg-button-hover transition-all"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    type="button"
+                    class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
+                  >
+                    Add to Wishlist
+                  </button>
+                </div>
+              </form>
+            </th:block>
+
+            <th:block th:if="${item.itemQuantity == 0}">
+              <div
+                class="flex flex-col sm:flex-row justify-between items-center w-full"
+              >
+                <span class="text-red-500 font-semibold">Out of Stock</span>
               </div>
-            </form>
+            </th:block>
           </div>
         </div>
       </div>
