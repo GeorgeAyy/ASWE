@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
+
+  <body class="font-poppins text-lg w-screen">
+    <th:block th:insert="~{fragments/header.html}" />
+
+    <div class="container text-primary mt">
+		<div class="flex mt-10">
+			<div class="checkout-left w-3/4 flex flex-col justify-between items-center border-2 px-32 py-8 rounded shadow-2xl">
+				<div class="w-3/4 flex flex-col gap-9">
+					<p class="font-bold text-3xl">Checkout</p>
+	
+					<div class="step flex justify-between items-center">
+						<div class="flex flex-col items-center">
+							<div id="step-one" class="flex justify-center items-center w-7 h-7 bg-button text-white rounded-full hover:cursor-pointer">1</div>
+							<p class="text-sm">Shipping</p>
+						</div>
+	
+						<div class="flex flex-col items-center">
+							<div id="step-two" class="flex justify-center items-center w-7 h-7 bg-gray-200 text-white rounded-full hover:cursor-not-allowed">2</div>
+							<p class="text-sm">Payment</p>
+						</div>
+	
+						<div class="flex flex-col items-center">
+							<div id="step-three" class="flex justify-center items-center w-7 h-7 bg-gray-200 text-white rounded-full hover:cursor-not-allowed">3</div>
+							<p class="text-sm">Review</p>
+						</div>
+					</div>
+	
+					<form action="" class="text-sm">
+						<div class="shipping">
+							<div>
+								<p class="text-xl">Ship To</p>
+							</div>
+
+							<div class="flex flex-col">
+								<label>Address</label>
+								<input id="address" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-9" type="text" value="1234 Elm St, Springfield, IL 62701">
+
+								<p id="empty-address" class="text-red-500 hidden">Please enter a shipping address</p>
+							</div>
+	
+							<div class="flex flex-col">
+								<label>Phone Number</label>
+								<input id="phone-number" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-9" type="text" value="01224587155">
+
+								<p id="empty-phone" class="text-red-500 hidden">Please enter a phone number</p>
+								<p id="invalid-phone" class="text-red-500 hidden">Please enter a valid phone number</p>
+							</div>
+						</div>
+	
+						<div class="payment" hidden>
+							<!-- choose payment method (credit card, Cash on delivery) -->
+							<div>
+								<p class="text-xl">Choose payment method</p>
+
+								<div class="flex flex-col gap-4 mt-6">
+									<div class="flex items-center">
+										<input class="mr-2" name="payment" id="credit-card" type="radio" checked>
+										<label for="credit-card">Credit Card</label>
+									</div>
+
+									<div class="flex items-center">
+										<input class="mr-2" name="payment" id="cash-on-delivery" type="radio">
+										<label for="cash-on-delivery">Cash on delivery</label>
+									</div>
+
+									<div id="card-details" class="flex flex-col">
+										<label>Card Number</label>
+										<input id="card-number" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-2" type="text" placeholder="1234 5678 9101 1121">
+
+										<p id="empty-card" class="text-red-500 hidden">Please enter a card number</p>
+										<p id="invalid-card" class="text-red-500 hidden">Please enter a valid card number</p>
+
+										<div class="flex justify-between mt-6">
+											<div class="flex flex-col">
+												<label>Expiration Date</label>
+												<input id="exp-date" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-2" type="text" placeholder="MM/YY">
+
+												<p id="empty-exp" class="text-red-500 hidden">Please enter the card's expiration date</p>
+												<p id="invalid-exp" class="text-red-500 hidden">Please enter a valid expiration date</p>
+											</div>
+
+											<div class="flex flex-col">
+												<label>CVV</label>
+												<input id="cvv" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-2" type="text" placeholder="123">
+
+												<p id="empty-cvv" class="text-red-500 hidden">Please enter the card's CVV</p>
+												<p id="invalid-cvv" class="text-red-500 hidden">Please enter a valid CVV</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="review" hidden>
+							<p class="text-xl">Review</p>
+
+							<!-- Cart items will be displayed here -->
+							<div class="flex flex-col gap-4 mt-6">
+								<div class="flex justify-between items-center">
+									<div class="flex items-center">
+										<img class="w-20 h-20" src="images/kirito.jpg" alt="product">
+										<div class="flex flex-col ml-4">
+											<p class="font-bold">Product Name</p>
+											<p>Quantity: 1</p>
+										</div>
+									</div>
+									<p class="font-semibold">EGP 500</p>
+								</div>
+
+								<hr>
+
+								<div class="flex justify-between items-center">
+									<div class="flex items-center">
+										<img class="w-20 h-20" src="images/zenitsu.jpg" alt="product">
+										<div class="flex flex-col ml-4">
+											<p class="font-bold">Product Name</p>
+											<p>Quantity: 2</p>
+										</div>
+									</div>
+									<p class="font-semibold">EGP 1000</p>
+								</div>
+							</div>
+						</div>
+
+						<button id="next-button" class="bg-button text-white w-28 h-14 mt-8 self-center hover:cursor-pointer hover:bg-button-hover transition-all">Next</button>
+	
+						<input id="submit-button" class="bg-button text-white w-28 h-14 mt-8 self-center hover:cursor-pointer hover:bg-button-hover transition-all" type="submit" value="Place Order" hidden>
+					</form>
+				</div>
+			</div>
+	
+			<div class="checkout-right w-1/4 flex flex-col justify-between items-center border-2 p-14 rounded shadow-2xl text-sm h-fit mx-10">
+				<div class="summary w-full">
+					<div class="flex flex-col pr-5">
+						<p class="text-xl font-bold">Order Summary</p>
+						<p class="text-xs">1 item</p>
+					</div>
+
+					<hr class="mb-4">
+	
+					<div class="w-full flex flex-col justify-between items-start mb-4">
+						<div class="w-full flex justify-between items-center mb-4">
+							<p>Products:</p>
+							<p class="font-semibold">EGP 1500</p>
+						</div>
+	
+						<div class="w-full flex justify-between items-center mb-4">
+							<p>Shipping:</p>
+							<p class="font-semibold">EGP 0</p>
+						</div>
+	
+						<div class="w-full flex justify-between items-center">
+							<p>Tax:</p>
+							<p class="font-semibold">EGP 15</p>
+						</div>
+					</div>
+
+					<hr class="mb-4">
+	
+					<div class="total flex justify-between items-center font-bold">
+						<p>Order Total:</p>
+						<p>EGP 1515</p>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
+
+	<script>
+		const shipping = document.querySelector('.shipping');
+		const payment = document.querySelector('.payment');
+		const review = document.querySelector('.review');
+		const next = document.getElementById('next-button');
+		const submit = document.getElementById('submit-button');
+
+		const stepOne = document.getElementById('step-one');
+		const stepTwo = document.getElementById('step-two');
+		const stepThree = document.getElementById('step-three');
+
+		document.getElementById('card-number').addEventListener('input', (event) => {
+			const cursorPosition = event.target.selectionStart;
+			let input = event.target.value.replace(/[^0-9]/g, '');
+			
+			if (input.length > 16) {
+				input = input.slice(0, 16);
+			}
+			
+			const previousLength = input.length;
+			input = input.replace(/(\d{4})/g, '$1 ').trim();
+			
+			event.target.value = input;
+
+			// Adjust the cursor position
+			let newPosition = cursorPosition;
+			if (input.length > previousLength && cursorPosition % 5 !== 0) {
+				newPosition++;
+			}
+			event.target.setSelectionRange(newPosition, newPosition);
+		});
+
+		document.getElementById('exp-date').addEventListener('input', (event) => {
+			let input = event.target.value.replace(/[^0-9]/g, '');
+			
+			if (input.length > 4) {
+				input = input.slice(0, 4);
+			}
+			
+			if (input.length >= 2) {
+				input = input.slice(0, 2) + '/' + input.slice(2);
+			}
+			
+			event.target.value = input;
+		});
+
+		document.getElementById('phone-number').addEventListener('input', (event) => {
+			event.target.value = event.target.value.replace(/[^0-9]/g, '');
+		});
+
+		document.getElementById('cvv').addEventListener('input', (event) => {
+			let input = event.target.value.replace(/[^0-9]/g, '');
+			
+			if (input.length > 3) {
+				input = input.slice(0, 3);
+			}
+
+			event.target.value = input;
+		});
+
+		function IsShippingValid() {
+			const address = document.getElementById('address').value;
+			const phoneNumber = document.getElementById('phone-number').value;
+
+			phoneNumber.replace(/\s/g, '');
+
+			if (address === '') {
+				document.getElementById('empty-address').classList.remove('hidden');
+				document.getElementById('empty-phone').classList.add('hidden');
+				document.getElementById('invalid-phone').classList.add('hidden');
+				return false;
+			}
+			else {
+				document.getElementById('empty-address').classList.add('hidden');
+			}
+
+			if (phoneNumber === '') {
+				document.getElementById('empty-phone').classList.remove('hidden');
+				document.getElementById('invalid-phone').classList.add('hidden');
+				return false;
+			}
+			else {
+				document.getElementById('empty-phone').classList.add('hidden');
+			}
+
+			if (phoneNumber.length !== 11 || isNaN(phoneNumber)) {
+				document.getElementById('invalid-phone').classList.remove('hidden');
+				return false;
+			}
+			else {
+				document.getElementById('invalid-phone').classList.add('hidden');
+			}
+
+			return true;
+		}
+
+		function IsExpDateValid(expirationDate) {
+			const currentDate = new Date();
+
+			// Get the current year and month
+			const fullYear = currentDate.getFullYear();
+			const currentYear = String(fullYear).slice(-2);
+			const currentMonth = currentDate.getMonth() + 1; // getMonth() returns a zero-based value (0-11)
+
+			// Get the input year and month
+			const [inputMonthStr, inputYearStr] = expirationDate.split('/');
+
+			// Check if the input month and year have two digits
+			if (inputMonthStr.length !== 2 || inputYearStr.length !== 2) {
+				return false;
+			}
+
+			const inputMonth = Number(inputMonthStr);
+			const inputYear = Number('20' + inputYearStr); // prepend '20' to get the full year
+
+			// Check if the input month is between 1 and 12
+			if (inputMonth < 1 || inputMonth > 12) {
+				return false;
+			}
+
+			// Check if the input date is not in the past
+			if (inputYear < fullYear || (inputYear === fullYear && inputMonth < currentMonth)) {
+				return false;
+			}
+
+			return true;
+		}
+		
+		function IsPaymentValid() {
+			const creditCard = document.getElementById('credit-card').checked;
+			const cardNumber = document.getElementById('card-number').value;
+			const expirationDate = document.getElementById('exp-date').value;
+			const cvv = document.getElementById('cvv').value;
+
+			if (creditCard) {
+				if (cardNumber === '') {
+					document.getElementById('empty-card').classList.remove('hidden');
+					document.getElementById('invalid-card').classList.add('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('empty-card').classList.add('hidden');
+				}
+
+				if ((cardNumber.length !== 19)) {
+					document.getElementById('invalid-card').classList.remove('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('invalid-card').classList.add('hidden');
+				}
+
+				if (expirationDate === '') {
+					document.getElementById('empty-exp').classList.remove('hidden');
+					document.getElementById('invalid-exp').classList.add('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('empty-exp').classList.add('hidden');
+				}
+
+				if (!IsExpDateValid(expirationDate)) {
+					document.getElementById('invalid-exp').classList.remove('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('invalid-exp').classList.add('hidden');
+				}
+
+				if (cvv === '') {
+					document.getElementById('empty-cvv').classList.remove('hidden');
+					document.getElementById('invalid-cvv').classList.add('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('empty-cvv').classList.add('hidden');
+				}
+
+				if (cvv.length !== 3) {
+					document.getElementById('invalid-cvv').classList.remove('hidden');
+					return false;
+				}
+				else {
+					document.getElementById('invalid-cvv').classList.add('hidden');
+				}
+			}
+
+			return true;
+		}
+
+		next.addEventListener('click', () => {
+			event.preventDefault();
+
+			if (shipping.hidden === false) {
+				if (!IsShippingValid()) {
+					return;
+				}
+
+				shipping.hidden = true;
+				payment.hidden = false;
+				review.hidden = true;
+
+				stepTwo.classList.remove('bg-gray-200');
+				stepTwo.classList.add('bg-button');
+
+				stepTwo.classList.remove('hover:cursor-not-allowed');
+				stepTwo.classList.add('hover:cursor-pointer');
+			}
+			else if (payment.hidden === false) {
+				if (!IsPaymentValid()) {
+					return;
+				}
+
+				shipping.hidden = true;
+				payment.hidden = true;
+				review.hidden = false;
+
+				stepThree.classList.remove('bg-gray-200');
+				stepThree.classList.add('bg-button');
+
+				stepThree.classList.remove('hover:cursor-not-allowed');
+				stepThree.classList.add('hover:cursor-pointer');
+
+				next.hidden = true;
+				submit.hidden = false;
+			}
+		});
+
+		submit.addEventListener('click', () => {
+			document.querySelector('form').submit();
+		});
+
+		// when step clicked, show corresponding div
+		stepOne.addEventListener('click', () => {
+			shipping.hidden = false;
+			payment.hidden = true;
+			review.hidden = true;
+
+			next.hidden = false;
+			submit.hidden = true;
+		});
+
+		stepTwo.addEventListener('click', () => {
+			if (stepTwo.classList.contains('hover:cursor-not-allowed')) {
+				return;
+			}
+
+			if (shipping.hidden === false) {
+				if (!IsShippingValid()) {
+					return;
+				}
+			}
+
+			shipping.hidden = true;
+			payment.hidden = false;
+			review.hidden = true;
+
+			next.hidden = false;
+			submit.hidden = true;
+		});
+
+		stepThree.addEventListener('click', () => {
+			if (stepThree.classList.contains('hover:cursor-not-allowed')) {
+				return;
+			}
+
+			if (shipping.hidden === false) {
+				if (!IsShippingValid()) {
+					return;
+				}
+			}
+
+			if (payment.hidden === false) {
+				if (!IsPaymentValid()) {
+					return;
+				}
+			}
+
+			shipping.hidden = true;
+			payment.hidden = true;
+			review.hidden = false;
+
+			next.hidden = true;
+			submit.hidden = false;
+		});
+
+		// if cash radio button is selected, hide card details, otherwise show them
+		document.getElementById('credit-card').addEventListener('click', () => {
+			document.getElementById('card-details').classList.remove('hidden');
+		});
+
+		document.getElementById('cash-on-delivery').addEventListener('click', () => {
+			document.getElementById('card-details').classList.add('hidden');
+		});
+	</script>
+  </body>
+</html>

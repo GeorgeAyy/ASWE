@@ -1,6 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-const twElementsPlugin = require("tw-elements/plugin.cjs");
-
 module.exports = {
   content: [
     "./src/main/resources/templates/**/*.html",
@@ -23,8 +21,6 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    twElementsPlugin,
-  ],
+  plugins: [],
   darkMode: "class"
 }
