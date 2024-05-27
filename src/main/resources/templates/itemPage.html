@@ -1,87 +1,203 @@
 <!DOCTYPE html>
+<style>
+  /* Style for discounted price */
+  .discounted-price {
+    color: green; /* Example color */
+    font-weight: bold; /* Example style */
+  }
+
+  /* Style for original price */
+  .original-price {
+    color: red; /* Example color */
+    text-decoration: line-through;
+    font-style: italic;
+  }
+
+  /* Style for regular price (no discount) */
+  .regular-price {
+    color: blue; /* Example color */
+    font-weight: normal;
+  }
+</style>
 <html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
 
-<th:block th:insert="~{fragments/head.html}"/>
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/header.html}" />
 
-<body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <div class="container">
+      <div class="my-12 mx-60 flex">
+        <div class="w-1/2 relative">
+          <div class="carousel max-w-screen-md mx-auto overflow-hidden">
+            <div
+              class="carousel-inner flex transition-transform ease-in-out duration-500"
+            >
+              <img
+                th:each="image : ${images}"
+                th:src="@{'/images/' + ${image.imagePath}}"
+                alt="Product Image"
+                class="w-full h-auto hiden"
+                th:classappend="${imageStat.index == 0} ? '' : 'hidden'"
+              />
+            </div>
+            <button
+              class="carousel-control prev absolute top-1/2 left-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10"
+              onclick="changeSlide(-1)"
+            >
+              &lt;
+            </button>
+            <button
+              class="carousel-control next absolute top-1/2 right-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10"
+              onclick="changeSlide(1)"
+            >
+              &gt;
+            </button>
+            <div
+              class="carousel-indicators absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10"
+            >
+              <span
+                th:each="image, imageStat : ${images}"
+                class="indicator h-1 w-8 bg-gray-400 cursor-pointer"
+                th:classappend="${imageStat.index == 0} ? 'bg-black' : ''"
+                th:onclick="|currentSlide(${imageStat.index + 1})|"
+              ></span>
+            </div>
+          </div>
+        </div>
 
-    <th:block th:insert="~{fragments/header.html}"/>
+        <div
+          class="flex flex-col justify-between w-1/2 bg-gray-50 px-20 border-l-8 shadow-xl"
+        >
+          <div class="flex flex-col">
+            <p
+              class="text-4xl text-primary mt-10 mb-5 font-light"
+              th:text="${item.itemTitle}"
+            >
+              Item Title
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Brand: ' + ${item.itemBrand}"
+            >
+              Brand
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Category: ' + ${item.itemCategory}"
+            >
+              Category
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Quantity: ' + ${item.itemQuantity}"
+            >
+              Quantity
+            </p>
+            <p
+              class="text-primary mb-5 font-light"
+              th:text="'Item Details: ' + ${item.itemDetails}"
+            >
+              Item details...
+            </p>
+          </div>
+          <div class="flex flex-col mb-10">
+            <div class="flex flex-col items-center sm:items-end w-full mb-4">
+              <p
+                class="text-primary text-xl discounted-price"
+                th:if="${item.itemOffers > 0}"
+                th:text="'EGP ' + ${discountedPrice}"
+              ></p>
+              <p
+                class="text-red-500 text-xl line-through italic original-price"
+                th:if="${item.itemOffers > 0}"
+                th:text="'EGP ' + ${item.itemPrice}"
+              ></p>
+              <p
+                class="text-primary text-xl regular-price"
+                th:if="${item.itemOffers == 0}"
+                th:text="'EGP ' + ${item.itemPrice}"
+              ></p>
+            </div>
 
-	<div class="container">
-		<div class="my-12 mx-60 flex">
-			<div class="w-1/2 relative">
-				<div class="carousel max-w-screen-md mx-auto overflow-hidden">
-					<div class="carousel-inner flex transition-transform ease-in-out duration-500">
-						<img class="w-full h-auto" src="images/kirito.jpg" alt="Image 1">
-						<img class="w-full h-auto hidden" src="images/kirito2.jpg" alt="Image 2">
-						<img class="w-full h-auto hidden" src="images/zenitsu.jpg" alt="Image 3">
-					</div>
-					<button class="carousel-control prev absolute top-1/2 left-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10" onclick="changeSlide(-1)">&lt;</button>
-					<button class="carousel-control next absolute top-1/2 right-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10" onclick="changeSlide(1)">&gt;</button>
-					<div class="carousel-indicators absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(1)"></span>
-						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(2)"></span>
-						<span class="indicator h-1 w-8 bg-gray-400 cursor-pointer" onclick="currentSlide(3)"></span>
-					</div>
-				</div>
-			</div>
-			
-			
+            <form
+              method="post"
+              th:action="@{/cart/add}"
+              class="flex flex-col sm:flex-row justify-between items-center w-full"
+            >
+              <input type="hidden" name="itemId" th:value="${item.itemId}" />
+              <div class="flex items-center mb-4 sm:mb-0 sm:mr-4">
+                <label for="quantity" class="mr-2">Quantity:</label>
+                <input
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  min="1"
+                  th:attr="max=${item.itemQuantity}"
+                  value="1"
+                  class="w-20 p-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div
+                class="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto"
+              >
+                <button
+                  type="submit"
+                  class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 sm:mr-4 hover:bg-button-hover transition-all"
+                >
+                  Add to Cart
+                </button>
+                <button
+                  type="button"
+                  class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
+                >
+                  Add to Wishlist
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
-			<div class="flex flex-col justify-between w-1/2 bg-gray-50 px-20 border-l-8 shadow-xl">
-				<div class="flex flex-col">
-					<p class="text-4xl text-primary mt-10 mb-5 font-light">Kirito</p>
-					<p class="text-primary mb-5 font-light">Kirito is a teenager who was chosen as one of 1,000 beta testers for a new virtual reality video game: Sword Art Online. After the game is released to the general public, he and the rest of the 10,000 players discover that they are unable to log out and are trapped in the simulation unless they manage to beat the game.</p>
-				</div>
-				<div class="flex flex-col mb-10">
-					<p class="text-primary text-xl text-right">$999.99</p>
-					<form method="post" class="flex justify-between">
-						<button class="bg-button text-white px-5 py-2 mt-5 hover:bg-button-hover transition-all">Add to Cart</button>
-						<button class="bg-button text-white px-5 py-2 mt-5 hover:bg-button-hover transition-all">Add to Wishlist</button>
-					</form>
-				</div>
-			</div>
-		</div>
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
 
-		<th:block th:insert="~{fragments/footer.html}"/>
-	</div>
+    <script>
+      let slideIndex = 0;
 
-	<script>
-		let slideIndex = 0;
-	
-		function showSlide(n) {
-			const slides = document.getElementsByClassName("carousel-inner")[0].children;
-			const indicators = document.getElementsByClassName("indicator");
-	
-			if (n >= slides.length) {
-				slideIndex = 0;
-			}
-	
-			if (n < 0) {
-				slideIndex = slides.length - 1;
-			}
-	
-			for (let i = 0; i < slides.length; i++) {
-				slides[i].classList.add("hidden");
-			}
-	
-			for (let i = 0; i < indicators.length; i++) {
-				indicators[i].classList.remove("bg-black");
-			}
-	
-			slides[slideIndex].classList.remove("hidden");
-			indicators[slideIndex].classList.add("bg-black");
-		}
-	
-		function changeSlide(n) {
-			showSlide(slideIndex += n);
-		}
-	
-		function currentSlide(n) {
-			showSlide(slideIndex = n - 1);
-		}
-	
-		showSlide(slideIndex);
-	</script>	
-</body>
+      function showSlide(n) {
+        const slides =
+          document.getElementsByClassName("carousel-inner")[0].children;
+        const indicators = document.getElementsByClassName("indicator");
+
+        if (n >= slides.length) {
+          slideIndex = 0;
+        }
+
+        if (n < 0) {
+          slideIndex = slides.length - 1;
+        }
+
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].classList.add("hidden");
+        }
+
+        for (let i = 0; i < indicators.length; i++) {
+          indicators[i].classList.remove("bg-black");
+        }
+
+        slides[slideIndex].classList.remove("hidden");
+        indicators[slideIndex].classList.add("bg-black");
+      }
+
+      function changeSlide(n) {
+        showSlide((slideIndex += n));
+      }
+
+      function currentSlide(n) {
+        showSlide((slideIndex = n - 1));
+      }
+
+      showSlide(slideIndex);
+    </script>
+  </body>
 </html>

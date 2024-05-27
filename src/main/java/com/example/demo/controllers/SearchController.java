@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -93,6 +94,27 @@ public class SearchController {
         mav.addObject("currentPage", page);
         mav.addObject("totalPages", itemsPage.getTotalPages());
         mav.addObject("pageSize", size);
+
+        return mav;
+    }
+
+    @GetMapping("/item/{id}")
+    public ModelAndView getItemDetails(@PathVariable("id") Long id, HttpSession session) {
+        ModelAndView mav = new ModelAndView("itemPage.html");
+        mav.addObject("user", (User) session.getAttribute("user"));
+
+        // Fetch product details using the ID
+        Item item = itemRepository.findById(id).orElseThrow();
+        List<ItemImages> itemImages = cleanItemImages(id);
+
+        // Calculate the discounted price
+        double discountedPrice = item.getItemPrice() - (item.getItemPrice() * item.getItemOffers() / 100);
+        String formattedDiscountedPrice = String.format("%.2f", discountedPrice);
+
+        // Add product details to the ModelAndView
+        mav.addObject("item", item);
+        mav.addObject("images", itemImages);
+        mav.addObject("discountedPrice", formattedDiscountedPrice);
 
         return mav;
     }
