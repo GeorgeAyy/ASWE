@@ -56,11 +56,11 @@
                   <input
                     id="address"
                     name="address"
-                    class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-9"
+                    class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-5"
                     type="text"
                     th:value="${address}"
                   />
-                  <p id="empty-address" class="text-red-500 hidden">
+                  <p id="empty-address" class="text-red-500 hidden mb-8">
                     Please enter a shipping address
                   </p>
                 </div>
@@ -70,7 +70,7 @@
                   <input
                     id="phone-number"
                     name="phoneNumber"
-                    class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-9"
+                    class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200 mb-5"
                     type="text"
                     placeholder="Enter your phone number"
                   />
@@ -246,7 +246,7 @@
 
               <hr class="mb-4" />
 
-              <div class="total flex justify-between items-center font-bold">
+              <div class="total w-full flex justify-between items-center font-bold">
                 <p>Order Total:</p>
                 <p th:text="'EGP ' + (${total} + 15)"></p>
               </div>
@@ -332,6 +332,10 @@
           document.getElementById("empty-address").classList.remove("hidden");
           document.getElementById("empty-phone").classList.add("hidden");
           document.getElementById("invalid-phone").classList.add("hidden");
+          document.getElementById("empty-address").classList.add("animate-shake");
+          setTimeout(() => {
+            document.getElementById("empty-address").classList.remove("animate-shake");
+          }, 2000);
           return false;
         } else {
           document.getElementById("empty-address").classList.add("hidden");
@@ -340,6 +344,10 @@
         if (phoneNumber === "") {
           document.getElementById("empty-phone").classList.remove("hidden");
           document.getElementById("invalid-phone").classList.add("hidden");
+          document.getElementById("empty-phone").classList.add("animate-shake");
+          setTimeout(() => {
+            document.getElementById("empty-phone").classList.remove("animate-shake");
+          }, 2000);
           return false;
         } else {
           document.getElementById("empty-phone").classList.add("hidden");
@@ -347,6 +355,10 @@
 
         if (phoneNumber.length !== 11 || isNaN(phoneNumber)) {
           document.getElementById("invalid-phone").classList.remove("hidden");
+          document.getElementById("invalid-phone").classList.add("animate-shake");
+          setTimeout(() => {
+            document.getElementById("invalid-phone").classList.remove("animate-shake");
+          }, 2000);
           return false;
         } else {
           document.getElementById("invalid-phone").classList.add("hidden");
@@ -400,6 +412,10 @@
           if (cardNumber === "") {
             document.getElementById("empty-card").classList.remove("hidden");
             document.getElementById("invalid-card").classList.add("hidden");
+            document.getElementById("empty-card").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("empty-card").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("empty-card").classList.add("hidden");
@@ -407,6 +423,10 @@
 
           if (cardNumber.length !== 19) {
             document.getElementById("invalid-card").classList.remove("hidden");
+            document.getElementById("invalid-card").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("invalid-card").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("invalid-card").classList.add("hidden");
@@ -415,6 +435,10 @@
           if (expirationDate === "") {
             document.getElementById("empty-exp").classList.remove("hidden");
             document.getElementById("invalid-exp").classList.add("hidden");
+            document.getElementById("empty-exp").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("empty-exp").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("empty-exp").classList.add("hidden");
@@ -422,6 +446,10 @@
 
           if (!IsExpDateValid(expirationDate)) {
             document.getElementById("invalid-exp").classList.remove("hidden");
+            document.getElementById("invalid-exp").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("invalid-exp").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("invalid-exp").classList.add("hidden");
@@ -430,6 +458,10 @@
           if (cvv === "") {
             document.getElementById("empty-cvv").classList.remove("hidden");
             document.getElementById("invalid-cvv").classList.add("hidden");
+            document.getElementById("empty-cvv").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("empty-cvv").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("empty-cvv").classList.add("hidden");
@@ -437,6 +469,10 @@
 
           if (cvv.length !== 3) {
             document.getElementById("invalid-cvv").classList.remove("hidden");
+            document.getElementById("invalid-cvv").classList.add("animate-shake");
+            setTimeout(() => {
+              document.getElementById("invalid-cvv").classList.remove("animate-shake");
+            }, 2000);
             return false;
           } else {
             document.getElementById("invalid-cvv").classList.add("hidden");

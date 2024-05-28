@@ -10,7 +10,7 @@
             <h1 class="text-4xl text-primary mb-10">You have been logged out</h1>
             <a href="/auth/login" class="text-primary hover:text-primary-dark">Click here to log back in</a>
             <span class="countdown">
-                <span>5</span>
+                <span>3</span>
             </span>
         </div>
 	</div>
@@ -19,11 +19,11 @@
          // Wait 5 seconds then redirect to home page
         setTimeout(() => {
             window.location.href = '/';
-        }, 5000);
+        }, 3000);
 
         // Countdown timer
         const countdown = document.querySelector('.countdown span');
-        let count = 5;
+        let count = 3;
         countdown.textContent = count;
         function updateCountdown() {
             count--;
