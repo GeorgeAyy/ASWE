@@ -30,16 +30,36 @@ public class Notifications {
     @Column(name = "notification_date", nullable = false)
     private Timestamp notificationDate;
 
-    // Add getters and setters
+    // i also want to add a column for title of the notification
 
-    public Notifications() {
-    }
+    @Column(name = "notification_title", nullable = false)
+    private String notificationTitle;
 
-    public Notifications(Long notificationId, User user, String notificationText, Timestamp notificationDate) {
+    public Notifications(Long notificationId, User user, String notificationText, Timestamp notificationDate,
+            String notificationTitle) {
         this.notificationId = notificationId;
         this.user = user;
         this.notificationText = notificationText;
         this.notificationDate = notificationDate;
+        this.notificationTitle = notificationTitle;
+    }
+
+    public String getNotificationTitle() {
+        return this.notificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
+    }
+
+    public Notifications notificationTitle(String notificationTitle) {
+        setNotificationTitle(notificationTitle);
+        return this;
+    }
+
+    // Add getters and setters
+
+    public Notifications() {
     }
 
     public Long getNotificationId() {
@@ -102,7 +122,9 @@ public class Notifications {
             return false;
         }
         Notifications notifications = (Notifications) o;
-        return Objects.equals(notificationId, notifications.notificationId) && Objects.equals(user, notifications.user) && Objects.equals(notificationText, notifications.notificationText) && Objects.equals(notificationDate, notifications.notificationDate);
+        return Objects.equals(notificationId, notifications.notificationId) && Objects.equals(user, notifications.user)
+                && Objects.equals(notificationText, notifications.notificationText)
+                && Objects.equals(notificationDate, notifications.notificationDate);
     }
 
     @Override
@@ -113,11 +135,11 @@ public class Notifications {
     @Override
     public String toString() {
         return "{" +
-            " notificationId='" + getNotificationId() + "'" +
-            ", user='" + getUser() + "'" +
-            ", notificationText='" + getNotificationText() + "'" +
-            ", notificationDate='" + getNotificationDate() + "'" +
-            "}";
+                " notificationId='" + getNotificationId() + "'" +
+                ", user='" + getUser() + "'" +
+                ", notificationText='" + getNotificationText() + "'" +
+                ", notificationDate='" + getNotificationDate() + "'" +
+                "}";
     }
 
 }

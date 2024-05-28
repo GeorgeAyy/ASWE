@@ -6,15 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CartDTO;
+import com.example.demo.dto.OrderDTO;
+import com.example.demo.dto.OrderItemDTO;
+import com.example.demo.dto.CartDTO;
 import com.example.demo.models.Item;
 import com.example.demo.models.Order;
 import com.example.demo.models.OrderItems;
 import com.example.demo.models.User;
 import com.example.demo.repositories.ItemRepository;
 import com.example.demo.repositories.OrderRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +31,9 @@ public class OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public Order createOrder(User user, List<CartDTO> items, String address, String phoneNumber, String paymentMethod) {
         Order order = new Order();
@@ -73,5 +81,64 @@ public class OrderService {
         double total = items.stream().mapToDouble(item -> item.getItemPrice() * item.getQuantity()).sum();
         logger.info("Calculated total: {}", total);
         return total;
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderDTO> getAllOrders() {
+        return orderRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderDTO> getOrdersByUser(User user) {
+        return orderRepository.findByUser(user).stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private OrderDTO convertToDTO(Order order) {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(order.getOrderId());
+        orderDTO.setOrderDate(order.getOrderDate());
+        orderDTO.setOrderStatus(order.getOrderStatus());
+        orderDTO.setOrderItems(order.getOrderItems().stream().map(this::convertToDTO).collect(Collectors.toList()));
+
+        double orderSum = order.getOrderItems().stream()
+                .mapToDouble(item -> item.getItemQuantity() * item.getItem().getItemPrice())
+                .sum();
+        orderDTO.setOrderSum(orderSum);
+
+        return orderDTO;
+    }
+
+    private OrderItemDTO convertToDTO(OrderItems orderItem) {
+        OrderItemDTO orderItemDTO = new OrderItemDTO();
+        orderItemDTO.setItemQuantity(orderItem.getItemQuantity());
+        orderItemDTO.setItemTitle(orderItem.getItem().getItemTitle());
+        orderItemDTO.setItemPrice(orderItem.getItem().getItemPrice());
+        return orderItemDTO;
+    }
+
+    public boolean changeOrderStatus(Long orderId, String orderStatus) {
+        try {
+            Optional<Order> optionalOrder = orderRepository.findById(orderId);
+            if (optionalOrder.isPresent()) {
+                Order order = optionalOrder.get();
+                order.setOrderStatus(orderStatus);
+                orderRepository.save(order);
+
+                User user = order.getUser();
+                String notificationTitle = "Order #" + orderId;
+                String notificationText = "Your order status has been updated to " + orderStatus;
+                notificationService.createNotification(user, notificationTitle, notificationText);
+
+                return true;
+            }
+        } catch (Exception e) {
+            // Handle exception, e.g., log it
+        }
+        return false;
+    }
+
+    @Transactional
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.CartDTO;
 import com.example.demo.dto.CartRequestDTO;
 import com.example.demo.models.Cart;
@@ -88,6 +88,7 @@ public class CartService {
     }
 
     // Method to clear the cart
+    @Transactional
     public void clearCart(User user) {
         cartRepository.deleteByUser(user);
     }

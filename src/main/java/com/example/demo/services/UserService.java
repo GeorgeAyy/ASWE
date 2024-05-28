@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.UserDTO;
 import com.example.demo.models.User;
+import com.example.demo.repositories.UserRepository;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private RestTemplate restTemplate;
     private String baseUrl = "http://localhost:8081"; // Base URL for the user microservice
+
+    @Autowired
+    private UserRepository userRepository;
 
     public UserService() {
         this.restTemplate = new RestTemplate(); // Initialize a new RestTemplate instance
@@ -82,5 +87,9 @@ public class UserService {
                     e.getStatusCode(), e.getResponseBodyAsString());
             return false;
         }
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 }
