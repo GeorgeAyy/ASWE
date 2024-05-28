@@ -23,10 +23,19 @@
             th:field="*{email}"
             class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
           />
+
+          <p id="empty-email" class="text-red-500 mb-4 hidden">
+            Please enter your email address
+          </p>
+
+          <p id="invalid-email" class="text-red-500 mb-4 hidden">
+            Please enter a valid email address
+          </p>
+
           <div
             th:if="${#fields.hasErrors('email')}"
             th:errors="*{email}"
-            class="text-red-500 mb-4"
+            class="text-red-500 mb-4 animate-shake"
           ></div>
 
           <input
@@ -37,13 +46,19 @@
             th:field="*{userPassword}"
             class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
           />
+
+          <p id="empty-password" class="text-red-500 mb-4 hidden">
+            Please enter your password
+          </p>
+
           <div
             th:if="${#fields.hasErrors('userPassword')}"
             th:errors="*{userPassword}"
-            class="text-red-500 mb-4"
+            class="text-red-500 mb-4 animate-shake"
           ></div>
 
           <input
+            id="submit"
             type="submit"
             value="Login"
             class="bg-button text-white w-full h-12 self-center hover:cursor-pointer hover:bg-button-hover transition-all"
@@ -53,5 +68,57 @@
     </div>
 
     <th:block th:insert="~{fragments/footer.html}" />
+
+    <script async>
+      document.addEventListener("DOMContentLoaded", () => {
+        const submit = document.getElementById("submit");
+        const email = document.getElementById("email");
+        const emptyEmail = document.getElementById("empty-email");
+        const invalidEmail = document.getElementById("invalid-email");
+        const userPassword = document.getElementById("userPassword");
+        const emptyPassword = document.getElementById("empty-password");
+
+        submit.addEventListener("click", (e) => {
+          if (email.value === "") {
+            e.preventDefault();
+            emptyEmail.classList.remove("hidden");
+            emptyEmail.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyEmail.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyEmail.classList.add("hidden");
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!emailPattern.test(email.value)) {
+            e.preventDefault();
+            emptyEmail.classList.add("hidden");
+            invalidEmail.classList.remove("hidden");
+            invalidEmail.classList.add("animate-shake");
+            setTimeout(() => {
+              invalidEmail.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            invalidEmail.classList.add("hidden");
+          }
+
+          if (userPassword.value === "") {
+            e.preventDefault();
+            emptyPassword.classList.remove("hidden");
+            emptyPassword.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyPassword.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyPassword.classList.add("hidden");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
