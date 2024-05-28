@@ -31,7 +31,7 @@ public class CartController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             logger.warn("User not logged in. Redirecting to login page.");
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/auth/login");
         }
 
         logger.info("Fetching cart items for user with ID: {}", user.getUser_id());
