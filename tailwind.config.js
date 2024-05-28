@@ -18,6 +18,7 @@ module.exports = {
         'input': '#f9fafb',
         'input-hover': '#f3f4f6',
         'input-focus': '#e5e7eb',
+        'confirm': '#31c07e',
       },
     },
   },

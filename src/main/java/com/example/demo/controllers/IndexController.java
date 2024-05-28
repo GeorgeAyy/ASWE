@@ -79,4 +79,10 @@ public class IndexController {
         return mav;
     }
 
+    @GetMapping("orderConfirmed")
+    public ModelAndView getorderconfirmed(HttpSession session) {
+        ModelAndView mav = new ModelAndView("orderConfirmed.html");
+        mav.addObject("user", (User) session.getAttribute("user"));
+        return mav;
+    }
 }
