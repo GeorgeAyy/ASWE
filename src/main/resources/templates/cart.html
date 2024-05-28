@@ -89,6 +89,7 @@
               <p id="total" class="text-2xl"></p>
             </div>
             <button
+              id="checkout-button"
               class="bg-button text-white py-2 px-4 hover:bg-button-hover transition-all"
             >
               Checkout
@@ -97,26 +98,41 @@
         </div>
       </div>
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/js/cart.js}"></script>
     <script>
       $(document).ready(function () {
+        // Function to format numbers with commas and two decimal places
+        function formatNumber(number) {
+          return new Intl.NumberFormat("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(number);
+        }
+
         // Function to calculate and update subtotal and total
         function updateTotals() {
           let total = 0;
           $(".quantity").each(function () {
             let quantity = parseInt($(this).val());
             let price = parseFloat(
-              $(this).closest("tr").find("td").eq(2).text().replace("EGP ", "")
+              $(this)
+                .closest("tr")
+                .find("td")
+                .eq(2)
+                .text()
+                .replace("EGP ", "")
+                .replace(/,/g, "")
             );
             let subtotal = quantity * price;
             $(this)
               .closest("tr")
               .find(".subtotal")
-              .text("EGP " + subtotal.toFixed(2));
+              .text("EGP " + formatNumber(subtotal));
             total += subtotal;
           });
-          $("#total").text("EGP " + total.toFixed(2));
+          $("#total").text("EGP " + formatNumber(total));
         }
 
         // Initial calculation on page load
@@ -144,6 +160,12 @@
         $(".button-remove").click(function () {
           $(this).closest("tr").remove();
           updateTotals();
+        });
+
+        // Handle checkout button click
+        $("#checkout-button").click(function () {
+          // Redirect to the checkout page
+          window.location.href = "/checkout";
         });
       });
     </script>

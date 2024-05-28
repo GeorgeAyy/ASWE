@@ -38,13 +38,6 @@ public class IndexController {
         return mav;
     }
 
-    @GetMapping("checkout")
-    public ModelAndView getcheckoutpage(HttpSession session) {
-        ModelAndView mav = new ModelAndView("checkout.html");
-        mav.addObject("user", (User) session.getAttribute("user"));
-        return mav;
-    }
-   
     @GetMapping("product/wishlist")
     public ModelAndView getproductwishlist(HttpSession session) {
         ModelAndView mav = new ModelAndView("wishlist.html");

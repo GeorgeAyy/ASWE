@@ -30,6 +30,8 @@ public class CartService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     private RestTemplate restTemplate;
     private String baseUrl = "http://localhost:8081"; // Base URL for the REST API
@@ -84,4 +86,10 @@ public class CartService {
         this.restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
         logger.info("Item removed from cart successfully");
     }
+
+    // Method to clear the cart
+    public void clearCart(User user) {
+        cartRepository.deleteByUser(user);
+    }
+
 }
