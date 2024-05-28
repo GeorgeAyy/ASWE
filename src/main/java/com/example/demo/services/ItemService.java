@@ -139,4 +139,8 @@ public class ItemService {
         }
     }
 
+    public Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId).orElse(null);
+    }
+
 }

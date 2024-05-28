@@ -66,8 +66,21 @@
     <div
       class="opacity-40 mr-2 hover:opacity-60 hover:cursor-pointer transition-all"
     >
-      <svg id="notifications" th:if="${user != null}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+      <svg
+        id="notifications"
+        th:if="${user != null}"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+        />
       </svg>
 
       <a th:unless="${user != null}" href="/auth/login">Login</a>
@@ -109,7 +122,7 @@
       <a href="/cart">Cart</a>
     </p>
     <p class="mb-10 text-2xl hover:underline underline-offset-8">
-      <a href="product/wishlist">Wishlist</a>
+      <a href="/wishlist">Wishlist</a>
     </p>
     <p class="mb-10 text-2xl hover:underline underline-offset-8">
       <a href="/account">Account & History</a>
@@ -154,17 +167,21 @@
   <h1 class="text-3xl font-bold text-primary mb-10">Notifications</h1>
 
   <div id="notifications-list" class="flex flex-col">
-    <div class="flex flex-col mb-3">
-      <p class="text-lg font-bold mr-4 text-primary">Order #1234</p>
-      <p class="text-sm text-primary">Your order has been shipped!</p>
+    <div th:each="notification : ${notifications}" class="flex flex-col mb-3">
+      <p
+        class="text-lg font-bold mr-4 text-primary"
+        th:text="${notification.notificationTitle}"
+      ></p>
+      <p
+        class="text-sm text-primary"
+        th:text="${notification.notificationText}"
+      ></p>
     </div>
-
-    <hr class="mb-3">
-
-    <div class="flex flex-col mb-3">
-      <p class="text-lg font-bold mr-4 text-primary">Order #1234</p>
-      <p class="text-sm text-primary">Your order has been shipped!</p>
-    </div>
+    <hr
+      class="mb-3"
+      th:each="notification,iterStat : ${notifications}"
+      th:if="${!iterStat.last}"
+    />
   </div>
 </div>
 

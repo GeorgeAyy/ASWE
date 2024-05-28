@@ -227,12 +227,85 @@
                     </div>
                   </form>
 
-                  <button
-                    type="button"
-                    class="bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
-                  >
-                    Add to Wishlist
-                  </button>
+                  <form th:action="@{/wishlist/add}" method="post">
+                    <!-- Modal Container with Alpine.js -->
+                    <div x-data="{ open: false }">
+                      <!-- Button to trigger modal -->
+
+                      <button
+                        @click="open=true"
+                        type="button"
+                        class="add_to_wishlist_btn bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
+                      >
+                        Add to Wishlist
+                      </button>
+                      <input
+                        type="hidden"
+                        name="itemId"
+                        th:value="${item.itemId}"
+                      />
+                      <!-- Modal -->
+                      <div
+                        x-show="open"
+                        class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4"
+                      >
+                        <div
+                          class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full"
+                        >
+                          <div class="p-4">
+                            <div
+                              class="flex justify-between items-center border-b pb-2"
+                            >
+                              <h3 class="text-lg font-medium text-gray-900">
+                                Item Added to Wishlist
+                              </h3>
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="text-gray-400 hover:text-gray-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div class="mt-4">
+                              <p class="text-gray-600">
+                                Your item has been successfully added to the
+                                wishlist.
+                              </p>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </th:block>
               <th:block th:if="${user == null}">
@@ -308,6 +381,26 @@
             data: { itemId: itemId, quantity: itemQuantity },
             success: function (response) {
               console.log("Item added to cart successfully.");
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+            },
+          });
+        });
+      });
+
+      $(document).ready(function () {
+        $(".add_to_wishlist_btn").click(function (e) {
+          e.preventDefault();
+
+          var form = $(this).closest("form");
+          var itemId = form.find("input[name='itemId']").val();
+          $.ajax({
+            url: "/wishlist/add",
+            method: "POST",
+            data: { itemId: itemId },
+            success: function (response) {
+              console.log("Item added to wishlist successfully.");
             },
             error: function (xhr, status, error) {
               console.error(xhr.responseText);
