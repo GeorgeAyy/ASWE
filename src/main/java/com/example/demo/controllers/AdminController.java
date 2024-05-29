@@ -4,6 +4,7 @@ package com.example.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -154,7 +155,7 @@ public class AdminController {
     }
 
     @PostMapping("/editUser")
-    public String editUser(@RequestBody UserDTO userDTO) {
+    public String editUser(@RequestBody UserDTO userDTO,BindingResult bindingResult) {
         try {
             userService.updateUser(userDTO);
             System.out.println("User updated successfully");
