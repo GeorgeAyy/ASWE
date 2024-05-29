@@ -110,7 +110,6 @@ $(document).ready(function () {
     var itemId = inputField.data("itemid");
     var currentValue = parseInt(inputField.val());
     if (currentValue > 1) {
-      inputField.val(currentValue - 1);
       updateQuantityInDatabase(itemId, currentValue - 1);
     }
   });
@@ -119,7 +118,6 @@ $(document).ready(function () {
     var inputField = $(this).closest(".quantity_range").find(".quantityvalue");
     var itemId = inputField.data("itemid");
     var currentValue = parseInt(inputField.val());
-    inputField.val(currentValue + 1);
     updateQuantityInDatabase(itemId, currentValue + 1);
   });
 
