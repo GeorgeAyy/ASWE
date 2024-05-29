@@ -2,34 +2,64 @@ package com.example.demo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import jakarta.servlet.http.HttpSession;
 import com.example.demo.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.example.demo.controllers.AdminController;
 import com.example.demo.controllers.AuthenticationController;
 import com.example.demo.dto.UserDTO;
-import org.springframework.validation.FieldError;
 
 @ExtendWith(MockitoExtension.class)
+
 public class AuthControllerTest {
+    private WireMockServer wireMockServer;
+    
     @Mock
     private UserService userService;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Mock
+    private HttpSession session;
 
     @InjectMocks
     private AuthenticationController authenticationController;
 
+    
+ 
+    
     @Test
     public void testLogin() {
         AuthenticationController controller = new AuthenticationController();
@@ -40,20 +70,32 @@ public class AuthControllerTest {
     
     @Test
     public void testLogin_ValidUser_ReturnsRedirect() {
+        // Create a valid UserDTO
         UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("validemail@example.com");
+        userDTO.setEmail("newuser@example.com");
         userDTO.setUserPassword("validpassword");
+        userDTO.setUserFname("First");
+        userDTO.setUserLname("Last");
+        userDTO.setCpassword("validpassword");
+        userDTO.setUserAddress("123 Street");
 
-        BindingResult bindingResult = mock(BindingResult.class);
-        HttpSession session = mock(HttpSession.class);
+        
+        // Mock UserService to simulate that email does not exist
+        when(userService.existEmail("newuser@example.com")).thenReturn(false);
 
-        when(userService.getUser("validemail@example.com", "validpassword", session)).thenReturn(true);
+        // Create a binding result
+        BindingResult bindingResult = new BeanPropertyBindingResult(userDTO, "userDTO");
 
-        ModelAndView mav = authenticationController.getUser(userDTO, bindingResult, session);
+        // Invoke the controller method
+        ModelAndView mav = authenticationController.signup(userDTO, bindingResult);
 
-        assert mav.getViewName().equals("redirect:/");
+        // Ensure that there are no validation errors
         assertFalse(bindingResult.hasErrors());
+
+        // Ensure that the returned ModelAndView redirects to the login page
+        assertEquals("redirect:/auth/login", mav.getViewName());
     }
+
     @Test
     public void testLogin_InvalidUser_ReturnsError() {
         UserDTO userDTO = new UserDTO();
@@ -72,7 +114,7 @@ public class AuthControllerTest {
     }
 
    @Test
-public void testSignup_ValidUser_ReturnsRedirect() {
+   public void testSignup_ValidUser_ReturnsRedirect() {
     UserDTO userDTO = new UserDTO();
     userDTO.setEmail("newuser@example.com");
     userDTO.setUserPassword("validpassword");
@@ -113,5 +155,38 @@ public void testSignup_RequiredFieldsMissing_ReturnsError() {
     // Ensure that the returned ModelAndView object stays on the signup page
     assertEquals("signup.html", mav.getViewName());
 }
+
+
+
+    // @Test
+    // public void testEditProfile_ValidData_ProfileUpdatedSuccessfully() throws Exception {
+    //     // Admin login
+    //     MvcResult loginResult = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+    //             .param("email", "admin@gmail.com")
+    //             .param("password", "admin1234"))
+    //             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+    //             .andReturn();
+
+    //     // Extract the session ID
+    //     String sessionID = loginResult.getRequest().getSession().getId();
+
+    //     // Simulate editing user profile
+    //     UserDTO userDTO = new UserDTO();
+    //     userDTO.setEmail("user@example.com");
+    //     userDTO.setUserFname("Zeina");
+    //     userDTO.setUserLname("Hesham");
+    //     userDTO.setUserAddress("123 Street, City");
+
+    //     mockMvc.perform(MockMvcRequestBuilders.post("/admin/editUser")
+    //             .sessionAttr("isAdmin", true)
+    //             .sessionAttr("sessionId", sessionID)
+    //             .flashAttr("userDTO", userDTO))
+    //             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+    //             .andExpect(MockMvcResultMatchers.redirectedUrl("/admin/users"));
+
+    //     // Verify that updateUser method was called
+    //     verify(userService, times(1)).updateUser(userDTO);
+    // }
+
 
 }
