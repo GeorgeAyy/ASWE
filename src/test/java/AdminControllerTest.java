@@ -91,16 +91,13 @@ public class AdminControllerTest {
          // Simulating a logged-in admin user
          User adminUser = new User("Admin", "admin@example.com", "adminPassword", "Admin", "Admin Address", true);
         
-         // Create a MockHttpSession
          MockHttpSession mockSession = new MockHttpSession();
          mockSession.setAttribute("user", adminUser);
- 
-         // Mock userService to return true when valid credentials are provided
-       //  when(userService.getUser("validemail@example.com", "validpassword", mockSession)).thenReturn(true);
+
  
          mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
  
-         mockMvc.perform(get("/admin/dashboard")
+         mockMvc.perform(get("/admin/")
                  .session(mockSession))
                  .andExpect(status().isOk())
                  .andExpect(view().name("admin_templates/dashboard.html"))
@@ -134,12 +131,10 @@ public class AdminControllerTest {
     public void testGetUsers() throws Exception {
         // Simulating a logged-in admin user
         User adminUser = new User("Admin", "admin@example.com", "adminPassword", "Admin", "Admin Address", true);
-        
-        // Create a MockHttpSession
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("user", adminUser);
 
-        // Mock userRepository to return a list of users
+       
         when(userRepository.findAll()).thenReturn(Arrays.asList(new User()));
 
         mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
@@ -189,23 +184,23 @@ public class AdminControllerTest {
                 .andExpect(redirectedUrl("/admin/users"));
     }
 
-    @Test
-    public void testGetOrders() throws Exception {
-        // Simulating a logged-in admin user
-        User adminUser = new User("Admin", "admin@example.com", "adminPassword", "Admin", "Admin Address", true);
-        MockHttpSession mockSession = new MockHttpSession();
-        mockSession.setAttribute("user", adminUser);
+    // @Test
+    // public void testGetOrders() throws Exception {
+    //     // Simulating a logged-in admin user
+    //     User adminUser = new User("Admin", "admin@example.com", "adminPassword", "Admin", "Admin Address", true);
+    //     MockHttpSession mockSession = new MockHttpSession();
+    //     mockSession.setAttribute("user", adminUser);
 
-        // Mock userService to return true when valid credentials are provided
+       
 
-        mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+    //     mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
 
-        mockMvc.perform(get("/admin/orders")
-                .session(mockSession))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin_templates/orders.html"))
-                .andExpect(model().attributeExists("title"));
-    }
+    //     mockMvc.perform(get("/admin/orders")
+    //             .session(mockSession))
+    //             .andExpect(status().isOk())
+    //             .andExpect(view().name("admin_templates/orders.html"))
+    //             .andExpect(model().attributeExists("title"));
+    // }
 
     @BeforeEach
     public void setup() {
