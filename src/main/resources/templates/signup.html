@@ -1,38 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
 
-<th:block th:insert="~{fragments/head.html}"/>
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/header.html}" />
 
-<body class="font-poppins text-lg w-screen">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col items-center mt-32 h-auto">
+        <form
+          th:action="@{/auth/signup}"
+          method="post"
+          th:object="${userDTO}"
+          class="flex flex-col w-full max-w-md md:max-w-lg h-full justify-between border-2 p-8 rounded shadow-2xl"
+        >
+          <h1 class="text-center text-2xl text-primary mb-6">Sign Up</h1>
 
-    <th:block th:insert="~{fragments/header.html}"/>
+          <input
+            type="text"
+            name="userFname"
+            id="userFname"
+            placeholder="First name"
+            th:field="*{userFname}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
 
-	<div class="container">
-		<div class="flex flex-col items-center mt-32 h-screen">
-			<form  th:action="@{/auth/signup}" method="post" th:object="${userDTO}" class="flex flex-col w-1/3 h-full justify-between border-2 p-8 rounded shadow-2xl">
-				<h1 class="text-center text-2xl text-primary">Sign Up</h1>
-				<input type="text" name="userFname" id="userFname" placeholder="First name" th:field="*{userFname}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('userFname')}" th:errors="*{userFname}" class="text-red-500"></div>
+          <p id="empty-firstname" class="text-red-500 mb-4 hidden">
+            Please enter your first name
+          </p>
 
-				<input type="text" name="userLname" id="userLname" placeholder="Last name" th:field="*{userLname}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('userLname')}" th:errors="*{userLname}" class="text-red-500"></div>
-				
-				<input type="text" name="email" id="email" placeholder="Email" th:field="*{email}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500"></div>
+          <div
+            th:if="${#fields.hasErrors('userFname')}"
+            th:errors="*{userFname}"
+            class="text-red-500 mb-4"
+          ></div>
 
-				<input type="password" name="userPassword" id="userPassword" placeholder="Password" th:field="*{userPassword}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="text-red-500"></div>
-				
-				<input type="password" name="cpassword" id="cpassword" placeholder="Confirm password" th:field="*{cpassword}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('cpassword')}" th:errors="*{cpassword}" class="text-red-500"></div>
+          <input
+            type="text"
+            name="userLname"
+            id="userLname"
+            placeholder="Last name"
+            th:field="*{userLname}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
 
-				<input type="text" name="userAddress" id="userAddress" placeholder="Address" th:field="*{userAddress}" class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200">
-				<div th:if="${#fields.hasErrors('userAddress')}" th:errors="*{userAddress}" class="text-red-500"></div>
-				<input type="submit" value="Sign Up" class="bg-button text-white w-1/2 h-16 self-center hover:cursor-pointer hover:bg-button-hover transition-all">
-			</form>
-		</div>
+          <p id="empty-lastname" class="text-red-500 mb-4 hidden">
+            Please enter your last name
+          </p>
 
-		<th:block th:insert="~{fragments/footer.html}"/>
-	</div>
-</body>
+          <div
+            th:if="${#fields.hasErrors('userLname')}"
+            th:errors="*{userLname}"
+            class="text-red-500 mb-4"
+          ></div>
+
+          <input
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Email"
+            th:field="*{email}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
+
+          <p id="empty-email" class="text-red-500 mb-4 hidden">
+            Please enter your email address
+          </p>
+
+          <p id="invalid-email" class="text-red-500 mb-4 hidden">
+            Please enter a valid email address
+          </p>
+
+          <div
+            th:if="${#fields.hasErrors('email')}"
+            th:errors="*{email}"
+            class="text-red-500 mb-4"
+          ></div>
+
+          <input
+            type="password"
+            name="userPassword"
+            id="userPassword"
+            placeholder="Password"
+            th:field="*{userPassword}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
+
+          <p id="empty-password" class="text-red-500 mb-4 hidden">
+            Please enter a password
+          </p>
+
+          <p id="invalid-password" class="text-red-500 mb-4 hidden">
+            Password must be at least 8 characters
+          </p>
+
+          <div
+            th:if="${#fields.hasErrors('userPassword')}"
+            th:errors="*{userPassword}"
+            class="text-red-500 mb-4"
+          ></div>
+
+          <input
+            type="password"
+            name="cpassword"
+            id="cpassword"
+            placeholder="Confirm password"
+            th:field="*{cpassword}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
+
+          <p id="empty-confirm" class="text-red-500 mb-4 hidden">
+            Please confirm your password
+          </p>
+          <p id="invalid-confirm" class="text-red-500 mb-4 hidden">
+            Passwords must match
+          </p>
+
+          <div
+            th:if="${#fields.hasErrors('cpassword')}"
+            th:errors="*{cpassword}"
+            class="text-red-500 mb-4"
+          ></div>
+
+          <input
+            type="text"
+            name="userAddress"
+            id="userAddress"
+            placeholder="Address"
+            th:field="*{userAddress}"
+            class="bg-gray-50 p-4 rounded mb-4 hover:bg-gray-100 focus:bg-gray-200"
+          />
+
+          <p id="empty-addess" class="text-red-500 mb-4 hidden">
+            Please enter your address
+          </p>
+
+          <div
+            th:if="${#fields.hasErrors('userAddress')}"
+            th:errors="*{userAddress}"
+            class="text-red-500 mb-4"
+          ></div>
+
+          <input
+            id="submit"
+            type="submit"
+            value="Sign Up"
+            class="bg-button text-white w-full h-12 self-center hover:cursor-pointer hover:bg-button-hover transition-all"
+          />
+        </form>
+      </div>
+    </div>
+
+    <th:block th:insert="~{fragments/footer.html}" />
+
+    <script async>
+      document.addEventListener("DOMContentLoaded", () => {
+        const submit = document.getElementById("submit");
+        const userFname = document.getElementById("userFname");
+        const userLname = document.getElementById("userLname");
+        const email = document.getElementById("email");
+        const userPassword = document.getElementById("userPassword");
+        const cpassword = document.getElementById("cpassword");
+        const userAddress = document.getElementById("userAddress");
+        const emptyFname = document.getElementById("empty-firstname");
+        const emptyLname = document.getElementById("empty-lastname");
+        const emptyEmail = document.getElementById("empty-email");
+        const emptyPassword = document.getElementById("empty-password");
+        const emptyConfirm = document.getElementById("empty-confirm");
+        const emptyAddress = document.getElementById("empty-addess");
+        const invalidConfirm = document.getElementById("invalid-confirm");
+        const invalidPassword = document.getElementById("invalid-password");
+        const invalidEmail = document.getElementById("invalid-email");
+
+        submit.addEventListener("click", (e) => {
+          if (userFname.value === "") {
+            e.preventDefault();
+            emptyFname.classList.remove("hidden");
+            emptyFname.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyFname.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyFname.classList.add("hidden");
+          }
+
+          if (userLname.value === "") {
+            e.preventDefault();
+            emptyLname.classList.remove("hidden");
+            emptyLname.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyLname.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyLname.classList.add("hidden");
+          }
+
+          if (email.value === "") {
+            e.preventDefault();
+            emptyEmail.classList.remove("hidden");
+            emptyEmail.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyEmail.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyEmail.classList.add("hidden");
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!emailPattern.test(email.value)) {
+            e.preventDefault();
+            emptyEmail.classList.add("hidden");
+            invalidEmail.classList.remove("hidden");
+            invalidEmail.classList.add("animate-shake");
+            setTimeout(() => {
+              invalidEmail.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            invalidEmail.classList.add("hidden");
+          }
+
+          if (userPassword.value === "") {
+            e.preventDefault();
+            emptyPassword.classList.remove("hidden");
+            emptyPassword.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyPassword.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyPassword.classList.add("hidden");
+          }
+
+          if (userPassword.value.length < 8) {
+            e.preventDefault();
+            emptyPassword.classList.add("hidden");
+            invalidPassword.classList.remove("hidden");
+            invalidPassword.classList.add("animate-shake");
+            setTimeout(() => {
+              invalidPassword.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            invalidPassword.classList.add("hidden");
+          }
+
+          if (cpassword.value === "") {
+            e.preventDefault();
+            emptyConfirm.classList.remove("hidden");
+            emptyConfirm.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyConfirm.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyConfirm.classList.add("hidden");
+          }
+
+          if (userPassword.value !== cpassword.value) {
+            e.preventDefault();
+            emptyConfirm.classList.add("hidden");
+            invalidConfirm.classList.remove("hidden");
+            invalidConfirm.classList.add("animate-shake");
+            setTimeout(() => {
+              invalidConfirm.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            invalidConfirm.classList.add("hidden");
+          }
+
+          if (userAddress.value === "") {
+            e.preventDefault();
+            emptyAddress.classList.remove("hidden");
+            emptyAddress.classList.add("animate-shake");
+            setTimeout(() => {
+              emptyAddress.classList.remove("animate-shake");
+            }, 2000);
+            return;
+          } else {
+            emptyAddress.classList.add("hidden");
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

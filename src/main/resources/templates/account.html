@@ -3,88 +3,172 @@
 
 <th:block th:insert="~{fragments/head.html}"/>
 
-<body class="font-poppins text-lg w-screen">
+<body class="font-poppins text-lg w-screen overflow-x-hidden">
 
-	<th:block th:insert="~{fragments/header.html}"/>
-	
-	<div class="container">
+    <th:block th:insert="~{fragments/header.html}"/>
+    
+    <div class="container">
 
-		<div class="flex flex-col">
-			<h1 class="text-4xl text-primary mt-10 mb-6 ml-40">Account</h1>
-			<div class="my-12 mx-40 flex justify-between">
-				<form id="account-form" action="" class="w-full">
-					<table class="w-full shadow-2xl">
-						<tr class="border-2 text-left">
-							<th class="p-4 text-primary">Name</th>
-							<th class="text-primary">Email</th>
-							<th class="text-primary">Address</th>
-							<th></th>
-						</tr>
-	
-						<tr class="border-2 text-left">
-							<td class="p-4"><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" placeholder="John Doe"></td>
-							<td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="email" placeholder="johndoe@gmail.com"></td>
-							<td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" placeholder="1234 Elm St, Springfield, IL 62701"></td>
-							<td><button id="save-button" class="bg-button-hover text-white w-32 h-10 transition-all cursor-not-allowed" type="submit" disabled>Save Changes</button></td>
-						</tr>
-					</table>
-				</form>
-			</div>
-		</div>
-		
+        <div class="flex flex-col">
+            <h1 class="text-3xl text-primary mt-10 ml-40">Account</h1>
+            <div class="my-12 mx-40 flex justify-between">
+                <form id="account-form" action="/changeAccountDetails" method="post" class="w-full">
+                    <table class="w-full shadow-2xl">
+                        <tr class="border-2 text-left">
+                            <th class="p-4 text-primary">Name</th>
+                            <th class="text-primary">Email</th>
+                            <th class="text-primary">Address</th>
+                            <th></th>
+                        </tr>
+    
+                        <tr class="border-2 text-left">
+                            <td class="p-4"><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" th:value="${user.user_fname + ' ' + user.user_Lname}" placeholder="John Doe" disabled></td>
+                            <td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="email" th:value="${user.email}" placeholder="johndoe@gmail.com" disabled></td>
+                            <td><input class="bg-gray-50 p-4 rounded hover:bg-gray-100 focus:bg-gray-200" type="text" th:value="${user.user_address}" placeholder="1234 Elm St, Springfield, IL 62701" disabled></td>
+                            
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <div class="flex flex-col mx-40">
+                <p class="text-xl text-primary mt-20">Order History</p>
+                <table class="shadow-2xl w-full my-12 text-sm">
+                    <tr class="border-2 text-left">
+                        <th class="p-4 text-primary w-1/3">Order ID</th>
+                        <th class="p-4 text-primary w-1/3">Order Products</th>
+                        <th class="p-4 text-primary w-1/3">Order Total</th>
+                    </tr>
+                    <th:block th:each="order : ${orders}">
+                    <tr class="border-2 text-left">
+                        <td class="p-4" th:text="'#' + ${order.orderId}"></td>
+                        <td class="p-4 flex flex-col multiple">
+                            <th:block th:each="item, iterStat : ${order.orderItems}">
+                                <div class="flex items-center gap-4 product">
+                                    <p class="font-semibold" th:text="${item.itemQuantity}"></p>
+                                    <p th:text="${item.itemTitle}"></p>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="expand h-4 w-4 hover:cursor-pointer" th:if="${iterStat.index == 0}">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+                                    </svg>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="collapse h-4 w-4 hover:cursor-pointer hidden" th:if="${iterStat.index == 0}">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
+                                    </svg>
+                                </div>
+                                <hr class="my-3 w-3/4" th:if="${iterStat.index > 0}">
+                            </th:block>
+                        </td>
+                        <td class="p-4 font-semibold" th:text="'EGP ' + ${order.orderSum}"></td>
+                    </tr>
+                    </th:block>
+                </table>
+            </div>
+        </div>
+        
         <th:block th:insert="~{fragments/footer.html}"/>
-	</div>
+    </div>
 
 	<script>
-		var saveButton = document.getElementById('save-button');
-		var accountForm = document.getElementById('account-form');
+        var saveButton = document.getElementById('save-button');
+        var accountForm = document.getElementById('account-form');
 
-		// When the user clicks the save changes button, save the input values as the new placeholders
-		accountForm.addEventListener('submit', function(event) {
-			event.preventDefault(); // Prevent form submission
+        // When the user clicks the save changes button, save the input values as the new placeholders
+        accountForm.addEventListener('submit', function(event) {
+            // Prevent form submission
+            //event.preventDefault(); // Comment this line to allow form submission
 
-			document.querySelectorAll('input').forEach(input => {
-				if (input.value !== '') {
-					input.placeholder = input.value;
-					input.value = '';
-				}
-			});
+            document.querySelectorAll('input').forEach(input => {
+                if (input.value !== '') {
+                    input.placeholder = input.value;
+                    input.value = '';
+                }
+            });
 
-			// Disable save button and add the appropriate classes
-			saveButton.disabled = true;
-			saveButton.classList.add('cursor-not-allowed');
-			saveButton.classList.add('bg-button-hover');
-			saveButton.classList.remove('bg-button');
-		});
+            // Disable save button and add the appropriate classes
+            saveButton.disabled = true;
+            saveButton.classList.add('cursor-not-allowed');
+            saveButton.classList.add('bg-button-hover');
+            saveButton.classList.remove('bg-button');
+        });
 
-		// when the user types in the input fields, enable the save changes button
-		document.querySelectorAll('input').forEach(input => {
-			input.addEventListener('input', () => {
-				saveButton.disabled = false;
-				saveButton.classList.remove('cursor-not-allowed');
-				saveButton.classList.remove('bg-button-hover');
-				saveButton.classList.add('bg-button');
-			});
-		});
-		
-		// When the user clicks out of the input fields, if they are all empty, disable the save changes button
-		document.querySelectorAll('input').forEach(input => {
-			input.addEventListener('blur', () => {
-				var allEmpty = true;
-				document.querySelectorAll('input').forEach(input => {
-					if (input.value !== '') {
-						allEmpty = false;
-					}
-				});
+        // when the user types in the input fields, enable the save changes button
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                saveButton.disabled = false;
+                saveButton.classList.remove('cursor-not-allowed');
+                saveButton.classList.remove('bg-button-hover');
+                saveButton.classList.add('bg-button');
+            });
+        });
+        
+        // When the user clicks out of the input fields, if they are all empty, disable the save changes button
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('blur', () => {
+                var allEmpty = true;
+                document.querySelectorAll('input').forEach(input => {
+                    if (input.value !== '') {
+                        allEmpty = false;
+                    }
+                });
 
-				if (allEmpty) {
-					saveButton.disabled = true;
-					saveButton.classList.add('cursor-not-allowed');
-					saveButton.classList.add('bg-button-hover');
-					saveButton.classList.remove('bg-button');
-				}
-			});
-		});
-	</script>
+                if (allEmpty) {
+                    saveButton.disabled = true;
+                    saveButton.classList.add('cursor-not-allowed');
+                    saveButton.classList.add('bg-button-hover');
+                    saveButton.classList.remove('bg-button');
+                }
+            });
+        });
+
+        // Select all the 'multiple' divs
+        const multiples = document.querySelectorAll('.multiple');
+
+        multiples.forEach(multiple => {
+            const items = multiple.querySelectorAll('.product'); // Select product divs
+            const hrs = multiple.querySelectorAll('hr');
+            const expand = multiple.querySelector('.expand');
+            const collapse = multiple.querySelector('.collapse');
+
+            for (let i = 1; i < items.length; i++) {
+                // Add the 'hidden' and 'item' classes
+                items[i].classList.add('hidden', 'item');
+            }
+
+            for (let i = 0; i < hrs.length; i++) {
+                hrs[i].classList.add('hidden');
+            }
+
+            // Add an event listener to the icon
+            expand.addEventListener('click', () => {
+                expand.classList.toggle('hidden');
+                collapse.classList.toggle('hidden');
+
+                // Loop over the items and toggle the 'hidden' class
+                for (let i = 1; i < items.length; i++) {
+                    items[i].classList.toggle('hidden');
+                }
+
+                for (let i = 0; i < hrs.length; i++) {
+                    hrs[i].classList.toggle('hidden');
+                }
+            });
+
+            collapse.addEventListener('click', () => {
+                expand.classList.toggle('hidden');
+                collapse.classList.toggle('hidden');
+
+                // Loop over the items and toggle the 'hidden' class
+                for (let i = 1; i < items.length; i++) {
+                    items[i].classList.toggle('hidden');
+                }
+
+                for (let i = 0; i < hrs.length; i++) {
+                    hrs[i].classList.toggle('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

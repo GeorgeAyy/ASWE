@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.CartDTO;
+import com.example.demo.dto.CartRequestDTO;
 import com.example.demo.models.Cart;
 import com.example.demo.models.Item;
 import com.example.demo.models.User;
@@ -15,110 +20,77 @@ import com.example.demo.repositories.ItemImagesRepository;
 import com.example.demo.repositories.ItemRepository;
 import com.example.demo.repositories.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class CartService {
-    @Autowired
-    private CartRepository cartRepository;
 
-    @Autowired
-    private ItemRepository itemRepository;
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private ItemImagesRepository imagesRepository;
+    private CartRepository cartRepository;
 
-    public void addToCart(Long itemId, User user) {
-        
-        Item item = this.itemRepository.findByItemId(itemId);
+    private RestTemplate restTemplate;
+    private String baseUrl = "http://localhost:8081"; // Base URL for the REST API
 
-        if (user != null && item != null) {
-            // Check if item quantity is greater than 0
-            if (item.getItemQuantity() > 0) {
-                // Reduce item quantity by 1
-                item.setItemQuantity(item.getItemQuantity() - 1);
-                this.itemRepository.save(item);
-
-                // Check if the item is already in the user's cart
-                Cart existingCartItem = this.cartRepository.findByUserAndItem(user, item);
-                System.out.println("existingCartItem" + existingCartItem);
-                if (existingCartItem != null) {
-                    // Increment quantity in the cart
-                    existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
-                    this.cartRepository.save(existingCartItem);
-                } else {
-                    // Add item to cart
-                    Cart cart = new Cart();
-                    cart.setItem(item);
-                    cart.setUser(user);
-                    cart.setQuantity(1);
-                    this.cartRepository.save(cart);
-                }
-            } else {
-                throw new IllegalArgumentException("Item is out of stock");
-            }
-        } else {
-            throw new IllegalArgumentException("User or item not found");
-        }
+    public CartService() {
+        this.restTemplate = new RestTemplate(); // Initialize a new RestTemplate instance
     }
 
-  public List getItemsInCart(User user) {
-        List<Cart> items = this.cartRepository.findByUser(user);
-      
+    public void addToCart(Long itemId, User user, int quantity) {
+        CartRequestDTO cartRequest = new CartRequestDTO();
+        cartRequest.setItemId(itemId);
+        cartRequest.setUserId(user.getUser_id());
+        cartRequest.setQuantity(quantity); // Set the quantity from the parameter
 
-        List<CartDTO> cartItemDTOs = new ArrayList<>();
-
-        for (Cart cart : items) {
-            CartDTO cartItemDTO = new CartDTO();
-            cartItemDTO.setItemId(cart.getItem().getItemId());
-            cartItemDTO.setItemName(cart.getItem().getItemTitle());
-            cartItemDTO.setItemPrice(cart.getItem().getItemPrice());
-            cartItemDTO.setQuantity(cart.getQuantity());
-
-            // Fetch and add image paths
-            List<String> imagePaths = this.imagesRepository.findImagePathsByItemId(cart.getItem().getItemId());
-                                                         
-            cartItemDTO.setImages(imagePaths);
-
-            cartItemDTOs.add(cartItemDTO);
-        }
-        System.out.println("cartItemDTOs"+cartItemDTOs);
-        
-        return cartItemDTOs;
+        logger.info("Adding item with ID: {} to cart for user with ID: {} with quantity: {}", itemId, user.getUser_id(),
+                quantity);
+        String url = baseUrl + "/cart/add";
+        this.restTemplate.postForObject(url, cartRequest, Void.class);
+        logger.info("Item added to cart successfully");
     }
 
-
-    public void updateCartItemQuantity(Long itemId,User user,int quantity){
-        
-
-
-        Item item = this.itemRepository.findByItemId(itemId);
-
-        Cart cartItem = cartRepository.findByUserAndItem(user, item);
-        
-        if (cartItem != null) {
-            // Calculate the difference in quantity
-            int quantityDifference = quantity - cartItem.getQuantity();
-            
-            // Update quantity in cart
-            cartItem.setQuantity(quantity);
-            cartRepository.save(cartItem);
-            
-            // Update quantity in item table
-            item.setItemQuantity(item.getItemQuantity() - quantityDifference);
-
-            itemRepository.save(item);
-        }
+    public List<CartDTO> getItemsInCart(User user) {
+        String url = baseUrl + "/cart/items/" + user.getUser_id();
+        logger.info("Fetching items in cart for user with ID: {}", user.getUser_id());
+        ResponseEntity<List<CartDTO>> response = this.restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<CartDTO>>() {
+                });
+        List<CartDTO> cartItems = response.getBody();
+        logger.info("Fetched {} items in cart for user with ID: {}", cartItems.size(), user.getUser_id());
+        return cartItems;
     }
+
+    public void updateCartItemQuantity(Long itemId, User user, int quantity) {
+        CartRequestDTO cartRequest = new CartRequestDTO();
+        cartRequest.setItemId(itemId);
+        cartRequest.setUserId(user.getUser_id());
+        cartRequest.setQuantity(quantity);
+
+        logger.info("Updating cart item with ID: {} for user with ID: {} to quantity: {}", itemId, user.getUser_id(),
+                quantity);
+        String url = baseUrl + "/cart/update";
+        this.restTemplate.put(url, cartRequest);
+        logger.info("Cart item updated successfully");
+    }
+
     public void removeItemFromCart(Long itemId, User user) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item not found"));
-        Cart cartItem = cartRepository.findByUserAndItem(user, item);
-        if (cartItem != null) {
-            cartRepository.delete(cartItem);
-            // Optionally adjust the item stock quantity if needed
-            item.setItemQuantity(item.getItemQuantity() + cartItem.getQuantity());
-            itemRepository.save(item);
-        }
+        String url = baseUrl + "/cart/remove/" + user.getUser_id() + "/" + itemId;
+        logger.info("Removing item with ID: {} from cart for user with ID: {}", itemId, user.getUser_id());
+        this.restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
+        logger.info("Item removed from cart successfully");
     }
+
+    // Method to clear the cart
+    @Transactional
+    public void clearCart(User user) {
+        cartRepository.deleteByUser(user);
+    }
+
 }

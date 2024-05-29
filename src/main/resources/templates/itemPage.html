@@ -1,34 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"
+      defer
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Style for discounted price */
+      .discounted-price {
+        color: green; /* Example color */
+        font-weight: bold; /* Example style */
+      }
 
-<th:block th:insert="~{fragments/head.html}"/>
+      /* Style for original price */
+      .original-price {
+        color: red; /* Example color */
+        text-decoration: line-through;
+        font-style: italic;
+      }
 
-<body class="font-poppins text-lg w-screen">
+      /* Style for regular price (no discount) */
+      .regular-price {
+        color: blue; /* Example color */
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/head.html}" />
 
-    <th:block th:insert="~{fragments/header.html}"/>
+    <th:block th:insert="~{fragments/header.html}" />
 
-	<div class="container">
-		<div class="my-12 mx-60 flex">
-			<div class="w-1/2">
-				<img src="images/kirito.jpg" alt="" class="w-full">
-			</div>
+    <div class="container">
+      <div class="my-12 mx-60 flex">
+        <div class="w-1/2 relative">
+          <div class="carousel max-w-screen-md mx-auto overflow-hidden">
+            <div
+              class="carousel-inner flex transition-transform ease-in-out duration-500"
+            >
+              <img
+                th:each="image : ${images}"
+                th:src="@{'/images/' + ${image.imagePath}}"
+                alt="Product Image"
+                class="w-full h-auto hidden"
+                th:classappend="${imageStat.index == 0} ? '' : 'hidden'"
+              />
+            </div>
+            <button
+              class="carousel-control prev absolute top-1/2 left-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10"
+              onclick="changeSlide(-1)"
+            >
+              &lt;
+            </button>
+            <button
+              class="carousel-control next absolute top-1/2 right-0 transform -translate-y-1/2 bg-black bg-opacity-50 text-white border-none px-4 py-2 cursor-pointer z-10"
+              onclick="changeSlide(1)"
+            >
+              &gt;
+            </button>
+            <div
+              class="carousel-indicators absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10"
+            >
+              <span
+                th:each="image, imageStat : ${images}"
+                class="indicator h-1 w-8 bg-gray-400 cursor-pointer"
+                th:classappend="${imageStat.index == 0} ? 'bg-black' : ''"
+                th:onclick="|currentSlide(${imageStat.index + 1})|"
+              ></span>
+            </div>
+          </div>
+        </div>
 
-			<div class="flex flex-col justify-between w-1/2 bg-gray-50 px-20 border-l-8 shadow-xl">
-				<div class="flex flex-col">
-					<p class="text-4xl text-primary mt-10 mb-5 font-light">Kirito</p>
-					<p class="text-primary mb-5 font-light">Kirito is a teenager who was chosen as one of 1,000 beta testers for a new virtual reality video game: Sword Art Online. After the game is released to the general public, he and the rest of the 10,000 players discover that they are unable to log out and are trapped in the simulation unless they manage to beat the game.</p>
-				</div>
-				<div class="flex flex-col mb-10">
-					<p class="text-primary text-xl text-right">$999.99</p>
-					<form method="post" class="flex justify-between">
-						<button class="bg-button text-white px-5 py-2 mt-5 hover:bg-button-hover transition-all">Add to Cart</button>
-						<button class="bg-button text-white px-5 py-2 mt-5 hover:bg-button-hover transition-all">Add to Wishlist</button>
-					</form>
-				</div>
-			</div>
-		</div>
+        <div
+          class="flex flex-col justify-between w-1/2 bg-gray-50 px-20 border-l-8 shadow-xl"
+        >
+          <div class="flex flex-col">
+            <p
+              class="text-4xl text-primary mt-10 mb-5 font-light"
+              th:text="${item.itemTitle}"
+            >
+              Item Title
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Brand: ' + ${item.itemBrand}"
+            >
+              Brand
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Category: ' + ${item.itemCategory}"
+            >
+              Category
+            </p>
+            <p
+              class="text-xl text-gray-500 mb-2"
+              th:text="'Quantity: ' + ${item.itemQuantity}"
+            >
+              Quantity
+            </p>
+            <p
+              class="text-primary mb-5 font-light"
+              th:text="'Item Details: ' + ${item.itemDetails}"
+            >
+              Item details...
+            </p>
+          </div>
+          <div class="flex flex-col mb-10">
+            <div class="flex flex-col items-center sm:items-end w-full mb-4">
+              <p
+                class="text-primary text-xl discounted-price"
+                th:if="${item.itemOffers > 0}"
+                th:text="'EGP ' + ${item.itemPrice * (1 - item.itemOffers / 100)}"
+              ></p>
+              <p
+                class="text-red-500 text-xl line-through italic original-price"
+                th:if="${item.itemOffers > 0}"
+                th:text="'EGP ' + ${item.itemPrice}"
+              ></p>
+              <p
+                class="text-primary text-xl regular-price"
+                th:if="${item.itemOffers == 0}"
+                th:text="'EGP ' + ${item.itemPrice}"
+              ></p>
+            </div>
 
-		<th:block th:insert="~{fragments/footer.html}"/>
-	</div>
-</body>
+            <th:block th:if="${item.itemQuantity > 0}">
+              <input type="hidden" name="itemId" th:value="${item.itemId}" />
+              <th:block th:if="${user != null}">
+                <div class="flex items-center mb-4 sm:mb-0 sm:mr-4">
+                  <label for="quantity" class="mr-2">Quantity:</label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    th:attr="max=${item.itemQuantity}"
+                    value="1"
+                    class="w-20 p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto"
+                >
+                  <form th:action="@{/cart/add}" method="post">
+                    <!-- Modal Container with Alpine.js -->
+                    <div x-data="{ open: false }">
+                      <!-- Button to trigger modal -->
+                      <button
+                        @click="open = true"
+                        type="submit"
+                        class="add_to_bag_btn bg-button text-white px-5 py-2 mt-2 sm:mt-0 sm:mr-4 hover:bg-button-hover transition-all"
+                      >
+                        Add to Cart
+                      </button>
+
+                      <input
+                        type="hidden"
+                        name="itemId"
+                        th:value="${item.itemId}"
+                      />
+                      <!-- Modal -->
+                      <div
+                        x-show="open"
+                        class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4"
+                      >
+                        <div
+                          class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full"
+                        >
+                          <div class="p-4">
+                            <div
+                              class="flex justify-between items-center border-b pb-2"
+                            >
+                              <h3 class="text-lg font-medium text-gray-900">
+                                Item Added to Cart
+                              </h3>
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="text-gray-400 hover:text-gray-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div class="mt-4">
+                              <p class="text-gray-600">
+                                Your item has been successfully added to the
+                                cart.
+                              </p>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                  <form th:action="@{/wishlist/add}" method="post">
+                    <!-- Modal Container with Alpine.js -->
+                    <div x-data="{ open: false }">
+                      <!-- Button to trigger modal -->
+
+                      <button
+                        @click="open=true"
+                        type="button"
+                        class="add_to_wishlist_btn bg-button text-white px-5 py-2 mt-2 sm:mt-0 hover:bg-button-hover transition-all"
+                      >
+                        Add to Wishlist
+                      </button>
+                      <input
+                        type="hidden"
+                        name="itemId"
+                        th:value="${item.itemId}"
+                      />
+                      <!-- Modal -->
+                      <div
+                        x-show="open"
+                        class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4"
+                      >
+                        <div
+                          class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full"
+                        >
+                          <div class="p-4">
+                            <div
+                              class="flex justify-between items-center border-b pb-2"
+                            >
+                              <h3 class="text-lg font-medium text-gray-900">
+                                Item Added to Wishlist
+                              </h3>
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="text-gray-400 hover:text-gray-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div class="mt-4">
+                              <p class="text-gray-600">
+                                Your item has been successfully added to the
+                                wishlist.
+                              </p>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                              <button
+                                type="button"
+                                @click="open = false"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </th:block>
+              <th:block th:if="${user == null}">
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto"
+                >
+                  <span class="text-gray-500">Login to add to cart</span>
+                </div>
+              </th:block>
+            </th:block>
+
+            <th:block th:if="${item.itemQuantity == 0}">
+              <div
+                class="flex flex-col sm:flex-row justify-between items-center w-full"
+              >
+                <span class="text-red-500 font-semibold">Out of Stock</span>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      let slideIndex = 0;
+
+      function showSlide(n) {
+        const slides =
+          document.getElementsByClassName("carousel-inner")[0].children;
+        const indicators = document.getElementsByClassName("indicator");
+
+        if (n >= slides.length) {
+          slideIndex = 0;
+        }
+
+        if (n < 0) {
+          slideIndex = slides.length - 1;
+        }
+
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].classList.add("hidden");
+        }
+
+        for (let i = 0; i < indicators.length; i++) {
+          indicators[i].classList.remove("bg-black");
+        }
+
+        slides[slideIndex].classList.remove("hidden");
+        indicators[slideIndex].classList.add("bg-black");
+      }
+
+      function changeSlide(n) {
+        showSlide((slideIndex += n));
+      }
+
+      function currentSlide(n) {
+        showSlide((slideIndex = n - 1));
+      }
+
+      showSlide(slideIndex);
+
+      $(document).ready(function () {
+        $(".add_to_bag_btn").click(function (e) {
+          e.preventDefault();
+
+          var form = $(this).closest("form");
+          var itemId = form.find("input[name='itemId']").val();
+          var itemQuantity = document.getElementById("quantity").value;
+          $.ajax({
+            url: "/cart/add",
+            method: "POST",
+            data: { itemId: itemId, quantity: itemQuantity },
+            success: function (response) {
+              console.log("Item added to cart successfully.");
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+            },
+          });
+        });
+      });
+
+      $(document).ready(function () {
+        $(".add_to_wishlist_btn").click(function (e) {
+          e.preventDefault();
+
+          var form = $(this).closest("form");
+          var itemId = form.find("input[name='itemId']").val();
+          $.ajax({
+            url: "/wishlist/add",
+            method: "POST",
+            data: { itemId: itemId },
+            success: function (response) {
+              console.log("Item added to wishlist successfully.");
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -61,7 +61,7 @@ public class AuthenticationController {
         }
         if(!this.userService.getUser(userDTO.getEmail(), userDTO.getUserPassword(),session)){
             System.out.println(bindingResult.hasErrors());
-            bindingResult.addError(new FieldError("userDTO", "userPassword", "Password incorrector Incoreect emaill"));
+            bindingResult.addError(new FieldError("userDTO", "userPassword", "Password incorrect or incorrect email"));
             return new ModelAndView("login.html");
         }
         return new ModelAndView("redirect:/");

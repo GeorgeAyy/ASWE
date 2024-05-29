@@ -1,55 +1,64 @@
 <th:block th:insert="~{fragments/admin_fragments/header.html}"/>
+<style>
+  .table-cell {
+    max-width: 150px; /* Adjust the maximum width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .table-responsive {
+    overflow: auto;
+  }
+</style>
 <div class="container">
   <div class="row">
-      <h1>Users</h1>
+    <h1>Users</h1>
   </div>
   <div class="table-responsive" style="max-height: 75vh; max-width: 75vw">
-      <table class="table table-bordered">
-          <thead class="sticky-top">
-              <tr>
-                  <th>ID</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Admin?</th>
-                  <th>Edit</th> <!-- New column for the Edit button -->
-                  <th></th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr th:each="user : ${users}">
-                  <td th:text="${user.user_id}"></td>
-                  <td th:text="${user.user_fname}"></td>
-                  <td th:text="${user.user_Lname}"></td>
-                  <td th:text="${user.email}"></td>
-                  <td th:text="${user.user_address}"></td>
-                  <td th:text="${user.user_isAdmin ? 'Yes' : 'No'}"></td>
-                  <!-- Edit button -->
-
-<td>
-              
-    <a
-    href="#"
-    class="btn btn-outline-primary btn-sm edit-user-btn"
-    data-bs-toggle="modal"
-    data-bs-target="#editUser"
-    th:data-user-id="${user.user_id}"
-    >Edit</a
-  >
-  </td>
-                  <td>
-                      <a th:href="@{/admin/users/toggle_admin/{userId}(userId=${user.user_id})}"
-                         class="btn btn-outline-secondary btn-sm"
-                         th:text="${user.user_isAdmin ? 'Switch to User' : 'Switch to Admin'}">Switch</a>
-                      <a href="#" class="btn btn-outline-danger btn-sm delete-user-btn"
-                         data-bs-toggle="modal"
-                         data-bs-target="#deleteConfirmation"
-                         th:data-user-id="${user.user_id}">Delete</a>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
+    <table class="table table-bordered">
+      <thead class="sticky-top">
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Admin?</th>
+          <th>Edit</th> <!-- New column for the Edit button -->
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="user : ${users}">
+          <td class="table-cell" th:text="${user.user_id}"></td>
+          <td class="table-cell" th:text="${user.user_fname}"></td>
+          <td class="table-cell" th:text="${user.user_Lname}"></td>
+          <td class="table-cell" th:text="${user.email}"></td>
+          <td class="table-cell" th:text="${user.user_address}"></td>
+          <td class="table-cell" th:text="${user.user_isAdmin ? 'Yes' : 'No'}"></td>
+          <!-- Edit button -->
+          <td>
+            <a
+              href="#"
+              class="btn btn-outline-primary btn-sm edit-user-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#editUser"
+              th:data-user-id="${user.user_id}"
+            >Edit</a>
+          </td>
+          <td>
+            <a th:href="@{/admin/users/toggle_admin/{userId}(userId=${user.user_id})}"
+               class="btn btn-outline-secondary btn-sm"
+               th:text="${user.user_isAdmin ? 'Switch to User' : 'Switch to Admin'}">Switch</a>
+            <a href="#" class="btn btn-outline-danger btn-sm delete-user-btn"
+               data-bs-toggle="modal"
+               data-bs-target="#deleteConfirmation"
+               th:data-user-id="${user.user_id}">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 <!-- Edit User Modal -->
