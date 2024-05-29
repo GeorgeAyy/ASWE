@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
+
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/header.html}" />
+
+    <div class="container">
+		<div class="bg-confirm w-full flex flex-col justify-between items-center">
+			<div>
+				<img class="w-20 h-20 my-10 animate-pulse" src="images/checked.png" alt="">
+			</div>
+
+			<div class="flex flex-col justify-center items-center text-white text-sm">
+				<p>THANK YOU</p>
+				<p class="text-lg">YOUR ORDER IS CONFIRMED</p>
+				<p>We will be sending you notifications to update you on your order's status</p>
+			</div>
+
+			<div class="bg-white w-3/4 my-10 px-10 pt-10 pb-3 text-primary text-sm flex flex-col justify-between items-center gap-6">
+				<div>
+					<p>Order <span>#1234</span> was placed on <span id="today" class="font-bold"></span> and is currently in progress</p>
+				</div>
+
+				<div class="flex justify-between items-center gap-10 mb-10 mt-5">
+					<div class="flex flex-col items-center">
+						<img class="w-6 h-6" src="images/checked-green.png" alt="">
+						<p class="font-bold">Processing</p>
+					</div>
+
+					<div class="flex flex-col items-center">
+						<img class="w-6 h-6" src="images/checked-gray.png" alt="">
+						<p class="font-bold">On it's way</p>
+					</div>
+
+					<div class="flex flex-col items-center">
+						<img class="w-6 h-6" src="images/checked-gray.png" alt="">
+						<p class="font-bold">Delivered</p>
+					</div>
+				</div>
+
+				<div class="flex justify-start items-center gap-8 self-start">
+					<p class="text-sm">Expected delivery date: <span id="delivery" class="font-bold"></span></p>
+
+					<a class="text-sm underline" href="/account">View your orders</a>
+				</div>
+			</div>
+
+			<div class="my-10">
+				<a href="/" class="text-white font-bold underline underline-offset-3 py-2 px-4 hover:cursor-pointer transition-all">Continue Shopping</a>
+			</div>
+		</div>
+
+      <th:block th:insert="~{fragments/footer.html}" />
+    </div>
+
+	<script>
+	  const today = new Date();
+	  const delivery = new Date();
+	  delivery.setDate(today.getDate() + 2);
+
+	  document.getElementById("today").innerHTML = today.toDateString();
+	  document.getElementById("delivery").innerHTML = delivery.toDateString();
+	</script>
+  </body>
+</html>

@@ -21,7 +21,7 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
-    private Orders order;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
@@ -35,7 +35,7 @@ public class OrderItems {
     public OrderItems() {
     }
 
-    public OrderItems(Long orderItemId, Orders order, Item item, int itemQuantity) {
+    public OrderItems(Long orderItemId, Order order, Item item, int itemQuantity) {
         this.orderItemId = orderItemId;
         this.order = order;
         this.item = item;
@@ -50,11 +50,11 @@ public class OrderItems {
         this.orderItemId = orderItemId;
     }
 
-    public Orders getOrder() {
+    public Order getOrder() {
         return this.order;
     }
 
-    public void setOrder(Orders order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
@@ -79,7 +79,7 @@ public class OrderItems {
         return this;
     }
 
-    public OrderItems order(Orders order) {
+    public OrderItems order(Order order) {
         setOrder(order);
         return this;
     }
@@ -102,7 +102,8 @@ public class OrderItems {
             return false;
         }
         OrderItems orderItems = (OrderItems) o;
-        return Objects.equals(orderItemId, orderItems.orderItemId) && Objects.equals(order, orderItems.order) && Objects.equals(item, orderItems.item) && itemQuantity == orderItems.itemQuantity;
+        return Objects.equals(orderItemId, orderItems.orderItemId) && Objects.equals(order, orderItems.order)
+                && Objects.equals(item, orderItems.item) && itemQuantity == orderItems.itemQuantity;
     }
 
     @Override
@@ -113,11 +114,11 @@ public class OrderItems {
     @Override
     public String toString() {
         return "{" +
-            " orderItemId='" + getOrderItemId() + "'" +
-            ", order='" + getOrder() + "'" +
-            ", item='" + getItem() + "'" +
-            ", itemQuantity='" + getItemQuantity() + "'" +
-            "}";
+                " orderItemId='" + getOrderItemId() + "'" +
+                ", order='" + getOrder() + "'" +
+                ", item='" + getItem() + "'" +
+                ", itemQuantity='" + getItemQuantity() + "'" +
+                "}";
     }
 
 }

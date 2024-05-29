@@ -1,184 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
+  <th:block th:insert="~{fragments/head.html}" />
 
-<th:block th:insert="~{fragments/head.html}"/>
+  <body class="font-poppins text-lg w-screen overflow-x-hidden">
+    <th:block th:insert="~{fragments/header.html}" />
 
-<body class="font-poppins text-lg w-screen">
+    <div class="container">
+      <div class="flex flex-col">
+        <h1 class="text-4xl text-primary mt-10 mb-6 ml-40">Cart</h1>
+        <div class="my-12 mx-40 flex justify-between">
+          <!-- Table to display the cart items -->
+          <table class="w-2/3 shadow-2xl">
+            <thead>
+              <tr class="border-2 text-primary text-left">
+                <th></th>
+                <th class="py-2">Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="product:${items}" class="border-2">
+                <td class="w-36 py-2">
+                  <div class="mr-10 ml-5">
+                    <a href="/itempage"
+                      ><img th:src="@{'/images/'+${product.images[0]}}" alt=""
+                    /></a>
+                  </div>
+                </td>
+                <td><a href="/itempage" th:text="${product.itemName}"></a></td>
+                <td th:text="'EGP ' + ${product.itemPrice}"></td>
+                <td>
+                  <div class="quantity_range flex border-2 w-fit">
+                    <button type="button" class="quan_button decrement">
+                      <p
+                        class="minus-button text-primary text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all"
+                      >
+                        -
+                      </p>
+                    </button>
+                    <input
+                      class="quantityvalue quantity w-7 text-center"
+                      th:value="${product.quantity}"
+                      th:data-itemid="${product.itemId}"
+                      readonly
+                    />
+                    <button type="button" class="quan_button increment">
+                      <p
+                        class="plus-button text-primary text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all"
+                      >
+                        +
+                      </p>
+                    </button>
+                  </div>
+                </td>
+                <td
+                  class="subtotal"
+                  th:text="'EGP ' + (${product.itemPrice} * ${product.quantity})"
+                ></td>
+                <td>
+                  <button type="button" class="button-remove">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="remove-button w-6 h-6 text-primary hover:cursor-pointer hover:text-red-500 transition-all"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-    <th:block th:insert="~{fragments/header.html}"/>
+          <!-- Total and Checkout Button -->
+          <div class="flex flex-col border-2 h-fit w-1/3 ml-5">
+            <div class="flex justify-between mx-5 my-5">
+              <p class="text-primary text-2xl">Total</p>
+              <p id="total" class="text-2xl"></p>
+            </div>
+            <button
+              id="checkout-button"
+              class="bg-button text-white py-2 px-4 hover:bg-button-hover transition-all"
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<div class="container">
-		<div class="flex flex-col">
-			<h1 class="text-4xl text-primary mt-10 mb-6 ml-40">Cart</h1>
-			<div class="my-12 mx-40 flex justify-between">
-				<!-- Table to display the cart items -->
-				<table class="w-2/3 shadow-2xl">
-					<tr class="border-2 text-primary text-left">
-						<th></th>
-						<th class="py-2">Product</th>
-						<th>Price</th>
-						<th>Quantity</th>
-						<th>Subtotal</th>
-						<th></th>
-					</tr>
-					
-					<tr th:each="product:${items}" class="border-2">
-						<td class="w-36 py-2">
-							<div class="mr-10 ml-5">
-								<a href="/itempage"><img th:src="@{'/images/'+${product.images[0]}}" alt=""></a> 	
-							</div>
-						</td>
-						<td><a href="/itempage" th:text="${product.itemName}"></a></td>
-						<td th:text="${product.itemPrice}"></td>
-						<td>
-							<div class="quantity_range flex border-2 w-fit">
-								<button type="button"  class="quan_button decrement"><p class="minus-button text-primary text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all">-</p></button>
-								<input  class="quantityvalue quantity w-7 text-center" th:value="${product.quantity}" th:data-itemid="${product.itemId}"  readonly>
-								<button type="button"  class="quan_button increment"><p class="plus-button text-primary text-xl bg-gray-200 px-2 hover:cursor-pointer hover:bg-gray-300 transition-all">+</p></button>						  
-							</div>
-						</td>
-						<td>$999.99</td>
-						<td>
-							<button type="button" class="button-remove">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="remove-button w-6 h-6 text-primary hover:cursor-pointer hover:text-red-500 transition-all">
-								<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-							  </svg>
-							</button>
-						</td>
-					</tr>
-				</table>
-	
-				<!-- Total and Checkout Button -->
-				<div class="flex flex-col border-2 h-fit w-1/3 ml-5">
-					<div class="flex justify-between mx-5 my-5">
-						<p class="text-primary text-2xl">Total</p>
-						<p id="total" class="text-2xl"></p>
-					</div>
-					<button class="bg-button text-white py-2 px-4 hover:bg-button-hover transition-all">Checkout</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/js/cart.js}"></script>
-	<!-- <script>
-		document.addEventListener('DOMContentLoaded', function() {
+    <script>
+      $(document).ready(function () {
+        // Function to format numbers with commas and two decimal places
+        function formatNumber(number) {
+          return new Intl.NumberFormat("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(number);
+        }
 
-			// -------------------------------------------- Quantity and Total Price Control -------------------------------------------- //
+        // Function to calculate and update subtotal and total
+        function updateTotals() {
+          let total = 0;
+          $(".quantity").each(function () {
+            let quantity = parseInt($(this).val());
+            let price = parseFloat(
+              $(this)
+                .closest("tr")
+                .find("td")
+                .eq(2)
+                .text()
+                .replace("EGP ", "")
+                .replace(/,/g, "")
+            );
+            let subtotal = quantity * price;
+            $(this)
+              .closest("tr")
+              .find(".subtotal")
+              .text("EGP " + formatNumber(subtotal));
+            total += subtotal;
+          });
+          $("#total").text("EGP " + formatNumber(total));
+        }
 
-			// Function to calculate and update the total
-			function updateTotal() {
-				// Get all the rows in the table (excluding the header row)
-				const rows = document.querySelectorAll('table tr:not(:first-child)');
-				
-				// Initialize total to zero
-				let total = 0;
-				
-				// Iterate over each row
-				rows.forEach(row => {
-					// Find the subtotal cell within the row
-					const subtotalCell = row.querySelector('td:nth-child(5)');
-					
-					// Get the subtotal from the subtotal cell and convert it to a number
-					const subtotal = parseFloat(subtotalCell.textContent.replace('$', ''));
-					
-					// Add the subtotal to the total
-					total += subtotal;
-				});
-				
-				// Format the total as currency
-				const formattedTotal = `$${total.toFixed(2)}`;
-				
-				// Find the total display element and update its text content
-				const totalDisplay = document.getElementById("total");
-				totalDisplay.textContent = formattedTotal;
-			}
+        // Initial calculation on page load
+        updateTotals();
 
-			// Call the updateTotal function initially to set the total on page load
-			updateTotal();
+        // Increment quantity
+        $(".increment").click(function () {
+          let quantityInput = $(this).closest("div").find(".quantity");
+          let quantity = parseInt(quantityInput.val());
+          quantityInput.val(quantity + 1);
+          updateTotals();
+        });
 
-			// Modify the existing handleMinusClick and handlePlusClick functions to call updateTotal
-			function handleMinusClick(event) {
-				const minusButton = event.target;
-				const row = minusButton.closest('tr');
-				const quantityInput = row.querySelector('.quantity');
-				let quantity = parseInt(quantityInput.value);
-				
-				if (quantity > 1) {
-					quantity--;
-					quantityInput.value = quantity;
-					updateSubtotal(row, quantity);
-				}
-				
-				// Update the total after modifying the quantity
-				updateTotal();
-			}
+        // Decrement quantity
+        $(".decrement").click(function () {
+          let quantityInput = $(this).closest("div").find(".quantity");
+          let quantity = parseInt(quantityInput.val());
+          if (quantity > 1) {
+            quantityInput.val(quantity - 1);
+            updateTotals();
+          }
+        });
 
-			function handlePlusClick(event) {
-				const plusButton = event.target;
-				const row = plusButton.closest('tr');
-				const quantityInput = row.querySelector('.quantity');
-				let quantity = parseInt(quantityInput.value);
-				
-				if (quantity < 9) {
-					quantity++;
-					quantityInput.value = quantity;
-					updateSubtotal(row, quantity);
-				}
-				
-				// Update the total after modifying the quantity
-				updateTotal();
-			}
+        // Remove item from cart
+        $(".button-remove").click(function () {
+          $(this).closest("tr").remove();
+          updateTotals();
+        });
 
-			// Function to update the subtotal for a row
-			function updateSubtotal(row, quantity) {
-				// Find the price cell within the row
-				const priceCell = row.querySelector('td:nth-child(3)');
+        // Handle checkout button click
+        $("#checkout-button").click(function () {
+          // Redirect to the checkout page
+          window.location.href = "/checkout";
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<!-- <script>
+	document.addEventListener('DOMContentLoaded', function() {
+
+		// -------------------------------------------- Quantity and Total Price Control -------------------------------------------- //
+
+		// Function to calculate and update the total
+		function updateTotal() {
+			// Get all the rows in the table (excluding the header row)
+			const rows = document.querySelectorAll('table tr:not(:first-child)');
+			
+			// Initialize total to zero
+			let total = 0;
+			
+			// Iterate over each row
+			rows.forEach(row => {
 				// Find the subtotal cell within the row
 				const subtotalCell = row.querySelector('td:nth-child(5)');
 				
-				// Get the price from the price cell and convert it to a number
-				const price = parseFloat(priceCell.textContent.replace('$', ''));
+				// Get the subtotal from the subtotal cell and convert it to a number
+				const subtotal = parseFloat(subtotalCell.textContent.replace('$', ''));
 				
-				// Calculate the new subtotal
-				const subtotal = price * quantity;
-				
-				// Update the subtotal cell with the new subtotal, formatted as currency
-				subtotalCell.textContent = `$${subtotal.toFixed(2)}`;
+				// Add the subtotal to the total
+				total += subtotal;
+			});
+			
+			// Format the total as currency
+			const formattedTotal = `$${total.toFixed(2)}`;
+			
+			// Find the total display element and update its text content
+			const totalDisplay = document.getElementById("total");
+			totalDisplay.textContent = formattedTotal;
+		}
+
+		// Call the updateTotal function initially to set the total on page load
+		updateTotal();
+
+		// Modify the existing handleMinusClick and handlePlusClick functions to call updateTotal
+		function handleMinusClick(event) {
+			const minusButton = event.target;
+			const row = minusButton.closest('tr');
+			const quantityInput = row.querySelector('.quantity');
+			let quantity = parseInt(quantityInput.value);
+			
+			if (quantity > 1) {
+				quantity--;
+				quantityInput.value = quantity;
+				updateSubtotal(row, quantity);
 			}
+			
+			// Update the total after modifying the quantity
+			updateTotal();
+		}
 
-			// Select all minus and plus buttons
-			const minusButtons = document.querySelectorAll('.minus-button');
-			const plusButtons = document.querySelectorAll('.plus-button');
+		function handlePlusClick(event) {
+			const plusButton = event.target;
+			const row = plusButton.closest('tr');
+			const quantityInput = row.querySelector('.quantity');
+			let quantity = parseInt(quantityInput.value);
+			
+			if (quantity < 9) {
+				quantity++;
+				quantityInput.value = quantity;
+				updateSubtotal(row, quantity);
+			}
+			
+			// Update the total after modifying the quantity
+			updateTotal();
+		}
 
-			// Add event listeners to each minus button
-			minusButtons.forEach(button => {
-				button.addEventListener('click', handleMinusClick);
-			});
+		// Function to update the subtotal for a row
+		function updateSubtotal(row, quantity) {
+			// Find the price cell within the row
+			const priceCell = row.querySelector('td:nth-child(3)');
+			// Find the subtotal cell within the row
+			const subtotalCell = row.querySelector('td:nth-child(5)');
+			
+			// Get the price from the price cell and convert it to a number
+			const price = parseFloat(priceCell.textContent.replace('$', ''));
+			
+			// Calculate the new subtotal
+			const subtotal = price * quantity;
+			
+			// Update the subtotal cell with the new subtotal, formatted as currency
+			subtotalCell.textContent = `$${subtotal.toFixed(2)}`;
+		}
 
-			// Add event listeners to each plus button
-			plusButtons.forEach(button => {
-				button.addEventListener('click', handlePlusClick);
-			});
+		// Select all minus and plus buttons
+		const minusButtons = document.querySelectorAll('.minus-button');
+		const plusButtons = document.querySelectorAll('.plus-button');
 
-			// -------------------------------------------- Remove Item -------------------------------------------- //
-			// Select all the "X" SVG elements in the table by class name
-			const removeButtons = document.getElementsByClassName('remove-button');
+		// Add event listeners to each minus button
+		minusButtons.forEach(button => {
+			button.addEventListener('click', handleMinusClick);
+		});
 
-			// Convert the HTMLCollection to an array to use forEach
-			Array.from(removeButtons).forEach(button => {
-				// Add click event listener to each button
-				button.addEventListener('click', function() {
-					// Find the closest parent row of the clicked SVG element
-					const rowToRemove = button.closest('tr');
-					
-					// Remove the row from the table
-					if (rowToRemove) {
-						rowToRemove.remove();
-					}
-				});
+		// Add event listeners to each plus button
+		plusButtons.forEach(button => {
+			button.addEventListener('click', handlePlusClick);
+		});
+
+		// -------------------------------------------- Remove Item -------------------------------------------- //
+		// Select all the "X" SVG elements in the table by class name
+		const removeButtons = document.getElementsByClassName('remove-button');
+
+		// Convert the HTMLCollection to an array to use forEach
+		Array.from(removeButtons).forEach(button => {
+			// Add click event listener to each button
+			button.addEventListener('click', function() {
+				// Find the closest parent row of the clicked SVG element
+				const rowToRemove = button.closest('tr');
+				
+				// Remove the row from the table
+				if (rowToRemove) {
+					rowToRemove.remove();
+				}
 			});
 		});
-	</script> -->
-</body>
-</html>
+	});
+</script> -->

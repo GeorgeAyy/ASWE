@@ -21,33 +21,24 @@ import java.util.List;
 public class CategoryLocationInterceptor implements HandlerInterceptor {
     @Autowired
     private final CategoryRepository categoryRepository;
-    @Autowired
-    private final LocationRepository locationRepository;
-   
 
-    
-    public CategoryLocationInterceptor(CategoryRepository categoryRepository, LocationRepository locationRepository) {
+    public CategoryLocationInterceptor(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.locationRepository = locationRepository;
-        
+
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+            ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
             List<Category> categories = categoryRepository.findAll();
-            List<Location> locations = locationRepository.findAll();
 
             // Add categories and locations to the model
             modelAndView.addObject("categories", categories);
-            modelAndView.addObject("locations", locations);
 
             System.out.println("Interceptor: Added categories and locations to the model");
             System.out.println("Categories: " + categories);
-            System.out.println("Locations: " + locations);
 
-            
         }
     }
 }

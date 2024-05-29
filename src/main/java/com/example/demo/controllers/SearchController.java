@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,32 +45,24 @@ public class SearchController {
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice,
-            @RequestParam(value = "sort", required = false) String sort,HttpSession session) {
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            HttpSession session) {
         ModelAndView mav = new ModelAndView("productList.html");
-         mav.addObject("user", (User) session.getAttribute("user"));
+        mav.addObject("user", (User) session.getAttribute("user"));
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Item> itemsPage = itemRepository.searchItems(title, category, minPrice, maxPrice, pageable);
+
         List<ItemWithImagesDTO> itemsWithImages = new ArrayList<>();
         Set<String> categories = new HashSet<>();
-        // Search for items based on all provided parameters
-        Iterable<Item> items = itemRepository.searchItems(title, category, minPrice, maxPrice);
 
-        // Populate categories and add items to the list
-        for (Item item : items) {
+        for (Item item : itemsPage) {
             categories.add(item.getItemCategory());
             List<ItemImages> cleanedItemImages = cleanItemImages(item.getItemId());
             ItemWithImagesDTO itemWithImagesDTO = new ItemWithImagesDTO(item, cleanedItemImages);
             itemsWithImages.add(itemWithImagesDTO);
-        }
-
-        // Filter items by price range if provided
-        if (minPrice != null) {
-            itemsWithImages = itemsWithImages.stream()
-                    .filter(item -> item.getItem().getItemPrice() >= minPrice)
-                    .collect(Collectors.toList());
-        }
-        if (maxPrice != null) {
-            itemsWithImages = itemsWithImages.stream()
-                    .filter(item -> item.getItem().getItemPrice() <= maxPrice)
-                    .collect(Collectors.toList());
         }
 
         // Sort items based on the provided sort parameter
@@ -91,10 +87,34 @@ public class SearchController {
                     break;
             }
         }
-        System.out.println("Category: " + category);
+
         mav.addObject("products", itemsWithImages);
         mav.addObject("categories", categories);
         mav.addObject("category", category);
+        mav.addObject("currentPage", page);
+        mav.addObject("totalPages", itemsPage.getTotalPages());
+        mav.addObject("pageSize", size);
+
+        return mav;
+    }
+
+    @GetMapping("/item/{id}")
+    public ModelAndView getItemDetails(@PathVariable("id") Long id, HttpSession session) {
+        ModelAndView mav = new ModelAndView("itemPage.html");
+        mav.addObject("user", (User) session.getAttribute("user"));
+
+        // Fetch product details using the ID
+        Item item = itemRepository.findById(id).orElseThrow();
+        List<ItemImages> itemImages = cleanItemImages(id);
+
+        // Calculate the discounted price
+        double discountedPrice = item.getItemPrice() - (item.getItemPrice() * item.getItemOffers() / 100);
+        String formattedDiscountedPrice = String.format("%.2f", discountedPrice);
+
+        // Add product details to the ModelAndView
+        mav.addObject("item", item);
+        mav.addObject("images", itemImages);
+        mav.addObject("discountedPrice", formattedDiscountedPrice);
 
         return mav;
     }
