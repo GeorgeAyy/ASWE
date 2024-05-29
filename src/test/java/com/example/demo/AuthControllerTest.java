@@ -158,35 +158,4 @@ public void testSignup_RequiredFieldsMissing_ReturnsError() {
 
 
 
-    // @Test
-    // public void testEditProfile_ValidData_ProfileUpdatedSuccessfully() throws Exception {
-    //     // Admin login
-    //     MvcResult loginResult = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-    //             .param("email", "admin@gmail.com")
-    //             .param("password", "admin1234"))
-    //             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-    //             .andReturn();
-
-    //     // Extract the session ID
-    //     String sessionID = loginResult.getRequest().getSession().getId();
-
-    //     // Simulate editing user profile
-    //     UserDTO userDTO = new UserDTO();
-    //     userDTO.setEmail("user@example.com");
-    //     userDTO.setUserFname("Zeina");
-    //     userDTO.setUserLname("Hesham");
-    //     userDTO.setUserAddress("123 Street, City");
-
-    //     mockMvc.perform(MockMvcRequestBuilders.post("/admin/editUser")
-    //             .sessionAttr("isAdmin", true)
-    //             .sessionAttr("sessionId", sessionID)
-    //             .flashAttr("userDTO", userDTO))
-    //             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-    //             .andExpect(MockMvcResultMatchers.redirectedUrl("/admin/users"));
-
-    //     // Verify that updateUser method was called
-    //     verify(userService, times(1)).updateUser(userDTO);
-    // }
-
-
 }
